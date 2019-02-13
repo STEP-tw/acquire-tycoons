@@ -1,0 +1,64 @@
+{
+  "env": {
+    "es6": true,
+    "node": true,
+    "mocha": true
+  },
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaVersion": 2016,
+    "sourceType": "module"
+  },
+  "rules": {
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "quotes": ["error", "single"],
+    "semi": ["error", "always"],
+    "max-lines": [
+      "error",
+      {
+        "skipBlankLines": true,
+        "max": 400
+      }
+    ],
+    "max-len": ["error", 80],
+    "max-lines-per-function": ["error", 20],
+    "func-style": ["error", "expression"],
+    "linebreak-style": ["error", "unix"],
+    "new-cap": [
+      "error",
+      {
+        "newIsCap": true,
+        "capIsNew": true
+      }
+    ],
+    "id-length": ["error", { "max": 25 }],
+    "max-depth": ["error", 5],
+    "object-curly-spacing": "error",
+    "curly": "error",
+    "no-empty": "error",
+    "no-dupe-args": "error",
+    "no-extra-semi": "error",
+    "no-lone-blocks": "error",
+    "no-empty-function": "error",
+    "no-multi-spaces": "error",
+    "no-return-assign": "error",
+    "no-self-assign": "error",
+    "no-self-compare": "error",
+    "no-unmodified-loop-condition": "error",
+    "no-multiple-empty-lines": "error",
+    "no-mixed-spaces-and-tabs": "error",
+    "no-trailing-spaces": "error",
+    "no-var": "error",
+    "no-global-assign": "error",
+    "no-else-return": "error",
+    "no-unexpected-multiline": "error",
+    "for-direction": "error",
+    "space-infix-ops": "error"
+  }
+}

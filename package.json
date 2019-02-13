@@ -1,0 +1,35 @@
+{
+  "name": "acquire-tycoons",
+  "version": "1.0.0",
+  "description": "To make acquire game in web.",
+  "main": "index.js",
+  "scripts": {
+    "test": "nyc mocha --recursive",
+    "coverage": "nyc check-coverage",
+    "start": "node server.js",
+    "lint": "./node_modules/.bin/eslint .",
+    "fix": "./node_modules/.bin/eslint --fix ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/STEP-tw/acquire-tycoons.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/STEP-tw/acquire-tycoons/issues"
+  },
+  "homepage": "https://github.com/STEP-tw/acquire-tycoons#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^5.13.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.10",
+    "nyc": "^13.2.0",
+    "supertest": "^3.4.2"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.4",
+    "express": "^4.16.4"
+  }
+}
