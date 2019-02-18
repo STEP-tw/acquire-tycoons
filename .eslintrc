@@ -26,8 +26,8 @@
         "max": 400
       }
     ],
-    "max-len": ["error", 80],
-    "max-lines-per-function": ["error", 20],
+    "max-len": ["warn", 80],
+    "max-lines-per-function": ["warn", 20],
     "func-style": ["error", "expression"],
     "linebreak-style": ["error", "unix"],
     "new-cap": [

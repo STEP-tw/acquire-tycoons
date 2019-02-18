@@ -2,7 +2,7 @@
   "name": "acquire-tycoons",
   "version": "1.0.0",
   "description": "To make acquire game in web.",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "nyc mocha --recursive",
     "coverage": "nyc check-coverage",
