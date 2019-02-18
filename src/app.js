@@ -1,6 +1,6 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const {hostGame, joinGame} = require('./handlers');
+const {hostGame, joinGame, getGameStatus} = require('./handlers');
 const GameManager = require('./models/game_manager');
 
 const app = express();
@@ -11,6 +11,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.post('/join-game', joinGame);
 app.post('/host-game', hostGame);
+app.get('/game-status', getGameStatus);
 app.use(express.static('public'));
 
 module.exports = app;

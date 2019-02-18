@@ -5,9 +5,11 @@ const hostGame = function(req, res) {
   let {host, totalPlayers} = req.body;
   let game = new Game(totalPlayers);
   let hostPlayer = new Player(host);
-  game.addPlayer(hostPlayer);
+  let playerId = game.addPlayer(hostPlayer);
   res.app.gameManager.addGame(game);
   let gameId = res.app.gameManager.getLatestId();
+  res.cookie('gameId', `${gameId}`);
+  res.cookie('playerId', `${playerId}`);
   res.send({gameId});
 };
 
@@ -28,8 +30,18 @@ const joinGame = function(req, res) {
   }
 
   const player = new Player(playerName);
-  game.addPlayer(player);
+  let playerId = game.addPlayer(player);
+  res.cookie('gameId', `${gameID}`);
+  res.cookie('playerId', `${playerId}`);
   res.send({error: false, message: ''});
 };
 
-module.exports = {hostGame, joinGame};
+const getGameStatus = function(req, res) {
+  let {gameId} = req.cookies;
+  let game = res.app.gameManager.getGameById(gameId);
+  let gameStatus = game.isFull();
+  let totalJoinedPlayers = game.getPlayersCount();
+  res.send({isStarted: gameStatus, totalJoinedPlayers});
+};
+
+module.exports = {hostGame, joinGame, getGameStatus};

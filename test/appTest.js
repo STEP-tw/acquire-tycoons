@@ -69,3 +69,12 @@ describe('hostGame', function() {
       .expect(200, done);
   });
 });
+
+describe('game-status', function() {
+  it('should redirect to the /game url when all players will be joined', function(done) {
+    request(app)
+      .get('/game-status')
+      .set('Cookie', ['gameId=1;playerId=2'])
+      .expect(200, done);
+  });
+});

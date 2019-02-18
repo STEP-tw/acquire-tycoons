@@ -27,8 +27,26 @@ const joinGame = function() {
       }
       setDisplay('join-game-form', 'none');
       setDisplay('waiting-area', 'flex');
+      checkGameStatus();
       document.getElementById('game-id').innerText = `Game ID: ${gameId}`;
     });
+};
+
+const checkGameStatus = function() {
+  setInterval(() => {
+    fetch('/game-status', {
+      method: 'GET',
+      credentials: 'same-origin'
+    })
+      .then(response => response.json())
+      .then(data => {
+        const { isStarted } = data;
+        if (isStarted) {
+          document.location.href = '/game';
+          return;
+        }
+      });
+  }, 2000);
 };
 
 const fetchGameId = function(requestData) {
@@ -38,6 +56,7 @@ const fetchGameId = function(requestData) {
       const { gameId } = resData;
       setDisplay('create-game-form', 'none');
       setDisplay('waiting-area', 'flex');
+      checkGameStatus();
       document.getElementById('game-id').innerText = `Game ID: ${gameId}`;
     });
 };
