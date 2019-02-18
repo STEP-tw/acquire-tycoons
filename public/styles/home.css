@@ -1,0 +1,56 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+
+header {
+  height: 4%;
+  border-bottom: 2px solid rgb(44, 43, 43);
+}
+
+main {
+  height: 96%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background: whitesmoke;
+}
+
+.game_options {
+  height: 480px;
+  width: 340px;
+  border: 1px solid gray;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 3px;
+
+  background: white;
+  box-shadow: 0px 0px 3px 1px gray;
+}
+
+.input-light {
+  padding: 10px;
+  font-size: 18px;
+  font-weight: lighter;
+  width: 60%;
+  margin: 8px;
+}
+
+form {
+  text-align: center;
+}
+
+.img-medium {
+  width: 96px;
+  height: 96px;
+}

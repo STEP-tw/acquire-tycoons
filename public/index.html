@@ -1,43 +1,62 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Home</title>
-    <script src="./scripts/main.js"></script>
+    <title>Acquire</title>
+    <link rel="stylesheet" type="text/css" href="/styles/home.css" />
+    <script src="/scripts/home.js"></script>
   </head>
-  <body id="body">
-    <div id="home-page">
-      <header>
-        <p>
-          ACQUIRE
-        </p>
-      </header>
-      <div class="“main-content”">
-        <section class="“next_step_container”">
-          <button onclick="displayHostingDiv()">HOST GAME</button>
-          <button>JOIN GAME</button>
-          <button>USER GUIDE</button>
-        </section>
-      </div>
-    </div>
-    <div id="hosting-div">
-      <input type="text" id="host-name" name="host" required /><br />
-      <div id="error-message"></div>
-      <select nam e="totalPlayers" id="total-players">
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-      </select>
-      <br />
-      <input type="submit" value="Create Game" onclick="hostGame()" />
-    </div>
-    <section>
-      <p id="msg"></p>
-      <div id="join-game-box">
-        <input id="game-id" type="text" placeholder="Game ID" />
-        <input id="player-name" type="text" placeholder="Name" />
-        <button id="join-game-btn">Join Game</button>
-      </div>
-    </section>
+  <body>
+    <header></header>
+    <main>
+      <section class="game_options" id="game-options-container">
+        <button class="input-light" id="create-game-btn">Create Game</button>
+        <button class="input-light" id="join-game-btn">Join Game</button>
+        <button class="input-light">User Guide</button>
+      </section>
+
+      <section class="game_options" id="create-game-form">
+        <input
+          type="text"
+          class="input-light"
+          placeholder="Host Name"
+          id="host-name"
+        />
+        <select class="input-light" id="total-players">
+          <option>No. of Players</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </select>
+        <button class="input-light" id="create-game-button-prime">
+          Create Game
+        </button>
+      </section>
+
+      <section class="game_options" id="join-game-form">
+        <p class="error" id="join-error-box"></p>
+        <input
+          type="text"
+          class="input-light"
+          placeholder="Your Name"
+          id="player-name"
+        />
+        <input
+          type="text"
+          class="input-light"
+          placeholder="Game ID"
+          id="game-id-field"
+        />
+        <button class="input-light" id="join-game-button-prime">
+          Join Game
+        </button>
+      </section>
+
+      <section class="game_options" id="waiting-area">
+        <p style="text-align:center" id="game-id"></p>
+        <p>Waiting for other players to join...</p>
+        <img class="img-medium" src="/images/loading.gif" alt="loading" />
+      </section>
+    </main>
   </body>
 </html>
