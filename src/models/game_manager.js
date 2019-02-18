@@ -7,7 +7,6 @@ class GameManager {
   addGame(game) {
     this.latestGameId += 1;
     this.games[this.latestGameId] = game;
-    return this.latestGameId;
   }
 
   getGameById(id) {
@@ -16,6 +15,10 @@ class GameManager {
 
   doesGameExist(id) {
     return this.games[id] != undefined;
+  }
+
+  getLatestId() {
+    return this.latestGameId;
   }
 }
 

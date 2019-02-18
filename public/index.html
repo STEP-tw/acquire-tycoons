@@ -1,20 +1,43 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Page Title</title>
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="/scripts/main.js"></script>
+    <title>Home</title>
+    <script src="./scripts/main.js"></script>
   </head>
-  <body>
-    <header></header>
-    <main>
+  <body id="body">
+    <div id="home-page">
+      <header>
+        <p>
+          ACQUIRE
+        </p>
+      </header>
+      <div class="“main-content”">
+        <section class="“next_step_container”">
+          <button onclick="displayHostingDiv()">HOST GAME</button>
+          <button>JOIN GAME</button>
+          <button>USER GUIDE</button>
+        </section>
+      </div>
+    </div>
+    <div id="hosting-div">
+      <input type="text" id="host-name" name="host" required /><br />
+      <div id="error-message"></div>
+      <select nam e="totalPlayers" id="total-players">
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+      </select>
+      <br />
+      <input type="submit" value="Create Game" onclick="hostGame()" />
+    </div>
+    <section>
       <p id="msg"></p>
-      <section id="join-game-box">
+      <div id="join-game-box">
         <input id="game-id" type="text" placeholder="Game ID" />
         <input id="player-name" type="text" placeholder="Name" />
         <button id="join-game-btn">Join Game</button>
-      </section>
-    </main>
+      </div>
+    </section>
   </body>
 </html>

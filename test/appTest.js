@@ -22,7 +22,8 @@ describe('POST /join-game', function() {
     const game = new Game(3);
     const host = new Player('Arnab');
     game.addPlayer(host);
-    gameID = app.gameManager.addGame(game);
+    app.gameManager.addGame(game);
+    gameID = app.gameManager.getLatestId();
   });
 
   it('Should add player to game provided correct game and game is not full', function(done) {
@@ -55,6 +56,16 @@ describe('POST /join-game', function() {
       .send({playerName: 'Sai', gameID})
       .expect('Content-Type', 'application/json; charset=utf-8')
       .expect({error: true, message: 'Sorry! Game has already started.'})
+      .expect(200, done);
+  });
+});
+
+describe('hostGame', function() {
+  it('should return response for the url(( /host-game', function(done) {
+    request(app)
+      .post('/host-game')
+      .send({host: 'gayatri', totalPlayers: 4})
+      .expect('Content-Type', 'application/json; charset=utf-8')
       .expect(200, done);
   });
 });
