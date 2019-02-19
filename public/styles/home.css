@@ -7,12 +7,13 @@ body {
 }
 
 header {
-  height: 4%;
-  border-bottom: 2px solid rgb(44, 43, 43);
+  font-size: 30px;
+  height: 6%;
+  border-bottom: 1px solid black;
 }
 
 main {
-  height: 96%;
+  height: 94%;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -58,4 +59,9 @@ form {
 .home_button img {
   width: 50px;
   height: 50px;
+}
+
+.user-guide-container {
+  height: 100%;
+  width: 60%;
 }

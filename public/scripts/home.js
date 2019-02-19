@@ -5,13 +5,15 @@ const setDisplay = function(elementId, display) {
 
 const renderHome = function() {
   setDisplay('user-guide', 'none');
+  setDisplay('join-game-form', 'none');
+  setDisplay('create-game-form', 'none');
   setDisplay('game-options-container', 'flex');
 };
 
 const showUserGuide = function() {
   setDisplay('game-options-container', 'none');
   setDisplay('user-guide', 'flex');
-  document.getElementById('back-btn-div').onclick = renderHome;
+  document.getElementById('user-guide-back-btn').onclick = renderHome;
 };
 
 const joinGame = function() {
@@ -37,27 +39,8 @@ const joinGame = function() {
         return;
       }
       setDisplay('join-game-form', 'none');
-      setDisplay('waiting-area', 'flex');
-      checkGameStatus();
-      document.getElementById('game-id').innerText = `Game ID: ${gameId}`;
+      window.location.href = '/game';
     });
-};
-
-const checkGameStatus = function() {
-  setInterval(() => {
-    fetch('/game-status', {
-      method: 'GET',
-      credentials: 'same-origin'
-    })
-      .then(response => response.json())
-      .then(data => {
-        const { isStarted } = data;
-        if (isStarted) {
-          document.location.href = '/game';
-          return;
-        }
-      });
-  }, 2000);
 };
 
 const fetchGameId = function(requestData) {
@@ -66,9 +49,7 @@ const fetchGameId = function(requestData) {
     .then(resData => {
       const { gameId } = resData;
       setDisplay('create-game-form', 'none');
-      setDisplay('waiting-area', 'flex');
-      checkGameStatus();
-      document.getElementById('game-id').innerText = `Game ID: ${gameId}`;
+      window.location.href = '/game';
     });
 };
 
@@ -89,7 +70,6 @@ const hostGame = function() {
 const initialize = function() {
   setDisplay('create-game-form', 'none');
   setDisplay('join-game-form', 'none');
-  setDisplay('waiting-area', 'none');
   setDisplay('user-guide', 'none');
 
   const createGameButton = document.getElementById('create-game-btn');
@@ -97,6 +77,7 @@ const initialize = function() {
   createGameButton.onclick = function() {
     setDisplay('game-options-container', 'none');
     setDisplay('create-game-form', 'flex');
+    document.getElementById('host-game-back-btn').onclick = renderHome;
   };
 
   const joinGameButton = document.getElementById('join-game-btn');
@@ -104,6 +85,7 @@ const initialize = function() {
   joinGameButton.onclick = function() {
     setDisplay('game-options-container', 'none');
     setDisplay('join-game-form', 'flex');
+    document.getElementById('join-game-back-btn').onclick = renderHome;
   };
 
   //For join game form

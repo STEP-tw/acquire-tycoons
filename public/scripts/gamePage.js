@@ -1,66 +1,5 @@
 const getGameData = function() {
-  return {
-    board: [
-      { id: '5A', corporation: 'unincorporated' },
-      { id: '5B', corporation: 'unincorporated' },
-      { id: '11B', corporation: 'unincorporated' },
-      { id: '8I', corporation: 'unincorporated' }
-    ],
-    corporations: [
-      {
-        name: 'Quantum',
-        size: 0,
-        marketPrice: 0,
-        availableStocks: 25
-      },
-      {
-        name: 'Phoenix',
-        size: 0,
-        marketPrice: 0,
-        availableStocks: 25
-      },
-      {
-        name: 'Fusion',
-        size: 0,
-        marketPrice: 0,
-        availableStocks: 25
-      },
-      {
-        name: 'Hydra',
-        size: 0,
-        marketPrice: 0,
-        availableStocks: 25
-      },
-      {
-        name: 'America',
-        size: 0,
-        marketPrice: 0,
-        availableStocks: 25
-      },
-      {
-        name: 'Zeta',
-        size: 0,
-        marketPrice: 0,
-        availableStocks: 25
-      },
-      {
-        name: 'Sackson',
-        size: 0,
-        marketPrice: 0,
-        availableStocks: 25
-      }
-    ],
-    players: {
-      playerNames: ['Arnab', 'Dheeraj', 'Swagata', 'Sai'],
-      currPlayerIndex: 0
-    },
-    player: {
-      tiles: ['1B', '2C', '3F', '4G', '10C', '11D'],
-      stocks: [],
-      money: 6000,
-      status: 'Welcome'
-    }
-  };
+  return;
 };
 
 const createElement = function(document, tagName) {
@@ -240,9 +179,45 @@ const displayGame = function(document, gameData) {
   displayStatus(document, gameData.player.status);
 };
 
+const removeWaitingArea = function(document) {
+  const waitingArea = document.getElementById('waiting-area');
+  waitingArea.parentNode.removeChild(waitingArea);
+};
+
+const fetchGameData = function(document) {
+  fetch('/game-data', { method: 'GET', credentials: 'same-origin' })
+    .then(response => response.json())
+    .then(gameData => {
+      removeWaitingArea(document);
+      const gameContainer = document.getElementById('game-container');
+      gameContainer.style.display = 'block';
+      initializeBoard(document);
+      displayGame(document, gameData);
+    });
+};
+
+const checkGameStatus = function(document) {
+  const gameStatusIntervalId = setInterval(() => {
+    fetch('/game-status', {
+      method: 'GET',
+      credentials: 'same-origin'
+    })
+      .then(response => response.json())
+      .then(data => {
+        const { isStarted } = data;
+        if (isStarted) {
+          fetchGameData(document);
+          clearInterval(gameStatusIntervalId);
+          return;
+        }
+      });
+  }, 2000);
+};
+
 const initialize = function(document) {
-  initializeBoard(document);
-  displayGame(document, getGameData());
+  const gameContainer = document.getElementById('game-container');
+  gameContainer.style.display = 'none';
+  checkGameStatus(document);
 };
 
 window.onload = initialize.bind(null, document);

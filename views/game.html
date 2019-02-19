@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Acquire</title>
+    <link rel="stylesheet" type="text/css" href="/styles/main.css" />
+    <link rel="stylesheet" href="/styles/background.css" />
+    <script src="/scripts/gamePage.js"></script>
+  </head>
+  <body>
+    <header><h3 style="margin: 0;">Acquire</h3></header>
+    <main>
+      <section class="waiting-area" id="waiting-area">
+        <p style="text-align:center" id="game-id">Game Id:<%= gameId %></p>
+        <p>Loading Game...</p>
+        <img class="img-medium" src="/images/loading.gif" alt="loading" />
+      </section>
+      <section id="game-container" class="game-container">
+        <section class="status">
+          <h2 id="status"></h2>
+        </section>
+        <section class="mainBody">
+          <section class="players" id="players"></section>
+          <section class="game-board" id="game-board"></section>
+          <section class="corporation-info">
+            <table>
+              <thead>
+                <td>
+                  Corporation
+                </td>
+                <td>
+                  Size
+                </td>
+                <td>Price</td>
+                <td>Stocks</td>
+              </thead>
+              <tbody id="corporations"></tbody>
+            </table>
+          </section>
+        </section>
+        <section class="user-info">
+          <section class="money">
+            <h2>Money</h2>
+            <span>$</span>
+            <label id="money"></label>
+          </section>
+          <section class="tiles-holder">
+            <h2>Tiles</h2>
+            <div class="tiles" id="tiles"></div>
+          </section>
+          <section class="stocks-holder">
+            <h2>Stocks</h2>
+            <div class="stocks" id="stocks"></div>
+          </section>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>

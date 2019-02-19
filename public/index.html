@@ -6,7 +6,7 @@
     <script src="/scripts/home.js"></script>
   </head>
   <body>
-    <header></header>
+    <header><h3 style="margin: 0;">Acquire</h3></header>
     <main>
       <section class="game_options" id="game-options-container">
         <button class="input-light" id="create-game-btn">Create Game</button>
@@ -15,6 +15,9 @@
       </section>
 
       <section class="game_options" id="create-game-form">
+          <div class="home_button" id="host-game-back-btn">
+              <img src="./images/home.png" alt="back-btn" />
+        </div>
         <input
           type="text"
           class="input-light"
@@ -34,6 +37,9 @@
       </section>
 
       <section class="game_options" id="join-game-form">
+        <div class="home_button" id="join-game-back-btn">
+              <img src="./images/home.png" alt="back-btn" />
+        </div>
         <p class="error" id="join-error-box"></p>
         <input
           type="text"
@@ -51,19 +57,11 @@
           Join Game
         </button>
       </section>
-
-      <section class="game_options" id="waiting-area">
-        <p style="text-align:center" id="game-id"></p>
-        <p>Waiting for other players to join...</p>
-        <img class="img-medium" src="/images/loading.gif" alt="loading" />
-      </section>
-
-      <section id="user-guide">
-        <div class="home_button" id="back-btn-div">
-          <img src="./media/left-arrow.png" alt="back-btn" />
+      <section class="user-guide-container" id="user-guide">
+        <div class="home_button" id="user-guide-back-btn">
+          <img src= "./images/left-arrow.png" alt="back-btn" />
         </div>
-        <embed src="./media/acquire.pdf" width="800px" height="2100px" />
-      </section>
+        <embed src="./media/acquire.pdf" style="height: 100%; width: 100%; overflow: scroll" />
     </main>
   </body>
 </html>

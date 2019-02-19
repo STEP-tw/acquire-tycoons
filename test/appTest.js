@@ -78,3 +78,36 @@ describe('game-status', function() {
       .expect(200, done);
   });
 });
+
+describe('GET /game', function() {
+  let gameID;
+  beforeEach(function() {
+    app.gameManager = new GameManager();
+    const game = new Game(3);
+    const host = new Player('Arnab');
+    game.addPlayer(host);
+    app.gameManager.addGame(game);
+    gameID = app.gameManager.getLatestId();
+  });
+
+  it('should redirect to / given gameId cookie is not present', function(done) {
+    request(app)
+      .get('/game')
+      .expect('location', '/')
+      .expect(302, done);
+  });
+  it('should redirect to / given gameId cookie is not valid', function(done) {
+    request(app)
+      .get('/game')
+      .set('Cookie', ['gameId=10'])
+      .expect('location', '/')
+      .expect(302, done);
+  });
+  it('should render gamepage given gameId cookie is valid', function(done) {
+    request(app)
+      .get('/game')
+      .set('Cookie', [`gameId=${gameID}`])
+      .expect(/game-container/)
+      .expect(200, done);
+  });
+});
