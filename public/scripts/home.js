@@ -19,6 +19,12 @@ const showUserGuide = function() {
 const joinGame = function() {
   const gameID = document.getElementById('game-id-field').value;
   const playerName = document.getElementById('player-name').value;
+  const errorMessageBox = document.getElementById('join-error-box');
+
+  if (!gameID || !playerName) {
+    errorMessageBox.innerText = "Game Id or Player Name fields can't be empty!";
+    return;
+  }
 
   const body = JSON.stringify({ gameID, playerName });
   const requestData = {
@@ -34,7 +40,6 @@ const joinGame = function() {
     .then(resData => {
       const { error, message } = resData;
       if (error) {
-        const errorMessageBox = document.getElementById('join-error-box');
         errorMessageBox.innerText = message;
         return;
       }
@@ -47,7 +52,6 @@ const fetchGameId = function(requestData) {
   fetch('/host-game', requestData)
     .then(response => response.json())
     .then(resData => {
-      const { gameId } = resData;
       setDisplay('create-game-form', 'none');
       window.location.href = '/game';
     });
@@ -56,15 +60,20 @@ const fetchGameId = function(requestData) {
 const hostGame = function() {
   let host = document.getElementById('host-name').value;
   let totalPlayers = document.getElementById('total-players').value;
-  if (host) {
-    let requestData = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ host, totalPlayers })
-    };
-    fetchGameId(requestData);
+  const errorMessageBox = document.getElementById('host-error-box');
+
+  if (!host) {
+    errorMessageBox.innerText = "Host Name field can't be empty!";
     return;
   }
+
+  let requestData = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ host, totalPlayers })
+  };
+  fetchGameId(requestData);
+  return;
 };
 
 const initialize = function() {
