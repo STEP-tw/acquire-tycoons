@@ -1,5 +1,5 @@
 class Game {
-  constructor(maxPlayers, random) {
+  constructor(maxPlayers, random, activityLog) {
     this.maxPlayers = maxPlayers;
     this.random = random;
     this.players = {};
@@ -8,6 +8,7 @@ class Game {
     this.faceDownCluster;
     this.uninCorporatedTiles = [];
     this.isStarted = false;
+    this.activityLog = activityLog;
   }
 
   addPlayer(player) {

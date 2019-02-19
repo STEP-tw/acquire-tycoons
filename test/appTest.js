@@ -3,6 +3,7 @@ const request = require('supertest');
 const GameManager = require('../src/models/game_manager');
 const {Game} = require('../src/models/game');
 const {Player} = require('../src/models/player');
+const {ActivityLog} = require('../src/models/log');
 const {expect} = require('chai');
 
 const app = require('../src/app.js');
@@ -126,6 +127,24 @@ describe('GET /game', function() {
       .get('/game')
       .set('Cookie', [`gameId=${gameID}`])
       .expect(/game-container/)
+      .expect(200, done);
+  });
+});
+
+describe('GET /log', function() {
+  let gameID;
+  beforeEach(function() {
+    app.gameManager = new GameManager();
+    const game = new Game(3, null, new ActivityLog());
+    app.gameManager.addGame(game);
+    gameID = app.gameManager.getLatestId();
+  });
+
+  it('should fetch all the logs from the activty log', function(done) {
+    request(app)
+      .get('/log')
+      .set('Cookie', [`gameId=${gameID}`])
+      .expect('Content-Type', 'application/json; charset=utf-8')
       .expect(200, done);
   });
 });

@@ -1,6 +1,7 @@
 const {Game} = require('./models/game');
 const {Player} = require('./models/player');
 const {initializeGame} = require('./util.js');
+const {ActivityLog} = require('./models/log');
 
 const addUtility = function(requiredFunctions, req, res, next) {
   req.app = {};
@@ -10,9 +11,23 @@ const addUtility = function(requiredFunctions, req, res, next) {
   next();
 };
 
+const getActivityLog = function(req, res) {
+  let {gameId} = req.cookies;
+  let game = res.app.gameManager.getGameById(gameId);
+  game.activityLog.addLog('You got 6000rs');
+  game.activityLog.addLog('Suman got D1 tile');
+  let logs = game.activityLog.getLogs();
+  return logs;
+};
+
+const fetchLog = function(req, res) {
+  let logs = getActivityLog(req, res);
+  res.send(logs);
+};
+
 const hostGame = function(req, res) {
   let {host, totalPlayers} = req.body;
-  let game = new Game(totalPlayers, req.app.random);
+  let game = new Game(totalPlayers, req.app.random, new ActivityLog());
   let hostPlayer = new Player(host);
   let playerId = game.addPlayer(hostPlayer);
   res.app.gameManager.addGame(game);
@@ -138,5 +153,6 @@ module.exports = {
   getGameStatus,
   renderGamePage,
   serveGameData,
-  addUtility
+  addUtility,
+  fetchLog
 };

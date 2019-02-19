@@ -1,13 +1,29 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Acquire</title>
+    <title>ACQUIRE</title>
     <link rel="stylesheet" type="text/css" href="/styles/main.css" />
     <link rel="stylesheet" href="/styles/background.css" />
     <script src="/scripts/game.js"></script>
   </head>
   <body>
-    <header><h3 style="margin: 0;">Acquire</h3></header>
+    <section id="overlay">
+      <section id="log-container">
+        <img src="/images/close-btn.png" id="close-overlay-btn" />
+        <section id="activity-log"></section>
+      </section>
+    </section>
+    <header>
+      <h3>ACQUIRE</h3>
+      <div>
+        <img src="/images/information-card.png" />
+        <img
+          src="/images/activity-log.png"
+          id="activity-log-icon"
+          title="Activity Log"
+        />
+      </div>
+    </header>
     <main>
       <section class="waiting-area" id="waiting-area">
         <p style="text-align:center" id="game-id">Game Id:<%= gameId %></p>

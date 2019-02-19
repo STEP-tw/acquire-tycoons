@@ -214,6 +214,28 @@ const initialize = function(document) {
   const gameContainer = document.getElementById('game-container');
   gameContainer.style.display = 'none';
   checkGameStatus(document);
+  document.getElementById('activity-log-icon').onclick = showLog;
+};
+
+const createLogHtml = function(log) {
+  return `<p style="margin-left:10px;font-size:20px;">${log}</p>`;
+};
+
+const closeOverlay = function() {
+  document.getElementById('overlay').style.display = 'none';
+  document.getElementById('overlay').style.zIndex = 1;
+};
+
+const showLog = function() {
+  document.getElementById('overlay').style.display = 'flex';
+  document.getElementById('overlay').style.zIndex = 0;
+  document.getElementById('close-overlay-btn').onclick = closeOverlay;
+  fetch('/log')
+    .then(response => response.json())
+    .then(logs => {
+      let logsHtml = logs.map(createLogHtml).join('');
+      document.getElementById('activity-log').innerHTML = logsHtml;
+    });
 };
 
 window.onload = initialize.bind(null, document);
