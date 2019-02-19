@@ -27,6 +27,28 @@ class Corporation {
     const size = this.getSize();
     return this.level.getStockPrice(size);
   }
+
+  getStocks() {
+    return this.availableStocks;
+  }
+
+  getName() {
+    return this.name;
+  }
+
+  addTile(tile) {
+    this.tiles.push(tile);
+  }
+
+  getTiles() {
+    const name = this.name;
+    return this.tiles.map(tile => {
+      return {
+        id: tile.getValue(),
+        corporation: name
+      };
+    });
+  }
 }
 
 const getLevelName = function(levelId) {

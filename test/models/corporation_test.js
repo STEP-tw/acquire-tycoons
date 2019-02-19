@@ -4,6 +4,7 @@ const {
 } = require('../../src/models/corporation.js');
 const {getLevel} = require('../../src/models/data_handler.js');
 const {expect} = require('chai');
+const {Tile} = require('../../src/models/tile.js');
 
 describe('Corporation', function() {
   let corporation;
@@ -94,7 +95,7 @@ describe(' createCorporationInstance', function() {
       ]
     };
     corporation = createCorporationInstance(
-      {name: 'sackson', levelId: 1},
+      {name: 'Sackson', levelId: 1},
       levelsData
     );
   });
@@ -138,6 +139,25 @@ describe(' createCorporationInstance', function() {
     it('should return stock price of corporation of size less than 2', function() {
       corporation.tiles = ['1A'];
       expect(corporation.getCurrentStockPrice()).to.equal(0);
+    });
+  });
+
+  describe('getTiles', function() {
+    it('should return tiles which ', function() {
+      const position = {
+        row: 0,
+        column: 2
+      };
+      const value = '3A';
+      const tile = new Tile(position, value);
+      corporation.addTile(tile);
+      const expectedOutput = [
+        {
+          id: '3A',
+          corporation: 'Sackson'
+        }
+      ];
+      expect(corporation.getTiles()).to.deep.equal(expectedOutput);
     });
   });
 });

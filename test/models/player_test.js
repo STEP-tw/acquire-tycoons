@@ -128,4 +128,16 @@ describe('Player', function() {
       expect(player.findTile(position)).to.equal(0);
     });
   });
+
+  describe('getDetails', function() {
+    it('should return all the details related to player', function() {
+      expect(player.getDetails()).to.deep.equal({
+        name: 'abc',
+        status: 'Welcome abc',
+        money: 6000,
+        stocks: [],
+        tiles: []
+      });
+    });
+  });
 });

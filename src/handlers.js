@@ -3,14 +3,6 @@ const {Player} = require('./models/player');
 const {initializeGame} = require('./util.js');
 const {ActivityLog} = require('./models/log');
 
-const addUtility = function(requiredFunctions, req, res, next) {
-  req.app = {};
-  Object.keys(requiredFunctions).forEach(
-    funcRef => (req.app[funcRef] = requiredFunctions[funcRef])
-  );
-  next();
-};
-
 const getActivityLog = function(req, res) {
   let {gameId} = req.cookies;
   let game = res.app.gameManager.getGameById(gameId);
@@ -27,7 +19,7 @@ const fetchLog = function(req, res) {
 
 const hostGame = function(req, res) {
   let {host, totalPlayers} = req.body;
-  let game = new Game(totalPlayers, req.app.random, new ActivityLog());
+  let game = new Game(totalPlayers, res.app.random, new ActivityLog());
   let hostPlayer = new Player(host);
   let playerId = game.addPlayer(hostPlayer);
   res.app.gameManager.addGame(game);
@@ -55,12 +47,12 @@ const joinGame = function(req, res) {
 
   const player = new Player(playerName);
   let playerId = game.addPlayer(player);
-  if (game.isFull()) {
-    initializeGame(game);
-  }
   res.cookie('gameId', `${gameID}`);
   res.cookie('playerId', `${playerId}`);
   res.send({error: false, message: ''});
+  if (game.isFull()) {
+    initializeGame(game);
+  }
 };
 
 const getGameStatus = function(req, res) {
@@ -81,69 +73,9 @@ const renderGamePage = function(req, res) {
 };
 
 const serveGameData = function(req, res) {
-  const gameData = {
-    board: [
-      {id: '5A', corporation: 'unincorporated'},
-      {id: '5B', corporation: 'unincorporated'},
-      {id: '11B', corporation: 'unincorporated'},
-      {id: '8I', corporation: 'unincorporated'}
-    ],
-    corporations: [
-      {
-        name: 'Quantum',
-        size: 0,
-        marketPrice: 0,
-        availableStocks: 25
-      },
-      {
-        name: 'Phoenix',
-        size: 0,
-        marketPrice: 0,
-        availableStocks: 25
-      },
-      {
-        name: 'Fusion',
-        size: 0,
-        marketPrice: 0,
-        availableStocks: 25
-      },
-      {
-        name: 'Hydra',
-        size: 0,
-        marketPrice: 0,
-        availableStocks: 25
-      },
-      {
-        name: 'America',
-        size: 0,
-        marketPrice: 0,
-        availableStocks: 25
-      },
-      {
-        name: 'Zeta',
-        size: 0,
-        marketPrice: 0,
-        availableStocks: 25
-      },
-      {
-        name: 'Sackson',
-        size: 0,
-        marketPrice: 0,
-        availableStocks: 25
-      }
-    ],
-    players: {
-      playerNames: ['Arnab', 'Dheeraj', 'Swagata', 'Sai'],
-      currPlayerIndex: 0
-    },
-    player: {
-      tiles: ['1B', '2C', '3F', '4G', '10C', '11D'],
-      stocks: [],
-      money: 6000,
-      status: 'Welcome'
-    }
-  };
-
+  const {gameId, playerId} = req.cookies;
+  const game = res.app.gameManager.getGameById(gameId);
+  const gameData = game.getDetails(playerId);
   res.send(gameData);
 };
 
@@ -152,7 +84,6 @@ module.exports = {
   joinGame,
   getGameStatus,
   renderGamePage,
-  serveGameData,
-  addUtility,
-  fetchLog
+  fetchLog,
+  serveGameData
 };

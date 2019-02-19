@@ -1,10 +1,10 @@
 const request = require('supertest');
-
 const GameManager = require('../src/models/game_manager');
 const {Game} = require('../src/models/game');
 const {Player} = require('../src/models/player');
 const {ActivityLog} = require('../src/models/log');
 const {expect} = require('chai');
+const {initializeGame} = require('../src/util.js');
 
 const app = require('../src/app.js');
 
@@ -131,20 +131,48 @@ describe('GET /game', function() {
   });
 });
 
-describe('GET /log', function() {
+describe('GET /game-data', function() {
   let gameID;
   beforeEach(function() {
+    const random = () => 0;
     app.gameManager = new GameManager();
-    const game = new Game(3, null, new ActivityLog());
+    const game = new Game(3, random);
+    const host = new Player('Arnab');
+    game.addPlayer(host);
     app.gameManager.addGame(game);
     gameID = app.gameManager.getLatestId();
   });
 
-  it('should fetch all the logs from the activty log', function(done) {
+  it('should send game data', function(done) {
+    const game = app.gameManager.getGameById(1);
+    const player2 = new Player('Dheeraj');
+    game.addPlayer(player2);
+    const player3 = new Player('Srushti');
+    game.addPlayer(player3);
+    initializeGame(game);
+
     request(app)
-      .get('/log')
-      .set('Cookie', [`gameId=${gameID}`])
+      .get('/game-data')
+      .set('Cookie', [`gameId=${gameID}`, 'playerId=1'])
       .expect('Content-Type', 'application/json; charset=utf-8')
       .expect(200, done);
+  });
+
+  describe('GET /log', function() {
+    let gameID;
+    beforeEach(function() {
+      app.gameManager = new GameManager();
+      const game = new Game(3, null, new ActivityLog());
+      app.gameManager.addGame(game);
+      gameID = app.gameManager.getLatestId();
+    });
+
+    it('should fetch all the logs from the activty log', function(done) {
+      request(app)
+        .get('/log')
+        .set('Cookie', [`gameId=${gameID}`])
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(200, done);
+    });
   });
 });

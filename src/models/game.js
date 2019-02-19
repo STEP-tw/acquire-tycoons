@@ -66,6 +66,55 @@ class Game {
   getGameStatus() {
     return this.isStarted;
   }
+
+  getTurnData() {
+    const playerNames = Object.keys(this.players).map(playerId =>
+      this.players[playerId].getName()
+    );
+    return {
+      playerNames,
+      currPlayerIndex: 0
+    };
+  }
+
+  getCorporationsDetail() {
+    const corporationsDetail = this.corporations.map(corporation => {
+      return {
+        name: corporation.getName(),
+        size: corporation.getSize(),
+        marketPrice: corporation.getCurrentStockPrice(),
+        availableStocks: corporation.getStocks()
+      };
+    });
+    return corporationsDetail;
+  }
+
+  getPlayerDetails(playerId) {
+    return this.players[playerId].getDetails();
+  }
+
+  generateBoard() {
+    const corporationsDetail = this.corporations.reduce(
+      (initial, corporation) => initial.concat(corporation.getTiles()),
+      []
+    );
+    const uninCorporatedDetail = this.uninCorporatedTiles.map(tile => {
+      const corporation = 'unincorporated';
+      return {
+        id: tile.getValue(),
+        corporation
+      };
+    });
+    return corporationsDetail.concat(uninCorporatedDetail);
+  }
+
+  getDetails(playerId) {
+    const board = this.generateBoard();
+    const corporations = this.getCorporationsDetail();
+    const players = this.getTurnData();
+    const player = this.getPlayerDetails(playerId);
+    return {board, corporations, players, player};
+  }
 }
 
 module.exports = {Game};

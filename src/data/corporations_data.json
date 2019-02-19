@@ -1,18 +1,18 @@
 [
   {
-    "name": "Sackson",
-    "levelId": 1
+    "name": "Quantum",
+    "levelId": 3
   },
   {
-    "name": "Zeta",
-    "levelId": 1
-  },
-  {
-    "name": "Hydra",
-    "levelId": 2
+    "name": "Phoenix",
+    "levelId": 3
   },
   {
     "name": "Fusion",
+    "levelId": 2
+  },
+  {
+    "name": "Hydra",
     "levelId": 2
   },
   {
@@ -20,11 +20,11 @@
     "levelId": 2
   },
   {
-    "name": "Phoenix",
-    "levelId": 3
+    "name": "Zeta",
+    "levelId": 1
   },
   {
-    "name": "Quantum",
-    "levelId": 3
+    "name": "Sackson",
+    "levelId": 1
   }
 ]

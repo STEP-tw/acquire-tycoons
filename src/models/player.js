@@ -12,6 +12,7 @@ class Player {
       Zeta: 0,
       Sackson: 0
     };
+    this.status = 'Welcome ' + this.name;
   }
 
   addTile(tile) {
@@ -53,6 +54,27 @@ class Player {
 
   getStocks() {
     return this.stocks;
+  }
+
+  getStockDetails() {
+    const stocks = Object.keys(this.stocks).map(name => {
+      const value = this.stocks[name];
+      return {name, value};
+    });
+    return stocks.filter(stock => stock.value != 0);
+  }
+
+  getName() {
+    return this.name;
+  }
+
+  getDetails() {
+    const name = this.name;
+    const money = this.money;
+    const stocks = this.getStockDetails();
+    const tiles = this.tiles.map(tile => tile.getValue());
+    const status = this.status;
+    return {name, money, stocks, tiles, status};
   }
 }
 

@@ -116,4 +116,78 @@ describe('Game', function() {
       expect(game.getGameStatus()).true;
     });
   });
+
+  describe('getCorporationsDetail', function() {
+    it('should return current details of corporation', function() {
+      const player1 = new Player('Swagata');
+      const player2 = new Player('Gayatri');
+      const player3 = new Player('Arnab');
+      game.addPlayer(player1);
+      game.addPlayer(player2);
+      game.addPlayer(player3);
+      const corporations = getCorporations(corporationData, levelsData);
+      const faceDownCluster = getFaceDownCluster(tilesData);
+      game.initialize(corporations, faceDownCluster);
+      const expectedOutput = [
+        {
+          name: 'Quantum',
+          size: 0,
+          marketPrice: 0,
+          availableStocks: 25
+        },
+        {
+          name: 'Phoenix',
+          size: 0,
+          marketPrice: 0,
+          availableStocks: 25
+        },
+        {
+          name: 'Fusion',
+          size: 0,
+          marketPrice: 0,
+          availableStocks: 25
+        },
+        {
+          name: 'Hydra',
+          size: 0,
+          marketPrice: 0,
+          availableStocks: 25
+        },
+        {
+          name: 'America',
+          size: 0,
+          marketPrice: 0,
+          availableStocks: 25
+        },
+        {
+          name: 'Zeta',
+          size: 0,
+          marketPrice: 0,
+          availableStocks: 25
+        },
+        {
+          name: 'Sackson',
+          size: 0,
+          marketPrice: 0,
+          availableStocks: 25
+        }
+      ];
+      expect(game.getCorporationsDetail()).to.deep.equal(expectedOutput);
+    });
+  });
+
+  describe('getDetails', function() {
+    it('should return details', function() {
+      const player1 = new Player('Swagata');
+      const player2 = new Player('Gayatri');
+      const player3 = new Player('Arnab');
+      game.addPlayer(player1);
+      game.addPlayer(player2);
+      game.addPlayer(player3);
+      const corporations = getCorporations(corporationData, levelsData);
+      const faceDownCluster = getFaceDownCluster(tilesData);
+      game.initialize(corporations, faceDownCluster);
+      expect(game.getDetails(1).board).to.have.length(4);
+    });
+  });
 });
