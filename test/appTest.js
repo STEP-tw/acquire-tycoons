@@ -60,7 +60,7 @@ describe('POST /join-game', function() {
   });
 });
 
-describe('hostGame', function() {
+describe('POST /host-game', function() {
   it('should return response for the url(( /host-game', function(done) {
     request(app)
       .post('/host-game')
@@ -70,7 +70,7 @@ describe('hostGame', function() {
   });
 });
 
-describe('game-status', function() {
+describe('GET /game-status', function() {
   it('should redirect to the /game url when all players will be joined', function(done) {
     request(app)
       .get('/game-status')
