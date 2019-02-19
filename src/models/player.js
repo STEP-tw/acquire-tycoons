@@ -43,11 +43,11 @@ class Player {
     return this.money;
   }
 
-  addStocks({ name, numberOfStock }) {
+  addStocks({name, numberOfStock}) {
     this.stocks[name] += numberOfStock;
   }
 
-  deductStocks({ name, numberOfStock }) {
+  deductStocks({name, numberOfStock}) {
     this.stocks[name] -= numberOfStock;
   }
 
@@ -56,4 +56,4 @@ class Player {
   }
 }
 
-module.exports = { Player };
+module.exports = {Player};
