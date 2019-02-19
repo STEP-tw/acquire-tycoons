@@ -1,15 +1,19 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const ejs = require('ejs');
-const morgan = require('morgan');
 const {
   hostGame,
   joinGame,
   getGameStatus,
   renderGamePage,
-  serveGameData
+  serveGameData,
+  addUtility
 } = require('./handlers');
 const GameManager = require('./models/game_manager');
+const { random } = require('./util.js');
+const requiredFunctions = {
+  random: random
+};
 
 const app = express();
 app.gameManager = new GameManager();
@@ -17,11 +21,12 @@ app.gameManager = new GameManager();
 app.engine('html', ejs.renderFile);
 app.set('view engine', 'html');
 
+app.random = random;
 app.use(cookieParser());
-app.use(morgan('short'));
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.get('/game', renderGamePage);
+app.use(addUtility.bind(null, requiredFunctions));
 app.post('/join-game', joinGame);
 app.get('/game-data', serveGameData);
 app.post('/host-game', hostGame);

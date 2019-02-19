@@ -1,7 +1,3 @@
-const getGameData = function() {
-  return;
-};
-
 const createElement = function(document, tagName) {
   return document.createElement(tagName);
 };

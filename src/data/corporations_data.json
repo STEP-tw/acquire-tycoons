@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Sackson",
+    "levelId": 1
+  },
+  {
+    "name": "Zeta",
+    "levelId": 1
+  },
+  {
+    "name": "Hydra",
+    "levelId": 2
+  },
+  {
+    "name": "Fusion",
+    "levelId": 2
+  },
+  {
+    "name": "America",
+    "levelId": 2
+  },
+  {
+    "name": "Phoenix",
+    "levelId": 3
+  },
+  {
+    "name": "Quantum",
+    "levelId": 3
+  }
+]

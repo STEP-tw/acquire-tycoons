@@ -1,0 +1,197 @@
+{
+  "level-1": [
+    {
+      "lowerLimit": 2,
+      "upperLimit": 2,
+      "marketPrice": 200,
+      "majority": 2000,
+      "minority": 1000
+    },
+    {
+      "lowerLimit": 3,
+      "upperLimit": 3,
+      "marketPrice": 300,
+      "majority": 3000,
+      "minority": 1500
+    },
+    {
+      "lowerLimit": 4,
+      "upperLimit": 4,
+      "marketPrice": 400,
+      "majority": 4000,
+      "minority": 2000
+    },
+    {
+      "lowerLimit": 5,
+      "upperLimit": 5,
+      "marketPrice": 500,
+      "majority": 5000,
+      "minority": 2500
+    },
+    {
+      "lowerLimit": 6,
+      "upperLimit": 10,
+      "marketPrice": 600,
+      "majority": 6000,
+      "minority": 3000
+    },
+    {
+      "lowerLimit": 11,
+      "upperLimit": 20,
+      "marketPrice": 700,
+      "majority": 7000,
+      "minority": 3500
+    },
+    {
+      "lowerLimit": 21,
+      "upperLimit": 30,
+      "marketPrice": 800,
+      "majority": 8000,
+      "minority": 4000
+    },
+    {
+      "lowerLimit": 31,
+      "upperLimit": 40,
+      "marketPrice": 900,
+      "majority": 9000,
+      "minority": 4500
+    },
+    {
+      "lowerLimit": 41,
+      "upperLimit": 108,
+      "marketPrice": 1000,
+      "majority": 10000,
+      "minority": 5000
+    }
+  ],
+  "level-2": [
+    {
+      "lowerLimit": 2,
+      "upperLimit": 2,
+      "marketPrice": 300,
+      "majority": 3000,
+      "minority": 1500
+    },
+    {
+      "lowerLimit": 3,
+      "upperLimit": 3,
+      "marketPrice": 400,
+      "majority": 4000,
+      "minority": 2000
+    },
+    {
+      "lowerLimit": 4,
+      "upperLimit": 4,
+      "marketPrice": 500,
+      "majority": 5000,
+      "minority": 2500
+    },
+    {
+      "lowerLimit": 5,
+      "upperLimit": 5,
+      "marketPrice": 600,
+      "majority": 6000,
+      "minority": 3000
+    },
+    {
+      "lowerLimit": 6,
+      "upperLimit": 10,
+      "marketPrice": 700,
+      "majority": 7000,
+      "minority": 3500
+    },
+    {
+      "lowerLimit": 11,
+      "upperLimit": 20,
+      "marketPrice": 800,
+      "majority": 8000,
+      "minority": 4000
+    },
+    {
+      "lowerLimit": 21,
+      "upperLimit": 30,
+      "marketPrice": 900,
+      "majority": 9000,
+      "minority": 4500
+    },
+    {
+      "lowerLimit": 31,
+      "upperLimit": 40,
+      "marketPrice": 1000,
+      "majority": 10000,
+      "minority": 5000
+    },
+    {
+      "lowerLimit": 41,
+      "upperLimit": 108,
+      "marketPrice": 1100,
+      "majority": 11000,
+      "minority": 5500
+    }
+  ],
+  "level-3": [
+    {
+      "lowerLimit": 2,
+      "upperLimit": 2,
+      "marketPrice": 400,
+      "majority": 4000,
+      "minority": 2000
+    },
+    {
+      "lowerLimit": 3,
+      "upperLimit": 3,
+      "marketPrice": 500,
+      "majority": 5000,
+      "minority": 2500
+    },
+    {
+      "lowerLimit": 4,
+      "upperLimit": 4,
+      "marketPrice": 600,
+      "majority": 6000,
+      "minority": 3000
+    },
+    {
+      "lowerLimit": 5,
+      "upperLimit": 5,
+      "marketPrice": 700,
+      "majority": 7000,
+      "minority": 3500
+    },
+    {
+      "lowerLimit": 6,
+      "upperLimit": 10,
+      "marketPrice": 800,
+      "majority": 8000,
+      "minority": 4000
+    },
+    {
+      "lowerLimit": 11,
+      "upperLimit": 20,
+      "marketPrice": 900,
+      "majority": 9000,
+      "minority": 4500
+    },
+    {
+      "lowerLimit": 21,
+      "upperLimit": 30,
+      "marketPrice": 1000,
+      "majority": 10000,
+      "minority": 5000
+    },
+    {
+      "lowerLimit": 31,
+      "upperLimit": 40,
+      "marketPrice": 1100,
+      "majority": 11000,
+      "minority": 5500
+    },
+    {
+      "lowerLimit": 41,
+      "upperLimit": 108,
+      "marketPrice": 1200,
+      "majority": 12000,
+      "minority": 6000
+    }
+  ]
+}

@@ -1,9 +1,18 @@
-const Game = require('./models/game');
-const Player = require('./models/player');
+const {Game} = require('./models/game');
+const {Player} = require('./models/player');
+const {initializeGame} = require('./util.js');
+
+const addUtility = function(requiredFunctions, req, res, next) {
+  req.app = {};
+  Object.keys(requiredFunctions).forEach(
+    funcRef => (req.app[funcRef] = requiredFunctions[funcRef])
+  );
+  next();
+};
 
 const hostGame = function(req, res) {
   let {host, totalPlayers} = req.body;
-  let game = new Game(totalPlayers);
+  let game = new Game(totalPlayers, req.app.random);
   let hostPlayer = new Player(host);
   let playerId = game.addPlayer(hostPlayer);
   res.app.gameManager.addGame(game);
@@ -31,6 +40,9 @@ const joinGame = function(req, res) {
 
   const player = new Player(playerName);
   let playerId = game.addPlayer(player);
+  if (game.isFull()) {
+    initializeGame(game);
+  }
   res.cookie('gameId', `${gameID}`);
   res.cookie('playerId', `${playerId}`);
   res.send({error: false, message: ''});
@@ -125,5 +137,6 @@ module.exports = {
   joinGame,
   getGameStatus,
   renderGamePage,
-  serveGameData
+  serveGameData,
+  addUtility
 };

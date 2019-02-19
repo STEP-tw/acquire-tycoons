@@ -3,11 +3,57 @@ class Player {
     this.name = name;
     this.money = 6000;
     this.tiles = [];
-    //Not sure about this now. You can change it according to your need
-    this.stocks = [];
+    this.stocks = {
+      Phoenix: 0,
+      Quantum: 0,
+      Fusion: 0,
+      Hydra: 0,
+      America: 0,
+      Zeta: 0,
+      Sackson: 0
+    };
   }
 
-  //Implement methods that you need for your work
+  addTile(tile) {
+    this.tiles.push(tile);
+  }
+
+  findTile(position) {
+    return this.tiles.findIndex(tile => tile.isSamePosition(position));
+  }
+
+  removeTile(position) {
+    const tileIndex = this.findTile(position);
+    this.tiles.splice(tileIndex, 1);
+  }
+
+  getTiles() {
+    return this.tiles;
+  }
+
+  addMoney(money) {
+    this.money = this.money + money;
+  }
+
+  deductMoney(money) {
+    this.money = this.money - money;
+  }
+
+  getMoney() {
+    return this.money;
+  }
+
+  addStocks({ name, numberOfStock }) {
+    this.stocks[name] += numberOfStock;
+  }
+
+  deductStocks({ name, numberOfStock }) {
+    this.stocks[name] -= numberOfStock;
+  }
+
+  getStocks() {
+    return this.stocks;
+  }
 }
 
-module.exports = Player;
+module.exports = { Player };
