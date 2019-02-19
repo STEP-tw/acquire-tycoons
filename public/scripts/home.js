@@ -3,6 +3,17 @@ const setDisplay = function(elementId, display) {
   element.style.display = display;
 };
 
+const renderHome = function() {
+  setDisplay('user-guide', 'none');
+  setDisplay('game-options-container', 'flex');
+};
+
+const showUserGuide = function() {
+  setDisplay('game-options-container', 'none');
+  setDisplay('user-guide', 'flex');
+  document.getElementById('back-btn-div').onclick = renderHome;
+};
+
 const joinGame = function() {
   const gameID = document.getElementById('game-id-field').value;
   const playerName = document.getElementById('player-name').value;
@@ -79,6 +90,7 @@ const initialize = function() {
   setDisplay('create-game-form', 'none');
   setDisplay('join-game-form', 'none');
   setDisplay('waiting-area', 'none');
+  setDisplay('user-guide', 'none');
 
   const createGameButton = document.getElementById('create-game-btn');
 
@@ -103,6 +115,9 @@ const initialize = function() {
     'create-game-button-prime'
   );
   createGameButtonPrime.onclick = hostGame;
+
+  const userGuideButton = document.getElementById('user-guide-btn');
+  userGuideButton.onclick = showUserGuide;
 };
 
 window.onload = initialize;
