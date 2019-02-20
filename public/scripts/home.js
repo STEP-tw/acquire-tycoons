@@ -12,6 +12,8 @@ const renderHome = function() {
   document.getElementById('player-name').value = '';
   document.getElementById('host-name').value = '';
   document.getElementById('total-players').value = '0';
+  document.getElementById('join-error-box').innerText = '';
+  document.getElementById('host-error-box').innerText = '';
 };
 
 const showUserGuide = function() {
