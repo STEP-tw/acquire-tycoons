@@ -1,4 +1,4 @@
-const { ActivityLog } = require('../../src/models/log');
+const ActivityLog = require('../../src/models/log');
 const { expect } = require('chai');
 
 describe('ActivityLog', function() {

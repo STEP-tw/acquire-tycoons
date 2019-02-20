@@ -2,7 +2,7 @@ const request = require('supertest');
 const GameManager = require('../src/models/game_manager');
 const Game = require('../src/models/game');
 const Player = require('../src/models/player');
-const { ActivityLog } = require('../src/models/log');
+const ActivityLog = require('../src/models/log');
 const { expect } = require('chai');
 const { initializeGame } = require('../src/util.js');
 

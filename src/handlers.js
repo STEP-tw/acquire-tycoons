@@ -1,7 +1,7 @@
 const Game = require('./models/game');
 const Player = require('./models/player');
 const { initializeGame } = require('./util.js');
-const { ActivityLog } = require('./models/log');
+const ActivityLog = require('./models/log');
 
 const fetchLog = function(req, res) {
   let { gameId } = req.cookies;

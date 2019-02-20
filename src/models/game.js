@@ -41,7 +41,12 @@ class Game {
     const tiles = this.getNRandomTiles(this.getNextPlayerId());
     this.uninCorporatedTiles = tiles;
     for (let index = 0; index < tiles.length; index++) {
-      this.players[index].setInitialTile(tiles[index]);
+      const player = this.players[index];
+      const tile = tiles[index];
+      player.setInitialTile(tiles[index]);
+      this.activityLog.addLog(
+        `${player.getName()} got tile ${tile.getValue()}`
+      );
     }
   }
 
