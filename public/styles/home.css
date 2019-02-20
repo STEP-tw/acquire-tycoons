@@ -9,7 +9,10 @@ body {
 header {
   font-size: 30px;
   height: 6%;
-  border-bottom: 1px solid black;
+  display: flex;
+  justify-content: space-between;
+  margin: auto 2%;
+  align-items: center;
 }
 
 main {
@@ -21,6 +24,7 @@ main {
   align-items: center;
 
   background: whitesmoke;
+  border-top: 1px solid black;
 }
 
 .game_options {

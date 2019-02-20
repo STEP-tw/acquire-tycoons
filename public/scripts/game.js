@@ -187,6 +187,8 @@ const fetchGameData = function(document) {
       removeWaitingArea(document);
       const gameContainer = document.getElementById('game-container');
       gameContainer.style.display = 'block';
+      const header = document.getElementById('game-header');
+      header.style.display = 'flex';
       initializeBoard(document);
       displayGame(document, gameData);
     });
@@ -213,6 +215,8 @@ const checkGameStatus = function(document) {
 const initialize = function(document) {
   const gameContainer = document.getElementById('game-container');
   gameContainer.style.display = 'none';
+  const header = document.getElementById('game-header');
+  header.style.display = 'none';
   checkGameStatus(document);
   document.getElementById('activity-log-icon').onclick = showLog;
 };

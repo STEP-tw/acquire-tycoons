@@ -8,6 +8,10 @@ const renderHome = function() {
   setDisplay('join-game-form', 'none');
   setDisplay('create-game-form', 'none');
   setDisplay('game-options-container', 'flex');
+  document.getElementById('game-id-field').value = '';
+  document.getElementById('player-name').value = '';
+  document.getElementById('host-name').value = '';
+  document.getElementById('total-players').value = '0';
 };
 
 const showUserGuide = function() {
@@ -62,8 +66,9 @@ const hostGame = function() {
   let totalPlayers = document.getElementById('total-players').value;
   const errorMessageBox = document.getElementById('host-error-box');
 
-  if (!host) {
-    errorMessageBox.innerText = "Host Name field can't be empty!";
+  if (!host || !parseInt(totalPlayers)) {
+    errorMessageBox.innerText =
+      "Host Name or total players field can't be empty!";
     return;
   }
 
