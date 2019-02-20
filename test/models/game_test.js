@@ -14,26 +14,23 @@ describe('Game', function() {
     random.returns(0);
     const maxPlayers = 4;
     game = new Game(maxPlayers, random);
-    const player = new Player('Dhiru');
+    const playerId = game.getNextPlayerId();
+    const player = new Player('Dhiru', playerId);
     game.addPlayer(player);
   });
 
   it('addPlayer: should add player to game', function() {
-    expect(game.players)
-      .to.have.property('1')
-      .to.have.property('name')
-      .to.equal('Dhiru');
-  });
-
-  it('getPlayersCount: should return current number of players', function() {
-    expect(game.getPlayersCount()).to.equal(1);
+    const playerId = game.getNextPlayerId();
+    const player = new Player('Sai', playerId);
+    game.addPlayer(player);
+    expect(game.getNextPlayerId()).to.equal(2);
   });
 
   describe('isFull', function() {
     it('should return true when current player number is equal to maximum player number', function() {
-      const player1 = new Player('Swagata');
-      const player2 = new Player('Gayatri');
-      const player3 = new Player('Arnab');
+      const player1 = new Player('Swagata', 1);
+      const player2 = new Player('Gayatri', 2);
+      const player3 = new Player('Arnab', 3);
       game.addPlayer(player1);
       game.addPlayer(player2);
       game.addPlayer(player3);
@@ -47,9 +44,9 @@ describe('Game', function() {
 
   describe('initialize', function() {
     it('getUnincorpratedTiles', function() {
-      const player1 = new Player('Swagata');
-      const player2 = new Player('Gayatri');
-      const player3 = new Player('Arnab');
+      const player1 = new Player('Swagata', 1);
+      const player2 = new Player('Gayatri', 2);
+      const player3 = new Player('Arnab', 3);
       game.addPlayer(player1);
       game.addPlayer(player2);
       game.addPlayer(player3);
@@ -60,12 +57,12 @@ describe('Game', function() {
     });
 
     it('getPlayersInitialTiles', function() {
-      const player1 = new Player('Swagata');
-      const player2 = new Player('Gayatri');
-      const player3 = new Player('Arnab');
-      game.addPlayer(player1);
-      game.addPlayer(player2);
-      game.addPlayer(player3);
+      const player1 = new Player('Swagata', 1);
+      const player2 = new Player('Gayatri', 2);
+      const player3 = new Player('Arnab', 3);
+      game.addPlayer(player1, 1);
+      game.addPlayer(player2, 2);
+      game.addPlayer(player3, 3);
       const corporations = getCorporations(corporationData, levelsData);
       const faceDownCluster = getFaceDownCluster(tilesData);
       game.initialize(corporations, faceDownCluster);
@@ -73,9 +70,9 @@ describe('Game', function() {
     });
 
     it('getRandomTile', function() {
-      const player1 = new Player('Swagata');
-      const player2 = new Player('Gayatri');
-      const player3 = new Player('Arnab');
+      const player1 = new Player('Swagata', 1);
+      const player2 = new Player('Gayatri', 2);
+      const player3 = new Player('Arnab', 3);
       game.addPlayer(player1);
       game.addPlayer(player2);
       game.addPlayer(player3);
@@ -94,9 +91,9 @@ describe('Game', function() {
 
   describe('getGameStatus', function() {
     it('should return false when game is not initialized', function() {
-      const player1 = new Player('Swagata');
-      const player2 = new Player('Gayatri');
-      const player3 = new Player('Arnab');
+      const player1 = new Player('Swagata', 1);
+      const player2 = new Player('Gayatri', 2);
+      const player3 = new Player('Arnab', 3);
       game.addPlayer(player1);
       game.addPlayer(player2);
       game.addPlayer(player3);
@@ -104,9 +101,9 @@ describe('Game', function() {
     });
 
     it('should return true when game is initialized', function() {
-      const player1 = new Player('Swagata');
-      const player2 = new Player('Gayatri');
-      const player3 = new Player('Arnab');
+      const player1 = new Player('Swagata', 1);
+      const player2 = new Player('Gayatri', 2);
+      const player3 = new Player('Arnab', 3);
       game.addPlayer(player1);
       game.addPlayer(player2);
       game.addPlayer(player3);
@@ -119,9 +116,9 @@ describe('Game', function() {
 
   describe('getCorporationsDetail', function() {
     it('should return current details of corporation', function() {
-      const player1 = new Player('Swagata');
-      const player2 = new Player('Gayatri');
-      const player3 = new Player('Arnab');
+      const player1 = new Player('Swagata', 1);
+      const player2 = new Player('Gayatri', 2);
+      const player3 = new Player('Arnab', 3);
       game.addPlayer(player1);
       game.addPlayer(player2);
       game.addPlayer(player3);
@@ -178,9 +175,9 @@ describe('Game', function() {
 
   describe('getDetails', function() {
     it('should return details', function() {
-      const player1 = new Player('Swagata');
-      const player2 = new Player('Gayatri');
-      const player3 = new Player('Arnab');
+      const player1 = new Player('Swagata', 1);
+      const player2 = new Player('Gayatri', 2);
+      const player3 = new Player('Arnab', 3);
       game.addPlayer(player1);
       game.addPlayer(player2);
       game.addPlayer(player3);

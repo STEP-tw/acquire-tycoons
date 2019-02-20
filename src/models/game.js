@@ -1,9 +1,12 @@
+const flatPosition = function(position) {
+  return position.row * 12 + position.column;
+};
+
 class Game {
   constructor(maxPlayers, random, activityLog) {
     this.maxPlayers = maxPlayers;
     this.random = random;
-    this.players = {};
-    this.latestPlayerId = 0;
+    this.players = [];
     this.corporations;
     this.faceDownCluster;
     this.uninCorporatedTiles = [];
@@ -12,9 +15,11 @@ class Game {
   }
 
   addPlayer(player) {
-    this.latestPlayerId += 1;
-    this.players[this.latestPlayerId] = player;
-    return this.latestPlayerId;
+    this.players.push(player);
+  }
+
+  getNextPlayerId() {
+    return this.players.length;
   }
 
   getRandomTile() {
@@ -33,13 +38,25 @@ class Game {
   }
 
   getInitialTiles() {
-    this.uninCorporatedTiles = this.getNRandomTiles(this.latestPlayerId);
+    const tiles = this.getNRandomTiles(this.getNextPlayerId());
+    this.uninCorporatedTiles = tiles;
+    for (let index = 0; index < tiles.length; index++) {
+      this.players[index].setInitialTile(tiles[index]);
+    }
   }
 
   getInitialTilesForPlayer() {
-    Object.keys(this.players).forEach(player => {
+    this.players.forEach(player => {
       const tiles = this.getNRandomTiles(6);
-      tiles.forEach(tile => this.players[player].addTile(tile));
+      tiles.forEach(tile => player.addTile(tile));
+    });
+  }
+
+  orderPlayer() {
+    this.players.sort((player1, player2) => {
+      const player1Tile = flatPosition(player1.initialTile.position);
+      const player2Tile = flatPosition(player2.initialTile.position);
+      return player1Tile - player2Tile;
     });
   }
 
@@ -48,11 +65,8 @@ class Game {
     this.corporations = corporations;
     this.getInitialTiles();
     this.getInitialTilesForPlayer();
+    this.orderPlayer();
     this.isStarted = true;
-  }
-
-  getPlayersCount() {
-    return Object.keys(this.players).length;
   }
 
   getUnincorporatedTiles() {
@@ -60,7 +74,7 @@ class Game {
   }
 
   isFull() {
-    return this.getPlayersCount() == this.maxPlayers;
+    return this.getNextPlayerId() == this.maxPlayers;
   }
 
   getGameStatus() {
@@ -68,9 +82,7 @@ class Game {
   }
 
   getTurnData() {
-    const playerNames = Object.keys(this.players).map(playerId =>
-      this.players[playerId].getName()
-    );
+    const playerNames = this.players.map(player => player.getName());
     return {
       playerNames,
       currPlayerIndex: 0
@@ -94,11 +106,12 @@ class Game {
   }
 
   getPlayerById(id) {
-    return this.players[id];
+    return this.players.find(player => player.isSame(id));
   }
 
   getPlayerDetails(playerId) {
-    return this.players[playerId].getDetails();
+    const player = this.getPlayerById(playerId);
+    return player.getDetails();
   }
 
   placeTile(tile) {

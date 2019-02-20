@@ -1,5 +1,6 @@
 class Player {
-  constructor(name) {
+  constructor(name, id) {
+    this.id = id;
     this.name = name;
     this.money = 6000;
     this.tiles = [];
@@ -13,6 +14,19 @@ class Player {
       Sackson: 0
     };
     this.log = 'Welcome ' + this.name;
+    this.initialTile = '';
+  }
+
+  setInitialTile(tile) {
+    this.initialTile = tile;
+  }
+
+  getId() {
+    return this.id;
+  }
+
+  isSame(id) {
+    return this.id == id;
   }
 
   addTile(tile) {

@@ -5,7 +5,7 @@ const { expect } = require('chai');
 describe('Player', function() {
   let player;
   beforeEach(() => {
-    player = new Player('abc');
+    player = new Player('abc', 0);
   });
   describe('getStocks', function() {
     it('should return stocks of player', function() {
@@ -138,6 +138,22 @@ describe('Player', function() {
         stocks: [],
         tiles: []
       });
+    });
+  });
+
+  describe('isSameId', function() {
+    it('should return true when player id and provided id is same', function() {
+      expect(player.isSame(0)).true;
+    });
+
+    it('should return false when player id and provided id is not same', function() {
+      expect(player.isSame(1)).false;
+    });
+  });
+
+  describe('getId', function() {
+    it('should return player id', function() {
+      expect(player.getId()).to.equal(0);
     });
   });
 });

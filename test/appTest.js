@@ -137,7 +137,7 @@ describe('GET /game-data', function() {
     const random = () => 0;
     app.gameManager = new GameManager();
     const game = new Game(3, random, new ActivityLog());
-    const host = new Player('Arnab');
+    const host = new Player('Arnab', 1);
     game.addPlayer(host);
     app.gameManager.addGame(game);
     gameID = app.gameManager.getLatestId();
@@ -145,9 +145,9 @@ describe('GET /game-data', function() {
 
   it('should send game data', function(done) {
     const game = app.gameManager.getGameById(1);
-    const player2 = new Player('Dheeraj');
+    const player2 = new Player('Dheeraj', 2);
     game.addPlayer(player2);
-    const player3 = new Player('Srushti');
+    const player3 = new Player('Srushti', 3);
     game.addPlayer(player3);
     initializeGame(game);
 
@@ -185,13 +185,13 @@ describe('GET /place-tile', function() {
     const random = () => 0;
     app.gameManager = new GameManager();
     const game = new Game(3, random, new ActivityLog());
-    const host = new Player('Arnab');
+    const host = new Player('Arnab', 0);
     game.addPlayer(host);
     app.gameManager.addGame(game);
     gameID = app.gameManager.getLatestId();
-    const player2 = new Player('Dheeraj');
+    const player2 = new Player('Dheeraj', 1);
     game.addPlayer(player2);
-    const player3 = new Player('Srushti');
+    const player3 = new Player('Srushti', 2);
     game.addPlayer(player3);
     initializeGame(game);
     firstTileOfHost = host.tiles[0];
@@ -200,7 +200,7 @@ describe('GET /place-tile', function() {
   it('should place tile when gameId cookie is valid', function(done) {
     request(app)
       .post('/place-tile')
-      .set('Cookie', [`gameId=${gameID};playerId=1`])
+      .set('Cookie', [`gameId=${gameID};playerId=0`])
       .send({ tileValue: firstTileOfHost.getValue() })
       .expect({ error: false, message: '' })
       .expect('Content-Type', 'application/json; charset=utf-8')

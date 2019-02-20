@@ -13,8 +13,9 @@ const fetchLog = function(req, res) {
 const hostGame = function(req, res) {
   let { host, totalPlayers } = req.body;
   let game = new Game(totalPlayers, res.app.random, new ActivityLog());
-  let hostPlayer = new Player(host);
-  let playerId = game.addPlayer(hostPlayer);
+  let playerId = game.getNextPlayerId();
+  let hostPlayer = new Player(host, playerId);
+  game.addPlayer(hostPlayer);
   res.app.gameManager.addGame(game);
   let gameId = res.app.gameManager.getLatestId();
   res.cookie('gameId', `${gameId}`);
@@ -38,8 +39,9 @@ const joinGame = function(req, res) {
     return;
   }
 
-  const player = new Player(playerName);
-  let playerId = game.addPlayer(player);
+  let playerId = game.getNextPlayerId();
+  let player = new Player(playerName, playerId);
+  game.addPlayer(player);
   res.cookie('gameId', `${gameID}`);
   res.cookie('playerId', `${playerId}`);
   res.send({ error: false, message: '' });
@@ -52,7 +54,7 @@ const getGameStatus = function(req, res) {
   let { gameId } = req.cookies;
   let game = res.app.gameManager.getGameById(gameId);
   let gameStatus = game.isFull();
-  let totalJoinedPlayers = game.getPlayersCount();
+  let totalJoinedPlayers = game.getNextPlayerId();
   res.send({ isStarted: gameStatus, totalJoinedPlayers });
 };
 
