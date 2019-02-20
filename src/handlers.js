@@ -84,6 +84,9 @@ const placeTile = function(req, res) {
   game.placeTile(tile);
   player.removeTile(tile.getPosition());
   player.updateLog(`You placed tile on ${tileValue}`);
+  game
+    .getActivityLog()
+    .addLog(`${player.getName()} placed tile ${tileValue} on board`);
   res.send({ error: false, message: '' });
 };
 

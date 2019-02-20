@@ -227,7 +227,7 @@ const checkGameStatus = function(document) {
         const { isStarted } = data;
         if (isStarted) {
           removeWaitingArea(document);
-          setInterval(fetchGameData.bind(null, document), 3000);
+          setInterval(fetchGameData.bind(null, document), 1000);
           clearInterval(gameStatusIntervalId);
           return;
         }

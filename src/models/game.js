@@ -89,6 +89,10 @@ class Game {
     return corporationsDetail;
   }
 
+  getActivityLog() {
+    return this.activityLog;
+  }
+
   getPlayerById(id) {
     return this.players[id];
   }
