@@ -148,6 +148,7 @@ const placeTile = function() {
       displayStatus(document, message);
     }
   })();
+  event.target.remove();
 };
 
 const getTileButton = function(document, tile) {
