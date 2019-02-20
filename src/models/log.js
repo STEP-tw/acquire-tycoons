@@ -12,4 +12,4 @@ class ActivityLog {
   }
 }
 
-module.exports = {ActivityLog};
+module.exports = { ActivityLog };

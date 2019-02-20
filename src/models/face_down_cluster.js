@@ -13,4 +13,4 @@ class FaceDownCluster {
   }
 }
 
-module.exports = {FaceDownCluster};
+module.exports = { FaceDownCluster };

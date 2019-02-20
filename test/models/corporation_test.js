@@ -1,10 +1,7 @@
-const {
-  Corporation,
-  createCorporationInstance
-} = require('../../src/models/corporation.js');
-const {getLevel} = require('../../src/models/data_handler.js');
-const {expect} = require('chai');
-const {Tile} = require('../../src/models/tile.js');
+const { Corporation } = require('../../src/models/corporation.js');
+const { getLevel, createCorporationInstance } = require('../../src/util.js');
+const { expect } = require('chai');
+const { Tile } = require('../../src/models/tile.js');
 
 describe('Corporation', function() {
   let corporation;
@@ -95,7 +92,7 @@ describe(' createCorporationInstance', function() {
       ]
     };
     corporation = createCorporationInstance(
-      {name: 'Sackson', levelId: 1},
+      { name: 'Sackson', levelId: 1 },
       levelsData
     );
   });

@@ -113,8 +113,8 @@ class Game {
     const corporations = this.getCorporationsDetail();
     const players = this.getTurnData();
     const player = this.getPlayerDetails(playerId);
-    return {board, corporations, players, player};
+    return { board, corporations, players, player };
   }
 }
 
-module.exports = {Game};
+module.exports = { Game };

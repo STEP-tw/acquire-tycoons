@@ -1,5 +1,3 @@
-const {getLevel} = require('./data_handler.js');
-
 class Corporation {
   constructor(name, level) {
     this.name = name;
@@ -51,24 +49,6 @@ class Corporation {
   }
 }
 
-const getLevelName = function(levelId) {
-  return 'level-' + levelId;
-};
-
-const getLevelData = function(levelsData, levelId) {
-  const levelName = getLevelName(levelId);
-  return levelsData[levelName];
-};
-
-const createCorporationInstance = function({name, levelId}, levelsData) {
-  const levelData = getLevelData(levelsData, levelId);
-  const level = getLevel(levelData);
-  return new Corporation(name, level);
-};
-
 module.exports = {
-  createCorporationInstance,
-  getLevelData,
-  getLevelName,
   Corporation
 };

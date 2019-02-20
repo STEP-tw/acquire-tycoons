@@ -44,11 +44,11 @@ class Player {
     return this.money;
   }
 
-  addStocks({name, numberOfStock}) {
+  addStocks({ name, numberOfStock }) {
     this.stocks[name] += numberOfStock;
   }
 
-  deductStocks({name, numberOfStock}) {
+  deductStocks({ name, numberOfStock }) {
     this.stocks[name] -= numberOfStock;
   }
 
@@ -59,7 +59,7 @@ class Player {
   getStockDetails() {
     const stocks = Object.keys(this.stocks).map(name => {
       const value = this.stocks[name];
-      return {name, value};
+      return { name, value };
     });
     return stocks.filter(stock => stock.value != 0);
   }
@@ -74,8 +74,8 @@ class Player {
     const stocks = this.getStockDetails();
     const tiles = this.tiles.map(tile => tile.getValue());
     const status = this.status;
-    return {name, money, stocks, tiles, status};
+    return { name, money, stocks, tiles, status };
   }
 }
 
-module.exports = {Player};
+module.exports = { Player };

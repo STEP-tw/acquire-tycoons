@@ -1,9 +1,3 @@
-const makeValuesArray = function(initial, final) {
-  const arraySize = final - initial + 1;
-  const values = new Array(arraySize).fill(0);
-  return values.map((zero, index) => initial + index + zero);
-};
-
 class CorporationSizeInfo {
   constructor({
     lowerLimit = 0,
@@ -12,14 +6,15 @@ class CorporationSizeInfo {
     majority = 0,
     minority = 0
   }) {
-    this.values = makeValuesArray(lowerLimit, upperLimit);
+    this.upperLimit = upperLimit;
+    this.lowerLimit = lowerLimit;
     this.stockPrice = stockPrice;
     this.majority = majority;
     this.minority = minority;
   }
 
   isValueIncluded(value) {
-    return this.values.includes(value);
+    return this.upperLimit >= value && this.lowerLimit <= value;
   }
 
   getStockPrice() {
@@ -65,16 +60,7 @@ class Level {
   }
 }
 
-const getLevel = function(levelSizesData) {
-  const corporationSizes = levelSizesData.map(
-    corporationSizeData => new CorporationSizeInfo(corporationSizeData)
-  );
-  return new Level(corporationSizes);
-};
-
 module.exports = {
-  makeValuesArray,
-  getLevel,
   Level,
   CorporationSizeInfo
 };

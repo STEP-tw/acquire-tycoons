@@ -11,7 +11,7 @@ class Tile {
   }
 
   getNeighbours() {
-    const {row, column} = this.position;
+    const { row, column } = this.position;
     return [
       {
         row: row + 1,

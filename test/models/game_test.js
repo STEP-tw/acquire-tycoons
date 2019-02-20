@@ -1,11 +1,11 @@
-const {Game} = require('../../src/models/game');
-const {Player} = require('../../src/models/player');
+const { Game } = require('../../src/models/game');
+const { Player } = require('../../src/models/player');
 const expect = require('chai').expect;
 const sinon = require('sinon');
 const tilesData = require('../../src/data/tiles_data.json');
 const levelsData = require('../../src/data/level_data.json');
 const corporationData = require('../../src/data/corporations_data.json');
-const {getCorporations, getFaceDownCluster} = require('../../src/util.js');
+const { getCorporations, getFaceDownCluster } = require('../../src/util.js');
 
 describe('Game', function() {
   let game;

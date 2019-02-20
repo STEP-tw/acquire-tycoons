@@ -1,6 +1,6 @@
-const {expect} = require('chai');
+const { expect } = require('chai');
 
-const {random} = require('../../src/util.js');
+const { random } = require('../../src/util.js');
 
 describe('random', function() {
   it('testing Math.random', () => {

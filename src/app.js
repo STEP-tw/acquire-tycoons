@@ -10,7 +10,7 @@ const {
   serveGameData
 } = require('./handlers');
 const GameManager = require('./models/game_manager');
-const {random} = require('./util.js');
+const { random } = require('./util.js');
 
 const app = express();
 app.gameManager = new GameManager();
@@ -20,7 +20,7 @@ app.engine('html', ejs.renderFile);
 app.set('view engine', 'html');
 
 app.use(cookieParser());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.get('/game', renderGamePage);
 app.post('/join-game', joinGame);

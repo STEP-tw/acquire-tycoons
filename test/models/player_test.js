@@ -1,6 +1,6 @@
-const {Player} = require('../../src/models/player.js');
-const {Tile} = require('../../src/models/tile.js');
-const {expect} = require('chai');
+const { Player } = require('../../src/models/player.js');
+const { Tile } = require('../../src/models/tile.js');
+const { expect } = require('chai');
 
 describe('Player', function() {
   let player;
@@ -54,23 +54,23 @@ describe('Player', function() {
 
   describe('addTile', function() {
     it('should add given money to the player\'s money', function() {
-      const position = {row: 1, column: 1};
+      const position = { row: 1, column: 1 };
       const value = '1A';
       const tile = new Tile(position, value);
       player.addTile(tile);
-      const expectedOutput = [{position: {row: 1, column: 1}, value: '1A'}];
+      const expectedOutput = [{ position: { row: 1, column: 1 }, value: '1A' }];
       expect(player.getTiles()).to.deep.equal(expectedOutput);
     });
   });
 
   describe('removeTile', function() {
     it('should remove tile from player\'s tile', function() {
-      let position = {row: 1, column: 1};
+      let position = { row: 1, column: 1 };
       let value = '1A';
       let tile = new Tile(position, value);
       player.addTile(tile);
 
-      position = {row: 1, column: 1};
+      position = { row: 1, column: 1 };
       value = '1A';
       tile = new Tile(position, value);
       player.removeTile(tile);
@@ -81,7 +81,7 @@ describe('Player', function() {
 
   describe('addStocks', function() {
     it('should add stocks to the player\'s stocks', function() {
-      const stock = {name: 'Sackson', numberOfStock: 4};
+      const stock = { name: 'Sackson', numberOfStock: 4 };
       player.addStocks(stock);
       const expectedOutput = {
         Phoenix: 0,
@@ -99,10 +99,10 @@ describe('Player', function() {
 
   describe('deductStocks', function() {
     it('should deduct stocks from the player\'s stocks', function() {
-      let stock = {name: 'Sackson', numberOfStock: 4};
+      let stock = { name: 'Sackson', numberOfStock: 4 };
       player.addStocks(stock);
 
-      stock = {name: 'Sackson', numberOfStock: 2};
+      stock = { name: 'Sackson', numberOfStock: 2 };
       player.deductStocks(stock);
       const expectedOutput = {
         Phoenix: 0,
@@ -120,7 +120,7 @@ describe('Player', function() {
 
   describe('findTile', function() {
     it('should return true if tile is present in player\'s tile', function() {
-      const position = {row: 1, column: 1};
+      const position = { row: 1, column: 1 };
       const value = '1A';
       const tile = new Tile(position, value);
       player.addTile(tile);
