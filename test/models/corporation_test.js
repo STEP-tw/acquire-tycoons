@@ -1,7 +1,8 @@
-const { Corporation } = require('../../src/models/corporation.js');
-const { getLevel, createCorporationInstance } = require('../../src/util.js');
+const Corporation = require('../../src/models/corporation.js');
+const { createCorporationInstance } = require('../../src/util.js');
+const Level = require('../../src/models/level.js');
 const { expect } = require('chai');
-const { Tile } = require('../../src/models/tile.js');
+const Tile = require('../../src/models/tile.js');
 
 describe('Corporation', function() {
   let corporation;
@@ -23,7 +24,7 @@ describe('Corporation', function() {
       }
     ];
 
-    const level = getLevel(levelData);
+    const level = new Level(levelData);
     corporation = new Corporation('Sackson', level);
   });
 

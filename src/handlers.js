@@ -1,5 +1,5 @@
-const { Game } = require('./models/game');
-const { Player } = require('./models/player');
+const Game = require('./models/game');
+const Player = require('./models/player');
 const { initializeGame } = require('./util.js');
 const { ActivityLog } = require('./models/log');
 

@@ -1,5 +1,5 @@
 const GameManager = require('../../src/models/game_manager');
-const { Game } = require('../../src/models/game');
+const Game = require('../../src/models/game');
 const expect = require('chai').expect;
 
 describe('Game Manager', () => {

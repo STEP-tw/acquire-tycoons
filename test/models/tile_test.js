@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 
-const { Tile } = require('../../src/models/tile.js');
+const Tile = require('../../src/models/tile.js');
 
 describe('Tile', function() {
   let tile;

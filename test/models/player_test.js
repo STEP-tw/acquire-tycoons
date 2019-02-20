@@ -1,5 +1,5 @@
-const { Player } = require('../../src/models/player.js');
-const { Tile } = require('../../src/models/tile.js');
+const Player = require('../../src/models/player.js');
+const Tile = require('../../src/models/tile.js');
 const { expect } = require('chai');
 
 describe('Player', function() {

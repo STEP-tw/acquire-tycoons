@@ -1,10 +1,10 @@
-const { Tile } = require('./models/tile.js');
-const { FaceDownCluster } = require('./models/face_down_cluster.js');
+const Tile = require('./models/tile.js');
+const FaceDownCluster = require('./models/face_down_cluster.js');
 const corpoarationsData = require('./data/corporations_data.json');
 const levelsData = require('./data/level_data.json');
 const tilesData = require('./data/tiles_data.json');
-const { CorporationSizeInfo, Level } = require('./models/data_handler.js');
-const { Corporation } = require('./models/corporation.js');
+const Level = require('./models/level.js');
+const Corporation = require('./models/corporation.js');
 
 const random = function(length) {
   return Math.floor(Math.random() * length);
@@ -29,13 +29,6 @@ const initializeGame = function(game) {
   game.initialize(corporations, faceDownCluster);
 };
 
-const getLevel = function(levelSizesData) {
-  const corporationSizes = levelSizesData.map(
-    corporationSizeData => new CorporationSizeInfo(corporationSizeData)
-  );
-  return new Level(corporationSizes);
-};
-
 const getLevelName = function(levelId) {
   return 'level-' + levelId;
 };
@@ -47,7 +40,7 @@ const getLevelData = function(levelsData, levelId) {
 
 const createCorporationInstance = function({ name, levelId }, levelsData) {
   const levelData = getLevelData(levelsData, levelId);
-  const level = getLevel(levelData);
+  const level = new Level(levelData);
   return new Corporation(name, level);
 };
 
@@ -56,6 +49,5 @@ module.exports = {
   initializeGame,
   getFaceDownCluster,
   getCorporations,
-  getLevel,
   createCorporationInstance
 };

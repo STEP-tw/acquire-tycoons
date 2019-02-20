@@ -1,5 +1,5 @@
-const { Game } = require('../../src/models/game');
-const { Player } = require('../../src/models/player');
+const Game = require('../../src/models/game');
+const Player = require('../../src/models/player');
 const expect = require('chai').expect;
 const sinon = require('sinon');
 const tilesData = require('../../src/data/tiles_data.json');

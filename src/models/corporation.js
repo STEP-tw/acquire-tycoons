@@ -49,6 +49,4 @@ class Corporation {
   }
 }
 
-module.exports = {
-  Corporation
-};
+module.exports = Corporation;

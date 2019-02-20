@@ -49,6 +49,4 @@ const isSamePositions = function(position1, position2) {
   return position1.row == position2.row && position1.column == position2.column;
 };
 
-module.exports = {
-  Tile
-};
+module.exports = Tile;

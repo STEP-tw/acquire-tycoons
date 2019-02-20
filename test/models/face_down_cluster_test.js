@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 
-const { FaceDownCluster } = require('../../src/models/face_down_cluster.js');
-const { Tile } = require('../../src/models/tile.js');
+const FaceDownCluster = require('../../src/models/face_down_cluster.js');
+const Tile = require('../../src/models/tile.js');
 
 describe('FaceDownCluster', function() {
   describe('getRandomTile', function() {
