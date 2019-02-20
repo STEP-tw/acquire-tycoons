@@ -3,17 +3,10 @@ const Player = require('./models/player');
 const { initializeGame } = require('./util.js');
 const { ActivityLog } = require('./models/log');
 
-const getActivityLog = function(req, res) {
+const fetchLog = function(req, res) {
   let { gameId } = req.cookies;
   let game = res.app.gameManager.getGameById(gameId);
-  game.activityLog.addLog('You got 6000rs');
-  game.activityLog.addLog('Suman got D1 tile');
   let logs = game.activityLog.getLogs();
-  return logs;
-};
-
-const fetchLog = function(req, res) {
-  let logs = getActivityLog(req, res);
   res.send(logs);
 };
 

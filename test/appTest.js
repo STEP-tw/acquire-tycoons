@@ -22,7 +22,7 @@ describe('POST /join-game', function() {
   beforeEach(function() {
     const random = () => 0;
     app.gameManager = new GameManager();
-    const game = new Game(3, random);
+    const game = new Game(3, random, new ActivityLog());
     const host = new Player('Arnab');
     game.addPlayer(host);
     app.gameManager.addGame(game);
@@ -102,7 +102,7 @@ describe('GET /game', function() {
   let gameID;
   beforeEach(function() {
     app.gameManager = new GameManager();
-    const game = new Game(3);
+    const game = new Game(3, null, new ActivityLog());
     const host = new Player('Arnab');
     game.addPlayer(host);
     app.gameManager.addGame(game);
@@ -136,7 +136,7 @@ describe('GET /game-data', function() {
   beforeEach(function() {
     const random = () => 0;
     app.gameManager = new GameManager();
-    const game = new Game(3, random);
+    const game = new Game(3, random, new ActivityLog());
     const host = new Player('Arnab');
     game.addPlayer(host);
     app.gameManager.addGame(game);
@@ -164,6 +164,7 @@ describe('GET /game-data', function() {
       app.gameManager = new GameManager();
       const game = new Game(3, null, new ActivityLog());
       app.gameManager.addGame(game);
+      game.activityLog.addLog('You got 6000rs');
       gameID = app.gameManager.getLatestId();
     });
 
@@ -172,6 +173,7 @@ describe('GET /game-data', function() {
         .get('/log')
         .set('Cookie', [`gameId=${gameID}`])
         .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect('["You got 6000rs"]')
         .expect(200, done);
     });
   });
