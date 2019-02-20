@@ -87,6 +87,7 @@ const createPlayerDiv = function(document, player) {
 
 const displayPlayers = function(document, { playerNames, currPlayerIndex }) {
   const playersDiv = document.getElementById('players');
+  playersDiv.innerHTML = '';
   const players = playerNames.map(createPlayerDiv.bind(null, document));
   setAttribute(players[currPlayerIndex], 'className', 'currentTurn');
   appendChilds(playersDiv, players);
@@ -113,6 +114,7 @@ const createCorporationRow = function(document, corporationData) {
 
 const displayCorporations = function(document, corporationsData) {
   const corporationsDiv = document.getElementById('corporations');
+  corporationsDiv.innerHTML = '';
   const corporations = corporationsData.map(
     createCorporationRow.bind(null, document)
   );
@@ -124,17 +126,43 @@ const displayMoney = function(document, money) {
   setAttribute(moneyHolder, 'innerText', money);
 };
 
+const displayStatus = function(document, statusMsg) {
+  const statusDiv = document.getElementById('status');
+  setAttribute(statusDiv, 'innerText', statusMsg);
+};
+
+const placeTile = function() {
+  const tileValue = event.target.id;
+  (async function() {
+    const reqData = {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({ tileValue })
+    };
+
+    const response = await fetch('/place-tile', reqData);
+    const { error, message } = await response.json();
+    if (error) {
+      displayStatus(document, message);
+    }
+  })();
+};
+
 const getTileButton = function(document, tile) {
   const attributes = {
     className: 'tile',
     id: tile,
-    innerText: tile
+    innerText: tile,
+    onclick: placeTile
   };
   return createTagWithAttributes(document, 'button', attributes);
 };
 
 const displayTiles = function(document, tilesData) {
   const tilesDiv = document.getElementById('tiles');
+  tilesDiv.innerHTML = '';
   const tiles = tilesData.map(getTileButton.bind(null, document));
   appendChilds(tilesDiv, tiles);
 };
@@ -156,13 +184,9 @@ const createStockDiv = function(document, stockDetail) {
 
 const displayStocks = function(document, stockDetails) {
   const stocksDiv = document.getElementById('stocks');
+  stocksDiv.innerHTML = '';
   const stocks = stockDetails.map(createStockDiv.bind(null, document));
   appendChilds(stocksDiv, stocks);
-};
-
-const displayStatus = function(document, statusMsg) {
-  const statusDiv = document.getElementById('status');
-  setAttribute(statusDiv, 'innerText', statusMsg);
 };
 
 const displayGame = function(document, gameData) {
@@ -184,12 +208,10 @@ const fetchGameData = function(document) {
   fetch('/game-data', { method: 'GET', credentials: 'same-origin' })
     .then(response => response.json())
     .then(gameData => {
-      removeWaitingArea(document);
       const gameContainer = document.getElementById('game-container');
       gameContainer.style.display = 'block';
       const header = document.getElementById('game-header');
       header.style.display = 'flex';
-      initializeBoard(document);
       displayGame(document, gameData);
     });
 };
@@ -204,7 +226,8 @@ const checkGameStatus = function(document) {
       .then(data => {
         const { isStarted } = data;
         if (isStarted) {
-          fetchGameData(document);
+          removeWaitingArea(document);
+          setInterval(fetchGameData.bind(null, document), 3000);
           clearInterval(gameStatusIntervalId);
           return;
         }
@@ -213,8 +236,7 @@ const checkGameStatus = function(document) {
 };
 
 const initialize = function(document) {
-  const gameContainer = document.getElementById('game-container');
-  gameContainer.style.display = 'none';
+  initializeBoard(document);
   const header = document.getElementById('game-header');
   header.style.display = 'none';
   checkGameStatus(document);

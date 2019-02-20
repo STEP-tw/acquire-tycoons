@@ -178,3 +178,42 @@ describe('GET /game-data', function() {
     });
   });
 });
+
+describe('GET /place-tile', function() {
+  let gameID, firstTileOfHost;
+  beforeEach(function() {
+    const random = () => 0;
+    app.gameManager = new GameManager();
+    const game = new Game(3, random, new ActivityLog());
+    const host = new Player('Arnab');
+    game.addPlayer(host);
+    app.gameManager.addGame(game);
+    gameID = app.gameManager.getLatestId();
+    const player2 = new Player('Dheeraj');
+    game.addPlayer(player2);
+    const player3 = new Player('Srushti');
+    game.addPlayer(player3);
+    initializeGame(game);
+    firstTileOfHost = host.tiles[0];
+  });
+
+  it('should place tile when gameId cookie is valid', function(done) {
+    request(app)
+      .post('/place-tile')
+      .set('Cookie', [`gameId=${gameID};playerId=1`])
+      .send({ tileValue: firstTileOfHost.getValue() })
+      .expect({ error: false, message: '' })
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200, done);
+  });
+
+  it('should provide error when gameId cookie is not valid', function(done) {
+    request(app)
+      .post('/place-tile')
+      .set('Cookie', ['gameId=12;playerId=1'])
+      .send({ tileValue: firstTileOfHost.getValue() })
+      .expect({ error: true, message: 'No Such Game with ID 12' })
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200, done);
+  });
+});

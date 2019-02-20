@@ -72,11 +72,27 @@ const serveGameData = function(req, res) {
   res.send(gameData);
 };
 
+const placeTile = function(req, res) {
+  let { tileValue } = req.body;
+  let { gameId, playerId } = req.cookies;
+  let game = res.app.gameManager.getGameById(gameId);
+  if (!game) {
+    return res.send({ error: true, message: `No Such Game with ID ${gameId}` });
+  }
+  const player = game.getPlayerById(playerId);
+  const tile = player.findTileByValue(tileValue);
+  game.placeTile(tile);
+  player.removeTile(tile.getPosition());
+  player.updateLog(`You placed tile on ${tileValue}`);
+  res.send({ error: false, message: '' });
+};
+
 module.exports = {
   hostGame,
   joinGame,
   getGameStatus,
   renderGamePage,
   fetchLog,
-  serveGameData
+  serveGameData,
+  placeTile
 };

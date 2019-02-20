@@ -89,8 +89,16 @@ class Game {
     return corporationsDetail;
   }
 
+  getPlayerById(id) {
+    return this.players[id];
+  }
+
   getPlayerDetails(playerId) {
     return this.players[playerId].getDetails();
+  }
+
+  placeTile(tile) {
+    this.uninCorporatedTiles.push(tile);
   }
 
   generateBoard() {

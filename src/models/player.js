@@ -12,7 +12,7 @@ class Player {
       Zeta: 0,
       Sackson: 0
     };
-    this.status = 'Welcome ' + this.name;
+    this.log = 'Welcome ' + this.name;
   }
 
   addTile(tile) {
@@ -23,9 +23,17 @@ class Player {
     return this.tiles.findIndex(tile => tile.isSamePosition(position));
   }
 
+  findTileByValue(value) {
+    return this.tiles.find(tile => tile.isSameValue(value));
+  }
+
   removeTile(position) {
     const tileIndex = this.findTile(position);
     this.tiles.splice(tileIndex, 1);
+  }
+
+  updateLog(newLog) {
+    this.log = newLog;
   }
 
   getTiles() {
@@ -73,7 +81,7 @@ class Player {
     const money = this.money;
     const stocks = this.getStockDetails();
     const tiles = this.tiles.map(tile => tile.getValue());
-    const status = this.status;
+    const status = this.log;
     return { name, money, stocks, tiles, status };
   }
 }

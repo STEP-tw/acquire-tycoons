@@ -7,7 +7,8 @@ const {
   getGameStatus,
   renderGamePage,
   fetchLog,
-  serveGameData
+  serveGameData,
+  placeTile
 } = require('./handlers');
 const GameManager = require('./models/game_manager');
 const { random } = require('./util.js');
@@ -25,6 +26,7 @@ app.use(express.json());
 app.get('/game', renderGamePage);
 app.post('/join-game', joinGame);
 app.post('/host-game', hostGame);
+app.post('/place-tile', placeTile);
 app.get('/game-status', getGameStatus);
 app.get('/log', fetchLog);
 app.get('/game-data', serveGameData);

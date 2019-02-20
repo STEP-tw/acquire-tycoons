@@ -36,6 +36,10 @@ class Tile {
     return this.value;
   }
 
+  getPosition() {
+    return this.position;
+  }
+
   isSameValue(value) {
     return this.value == value;
   }
