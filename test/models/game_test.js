@@ -221,4 +221,14 @@ describe('Game', function() {
       expect(game.getCurrentPlayer().log).to.equals(`It's your turn`);
     });
   });
+
+  describe('provideNewTile', function() {
+    it('should change the player turn and add log for next player', function() {
+      const corporations = getCorporations(corporationData, levelsData);
+      const faceDownCluster = getFaceDownCluster([]);
+      game.initialize(corporations, faceDownCluster);
+      game.provideNewTile();
+      expect(game.getCurrentPlayer().tiles).to.have.length(0);
+    });
+  });
 });

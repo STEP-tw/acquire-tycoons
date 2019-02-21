@@ -1,7 +1,6 @@
 class FaceDownCluster {
-  constructor(tiles, randomNumberGenerator) {
+  constructor(tiles) {
     this.tiles = tiles;
-    this.random = randomNumberGenerator;
   }
 
   getTile(index) {

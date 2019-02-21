@@ -36,7 +36,7 @@ class Game {
       const tile = this.getRandomTile();
       tiles.push(tile);
     }
-    return tiles;
+    return tiles.filter(tile => tile !== undefined);
   }
 
   getInitialTiles() {
@@ -168,7 +168,18 @@ class Game {
     return this.players[currentPlayerIndex];
   }
 
+  provideNewTile() {
+    const newTile = this.getRandomTile();
+    const currentPlayer = this.getCurrentPlayer();
+    if (newTile) {
+      currentPlayer.addTile(newTile);
+      this.activityLog.addLog(`${currentPlayer.getName()} got a new tile`);
+      currentPlayer.updateLog(`You got ${newTile.getValue()} tile`);
+    }
+  }
+
   changeTurn() {
+    this.provideNewTile();
     this.turnManager.changeTurn();
     this.turnManager.changeAction({ name: 'PLACE_A_TILE', data: {} });
     this.updateTurnLog();
