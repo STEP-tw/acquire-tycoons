@@ -69,6 +69,7 @@ const displayBoard = function(document, tiles) {
   tiles.forEach(({ id, corporation }) => {
     const cell = document.getElementById(id);
     setAttribute(cell, 'className', corporation);
+    cell.style.border = '1px solid black';
   });
 };
 
@@ -196,6 +197,10 @@ const displayStocks = function(document, stockDetails) {
   appendChilds(stocksDiv, stocks);
 };
 
+const highlightLastPlacedTile = function(document, tileId) {
+  document.getElementById(tileId).style.border = '2px solid red';
+};
+
 const displayGame = function(document, gameData) {
   displayBoard(document, gameData.board);
   displayPlayers(document, gameData.players);
@@ -204,6 +209,7 @@ const displayGame = function(document, gameData) {
   displayTiles(document, gameData.player.tiles);
   displayStocks(document, gameData.player.stocks);
   displayStatus(document, gameData.player.status);
+  highlightLastPlacedTile(document, gameData.lastPlacedTileId);
 };
 
 const removeWaitingArea = function(document) {

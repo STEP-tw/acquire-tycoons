@@ -133,6 +133,10 @@ class Game {
     this.uninCorporatedTiles.push(tile);
   }
 
+  getLastTile() {
+    return this.uninCorporatedTiles[this.uninCorporatedTiles.length - 1];
+  }
+
   generateBoard() {
     const corporationsDetail = this.corporations.reduce(
       (initial, corporation) => initial.concat(corporation.getTiles()),
@@ -158,7 +162,8 @@ class Game {
     const players = this.getTurnData();
     const player = this.getPlayerDetails(playerId);
     const action = this.turnManager.getAction(playerId);
-    return { board, corporations, players, player, action };
+    const lastPlacedTileId = this.getLastTile().getValue();
+    return { board, corporations, players, player, action, lastPlacedTileId };
   }
 }
 
