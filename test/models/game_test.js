@@ -188,4 +188,37 @@ describe('Game', function() {
       expect(game.getDetails(1).board).to.have.length(4);
     });
   });
+
+  describe('getCurrentPlayer', function() {
+    it('should return the current player as 0 when initialized', function() {
+      const player1 = new Player('Swagata', 1);
+      const player2 = new Player('Gayatri', 2);
+      const player3 = new Player('Arnab', 3);
+      game.addPlayer(player1);
+      game.addPlayer(player2);
+      game.addPlayer(player3);
+      const corporations = getCorporations(corporationData, levelsData);
+      const faceDownCluster = getFaceDownCluster(tilesData);
+      game.initialize(corporations, faceDownCluster);
+
+      expect(game.getCurrentPlayer().getId()).to.equals(0);
+    });
+  });
+
+  describe('changeTurn', function() {
+    it('should change the player turn and add log for next player', function() {
+      const player1 = new Player('Swagata', 1);
+      const player2 = new Player('Gayatri', 2);
+      const player3 = new Player('Arnab', 3);
+      game.addPlayer(player1);
+      game.addPlayer(player2);
+      game.addPlayer(player3);
+      const corporations = getCorporations(corporationData, levelsData);
+      const faceDownCluster = getFaceDownCluster(tilesData);
+      game.initialize(corporations, faceDownCluster);
+      game.changeTurn();
+      expect(game.getCurrentPlayer().getId()).to.equal(1);
+      expect(game.getCurrentPlayer().log).to.equals(`It's your turn`);
+    });
+  });
 });

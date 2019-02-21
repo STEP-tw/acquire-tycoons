@@ -76,6 +76,7 @@ class Game {
     const orderedPlayerIds = this.players.map(player => player.getId());
     this.turnManager = new TurnManager(orderedPlayerIds);
     this.turnManager.changeAction({ name: 'PLACE_A_TILE', data: {} });
+    this.getCurrentPlayer().updateLog('It\'s your turn');
     this.isStarted = true;
   }
 
@@ -152,10 +153,17 @@ class Game {
     return corporationsDetail.concat(uninCorporatedDetail);
   }
 
+  getCurrentPlayer() {
+    const currentPlayerIndex = this.turnManager.getCurrentPlayerIndex();
+    return this.players[currentPlayerIndex];
+  }
+
   changeTurn() {
     this.turnManager.changeTurn();
     this.turnManager.changeAction({ name: 'PLACE_A_TILE', data: {} });
+    this.getCurrentPlayer().updateLog('It\'s your turn');
   }
+
   getDetails(playerId) {
     const board = this.generateBoard();
     const corporations = this.getCorporationsDetail();
