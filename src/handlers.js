@@ -50,6 +50,43 @@ const joinGame = function(req, res) {
   }
 };
 
+const validateGameSession = function(req, res, next) {
+  if (!res.app.urlsToValidateGame.includes(req.url)) {
+    next();
+    return;
+  }
+  const { gameId, playerId } = req.cookies;
+  const game = res.app.gameManager.getGameById(gameId);
+  if (!game) {
+    return res.send({ error: true, message: `No Such Game with ID ${gameId}` });
+  }
+
+  const player = game.getPlayerById(playerId);
+  if (!player) {
+    return res.send({
+      error: true,
+      message: `No Such Player with ID ${playerId}`
+    });
+  }
+
+  req.game = game;
+  next();
+};
+
+const validateTurn = function(req, res, next) {
+  if (!res.app.urlsToValidateTurn.includes(req.url)) {
+    next();
+    return;
+  }
+
+  const { playerId } = req.cookies;
+  const game = req.game;
+  if (!game.isCurrentPlayer(playerId)) {
+    return res.send({ error: true, message: 'It\'s not your turn' });
+  }
+  next();
+};
+
 const getGameStatus = function(req, res) {
   let { gameId } = req.cookies;
   let game = res.app.gameManager.getGameById(gameId);
@@ -76,11 +113,8 @@ const serveGameData = function(req, res) {
 
 const placeTile = function(req, res) {
   let { tileValue } = req.body;
-  let { gameId, playerId } = req.cookies;
-  let game = res.app.gameManager.getGameById(gameId);
-  if (!game) {
-    return res.send({ error: true, message: `No Such Game with ID ${gameId}` });
-  }
+  let { playerId } = req.cookies;
+  let game = req.game;
   const player = game.getPlayerById(playerId);
   const tile = player.findTileByValue(tileValue);
   if (!tile) {
@@ -106,5 +140,7 @@ module.exports = {
   renderGamePage,
   fetchLog,
   serveGameData,
-  placeTile
+  placeTile,
+  validateGameSession,
+  validateTurn
 };

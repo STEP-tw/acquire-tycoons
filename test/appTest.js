@@ -160,9 +160,13 @@ describe('GET /game-data', function() {
 
   describe('GET /log', function() {
     let gameID;
+    let playerId;
     beforeEach(function() {
       app.gameManager = new GameManager();
       const game = new Game(3, null, new ActivityLog());
+      playerId = game.getNextPlayerId();
+      const host = new Player('Dheeraj', playerId);
+      game.addPlayer(host);
       app.gameManager.addGame(game);
       game.activityLog.addLog('You got 6000rs');
       gameID = app.gameManager.getLatestId();
@@ -171,9 +175,17 @@ describe('GET /game-data', function() {
     it('should fetch all the logs from the activty log', function(done) {
       request(app)
         .get('/log')
-        .set('Cookie', [`gameId=${gameID}`])
+        .set('Cookie', [`gameId=${gameID}; playerId=${playerId}`])
         .expect('Content-Type', 'application/json; charset=utf-8')
         .expect('["You got 6000rs"]')
+        .expect(200, done);
+    });
+    it('should fetch all the logs from the activty log', function(done) {
+      request(app)
+        .get('/log')
+        .set('Cookie', [`gameId=${gameID}; playerId=1`])
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect({ error: true, message: 'No Such Player with ID 1' })
         .expect(200, done);
     });
   });
@@ -223,6 +235,15 @@ describe('GET /place-tile', function() {
       .set('Cookie', ['gameId=12;playerId=1'])
       .send({ tileValue: firstTileOfHost.getValue() })
       .expect({ error: true, message: 'No Such Game with ID 12' })
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200, done);
+  });
+  it('should provide error when gameId cookie is not valid', function(done) {
+    request(app)
+      .post('/place-tile')
+      .set('Cookie', [`gameId=${gameID};playerId=2`])
+      .send({ tileValue: firstTileOfHost.getValue() })
+      .expect({ error: true, message: 'It\'s not your turn' })
       .expect('Content-Type', 'application/json; charset=utf-8')
       .expect(200, done);
   });

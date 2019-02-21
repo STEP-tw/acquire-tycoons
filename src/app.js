@@ -8,7 +8,9 @@ const {
   renderGamePage,
   fetchLog,
   serveGameData,
-  placeTile
+  placeTile,
+  validateGameSession,
+  validateTurn
 } = require('./handlers');
 const GameManager = require('./models/game_manager');
 const { random } = require('./util.js');
@@ -16,13 +18,16 @@ const { random } = require('./util.js');
 const app = express();
 app.gameManager = new GameManager();
 app.random = random;
-
+app.urlsToValidateGame = ['/game-status', '/place-tile', '/game-data', '/log'];
+app.urlsToValidateTurn = ['/place-tile'];
 app.engine('html', ejs.renderFile);
 app.set('view engine', 'html');
 
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(validateGameSession);
+app.use(validateTurn);
 app.get('/game', renderGamePage);
 app.post('/join-game', joinGame);
 app.post('/host-game', hostGame);

@@ -42,7 +42,7 @@ class Game {
   getInitialTiles() {
     const tiles = this.getNRandomTiles(this.getNextPlayerId());
     this.uninCorporatedTiles = tiles;
-    for (let index = 0; index < tiles.length; index++) {
+    for (let index in tiles) {
       const player = this.players[index];
       const tile = tiles[index];
       player.setInitialTile(tiles[index]);
@@ -118,6 +118,10 @@ class Game {
 
   getPlayerById(id) {
     return this.players.find(player => player.isSame(id));
+  }
+
+  isCurrentPlayer(id) {
+    return this.turnManager.isCurrentPlayer(id);
   }
 
   getPlayerDetails(playerId) {
