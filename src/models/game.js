@@ -1,3 +1,5 @@
+const TurnManager = require('./turn_manager.js');
+
 const flatPosition = function(position) {
   return position.row * 12 + position.column;
 };
@@ -71,6 +73,9 @@ class Game {
     this.getInitialTiles();
     this.getInitialTilesForPlayer();
     this.orderPlayer();
+    const orderedPlayerIds = this.players.map(player => player.getId());
+    this.turnManager = new TurnManager(orderedPlayerIds);
+    this.turnManager.changeAction({ name: 'PLACE_A_TILE', data: {} });
     this.isStarted = true;
   }
 
@@ -88,9 +93,10 @@ class Game {
 
   getTurnData() {
     const playerNames = this.players.map(player => player.getName());
+    const currentPlayerIndex = this.turnManager.getCurrentPlayerIndex();
     return {
       playerNames,
-      currPlayerIndex: 0
+      currentPlayerIndex
     };
   }
 
@@ -138,12 +144,17 @@ class Game {
     return corporationsDetail.concat(uninCorporatedDetail);
   }
 
+  changeTurn() {
+    this.turnManager.changeTurn();
+    this.turnManager.changeAction({ name: 'PLACE_A_TILE', data: {} });
+  }
   getDetails(playerId) {
     const board = this.generateBoard();
     const corporations = this.getCorporationsDetail();
     const players = this.getTurnData();
     const player = this.getPlayerDetails(playerId);
-    return { board, corporations, players, player };
+    const action = this.turnManager.getAction(playerId);
+    return { board, corporations, players, player, action };
   }
 }
 

@@ -207,6 +207,16 @@ describe('GET /place-tile', function() {
       .expect(200, done);
   });
 
+  it('should provide error message when tile is not valid', function(done) {
+    request(app)
+      .post('/place-tile')
+      .set('Cookie', [`gameId=${gameID};playerId=0`])
+      .send({ tileValue: '12B' })
+      .expect({ error: true, message: 'You don\'t have 12B tile' })
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200, done);
+  });
+
   it('should provide error when gameId cookie is not valid', function(done) {
     request(app)
       .post('/place-tile')

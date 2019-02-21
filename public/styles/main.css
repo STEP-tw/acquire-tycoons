@@ -12,7 +12,6 @@ header {
   justify-content: space-between;
   margin: auto 2%;
   align-items: center;
-
 }
 
 main {
@@ -237,7 +236,6 @@ main {
 .tile {
   height: 50%;
   width: 11%;
-
   font-size: 120%;
   border: 1px solid black;
   border-radius: 5%;
@@ -246,6 +244,15 @@ main {
   outline: none;
 }
 
+.disabled {
+  background-color: lightgray;
+  border: 1px solid lightgray;
+  color: gray;
+}
+
+.enabled {
+  background-color: white;
+}
 .waiting-area {
   height: 480px;
   width: 340px;

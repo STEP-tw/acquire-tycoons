@@ -83,12 +83,19 @@ const placeTile = function(req, res) {
   }
   const player = game.getPlayerById(playerId);
   const tile = player.findTileByValue(tileValue);
+  if (!tile) {
+    return res.send({
+      error: true,
+      message: `You don't have ${tileValue} tile`
+    });
+  }
   game.placeTile(tile);
   player.removeTile(tile.getPosition());
   player.updateLog(`You placed tile on ${tileValue}`);
   game
     .getActivityLog()
     .addLog(`${player.getName()} placed tile ${tileValue} on board`);
+  game.changeTurn();
   res.send({ error: false, message: '' });
 };
 

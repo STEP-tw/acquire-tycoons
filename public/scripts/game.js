@@ -85,11 +85,11 @@ const createPlayerDiv = function(document, player) {
   return createTagWithAttributes(document, 'div', attributes);
 };
 
-const displayPlayers = function(document, { playerNames, currPlayerIndex }) {
+const displayPlayers = function(document, { playerNames, currentPlayerIndex }) {
   const playersDiv = document.getElementById('players');
   playersDiv.innerHTML = '';
   const players = playerNames.map(createPlayerDiv.bind(null, document));
-  setAttribute(players[currPlayerIndex], 'className', 'currentTurn');
+  setAttribute(players[currentPlayerIndex], 'className', 'currentTurn');
   appendChilds(playersDiv, players);
 };
 
@@ -131,8 +131,10 @@ const displayStatus = function(document, statusMsg) {
   setAttribute(statusDiv, 'innerText', statusMsg);
 };
 
-const placeTile = function() {
-  const tileValue = event.target.id;
+const placeTile = function(document) {
+  const tile = event.target;
+  const tileValue = tile.id;
+
   (async function() {
     const reqData = {
       method: 'POST',
@@ -146,17 +148,18 @@ const placeTile = function() {
     const { error, message } = await response.json();
     if (error) {
       displayStatus(document, message);
+      return;
     }
+    fetchGameData(document);
   })();
   event.target.remove();
 };
 
 const getTileButton = function(document, tile) {
   const attributes = {
-    className: 'tile',
+    className: 'tile disabled',
     id: tile,
-    innerText: tile,
-    onclick: placeTile
+    innerText: tile
   };
   return createTagWithAttributes(document, 'button', attributes);
 };
@@ -205,16 +208,40 @@ const removeWaitingArea = function(document) {
   waitingArea.parentNode.removeChild(waitingArea);
 };
 
+const showGameContainer = function(document) {
+  const gameContainer = document.getElementById('game-container');
+  gameContainer.style.display = 'block';
+  const header = document.getElementById('game-header');
+  header.style.display = 'flex';
+};
+
+const setOnClickForTiles = function(document) {
+  const tiles = document.getElementById('tiles').children;
+  for (const tile of tiles) {
+    tile.className = 'tile enabled';
+    tile.onclick = placeTile.bind(null, document);
+  }
+};
+
+const performAction = function(id, document, action) {
+  if (action.name != 'DO_NOTHING') clearInterval(id);
+  const actions = {
+    PLACE_A_TILE: setOnClickForTiles,
+    DO_NOTHING: () => {}
+  };
+  actions[action.name](document, action.data);
+};
+
 const fetchGameData = function(document) {
-  fetch('/game-data', { method: 'GET', credentials: 'same-origin' })
-    .then(response => response.json())
-    .then(gameData => {
-      const gameContainer = document.getElementById('game-container');
-      gameContainer.style.display = 'block';
-      const header = document.getElementById('game-header');
-      header.style.display = 'flex';
-      displayGame(document, gameData);
-    });
+  const gameDataIntervalId = setInterval(() => {
+    fetch('/game-data', { method: 'GET', credentials: 'same-origin' })
+      .then(response => response.json())
+      .then(gameData => {
+        showGameContainer(document);
+        displayGame(document, gameData);
+        performAction(gameDataIntervalId, document, gameData.action);
+      });
+  }, 1000);
 };
 
 const checkGameStatus = function(document) {
@@ -228,7 +255,7 @@ const checkGameStatus = function(document) {
         const { isStarted } = data;
         if (isStarted) {
           removeWaitingArea(document);
-          setInterval(fetchGameData.bind(null, document), 1000);
+          fetchGameData(document);
           clearInterval(gameStatusIntervalId);
           return;
         }
