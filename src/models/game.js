@@ -67,16 +67,26 @@ class Game {
     });
   }
 
+  initiateTurnManager() {
+    const orderedPlayerIds = this.players.map(player => player.getId());
+    this.turnManager = new TurnManager(orderedPlayerIds);
+    this.turnManager.changeAction({ name: 'PLACE_A_TILE', data: {} });
+  }
+
+  updateTurnLog() {
+    const currentPlayer = this.getCurrentPlayer();
+    currentPlayer.updateLog(`It's your turn`);
+    this.activityLog.addLog(`It's ${currentPlayer.getName()}'s turn`);
+  }
+
   initialize(corporations, faceDownCluster) {
     this.faceDownCluster = faceDownCluster;
     this.corporations = corporations;
     this.getInitialTiles();
     this.getInitialTilesForPlayer();
     this.orderPlayer();
-    const orderedPlayerIds = this.players.map(player => player.getId());
-    this.turnManager = new TurnManager(orderedPlayerIds);
-    this.turnManager.changeAction({ name: 'PLACE_A_TILE', data: {} });
-    this.getCurrentPlayer().updateLog('It\'s your turn');
+    this.initiateTurnManager();
+    this.updateTurnLog();
     this.isStarted = true;
   }
 
@@ -161,7 +171,7 @@ class Game {
   changeTurn() {
     this.turnManager.changeTurn();
     this.turnManager.changeAction({ name: 'PLACE_A_TILE', data: {} });
-    this.getCurrentPlayer().updateLog('It\'s your turn');
+    this.updateTurnLog();
   }
 
   getDetails(playerId) {
