@@ -1,317 +1,305 @@
-html,
-body {
-  margin: 0px;
-  height: 100%;
-  width: 100%;
+html, body {
+	margin: 0px;
+	height: 100%;
+	width: 100%;
 }
 
 header {
-  font-size: 30px;
-  height: 6%;
-  display: flex;
-  justify-content: space-between;
-  margin: auto 2%;
-  align-items: center;
+	font-size: 30px;
+	height: 6%;
+	display: flex;
+	justify-content: space-between;
+	margin: auto 2%;
+	align-items: center;
 }
 
 main {
-  height: 94%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border-top: 1px solid black;
-
-  background: whitesmoke;
+	height: 94%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	border-top: 1px solid black;
+	background: whitesmoke;
 }
 
 .status {
-  height: 4%;
-  width: 100%;
-  padding-top: 1%;
-  display: flex;
-  justify-content: center;
+	height: 4%;
+	width: 100%;
+	padding-top: 1%;
+	display: flex;
+	justify-content: center;
 }
 
 .status h2 {
-  height: 80%;
-  width: 60%;
-
-  margin: 0px;
-  padding-left: 1%;
-  font-size: 120%;
+	height: 80%;
+	width: 60%;
+	margin: 0px;
+	padding-left: 1%;
+	font-size: 120%;
 }
 
 .mainBody {
-  height: 68%;
-
-  display: flex;
-  align-items: center;
+	height: 68%;
+	display: flex;
+	align-items: center;
 }
 
 .user-info {
-  height: 18%;
-  width: 99%;
-
-  border: 1px solid black;
-  display: flex;
-  margin-left: 0.5%;
-  /* align-items: center; */
-  justify-content: space-around;
+	height: 18%;
+	width: 99%;
+	border: 1px solid black;
+	display: flex;
+	margin-left: 0.5%;
+	/* align-items: center; */
+	justify-content: space-around;
 }
 
-.players,
-.game-board,
-.hotels-info {
-  height: 92%;
+.players, .game-board, .hotels-info {
+	height: 92%;
 }
 
 .game-board {
-  width: 60%;
-  display: flex;
-  align-items: center;
+	width: 60%;
+	display: flex;
+	align-items: center;
 }
 
 .players {
-  width: 15%;
-  height: 92%;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+	width: 15%;
+	height: 92%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 .players div {
-  width: 60%;
-  height: 16.66%;
-  border: 1px solid black;
-  font-size: 150%;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	width: 60%;
+	height: 16.66%;
+	border: 1px solid black;
+	font-size: 150%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .players p {
-  margin: 0px;
-  text-align: center;
+	margin: 0px;
+	text-align: center;
 }
 
 .board {
-  height: 100%;
-  width: 98%;
-  border: 1px solid black;
+	height: 100%;
+	width: 98%;
+	border: 1px solid black;
 }
 
 .board td {
-  width: 8.33%;
-  text-align: center;
-  height: 11.11%;
-  border: 1px solid black;
-  border-radius: 5%;
+	width: 8.33%;
+	text-align: center;
+	height: 11.11%;
+	border: 1px solid black;
+	border-radius: 5%;
 }
 
 .corporation-info {
-  width: 40%;
-  height: 92%;
+	width: 40%;
+	height: 92%;
 }
 
 .corporation-info table {
-  width: 100%;
-  height: 100%;
-  border: 1px solid black;
-  border-collapse: collapse;
+	width: 100%;
+	height: 100%;
+	border: 1px solid black;
+	border-collapse: collapse;
 }
 
 .corporation-info thead {
-  height: 12%;
-  font-weight: bold;
+	height: 12%;
+	font-weight: bold;
 }
 
 .corporation-info tbody {
-  height: 84%;
+	height: 84%;
 }
 
 .corporation-info td {
-  height: 12%;
-  text-align: center;
-  border: 1px solid black;
+	height: 12%;
+	text-align: center;
+	border: 1px solid black;
 }
 
 .activity-info img {
-  width: 18%;
-  height: 60%;
-
-  padding-left: 15%;
-  padding-right: 16%;
-  margin: 0px;
+	width: 18%;
+	height: 60%;
+	padding-left: 15%;
+	padding-right: 16%;
+	margin: 0px;
 }
 
 .activity-info section {
-  width: 100%;
-  height: 50%;
-  margin: 0px;
-
-  display: flex;
-  align-items: center;
+	width: 100%;
+	height: 50%;
+	margin: 0px;
+	display: flex;
+	align-items: center;
 }
 
 .activity-info span {
-  width: 50%;
-  height: 50%;
-  margin: 0px;
-
-  align-self: flex-start;
-  border: 0px solid black;
-  text-align: center;
+	width: 50%;
+	height: 50%;
+	margin: 0px;
+	align-self: flex-start;
+	border: 0px solid black;
+	text-align: center;
 }
 
 .money {
-  width: 10%;
-  height: 100%;
-  text-align: center;
-  font-size: 150%;
+	width: 10%;
+	height: 100%;
+	text-align: center;
+	font-size: 150%;
 }
 
 .money h2 {
-  height: 40%;
-  margin: 0px;
-  padding: 0px;
-  font-size: unset;
-  text-align: center;
+	height: 40%;
+	margin: 0px;
+	padding: 0px;
+	font-size: unset;
+	text-align: center;
 }
 
 .stocks-holder {
-  width: 50%;
-  height: 100%;
+	width: 50%;
+	height: 100%;
 }
 
 .stocks-holder h2 {
-  height: 40%;
-  margin: 0px;
-  padding: 0px;
-  text-align: center;
+	height: 40%;
+	margin: 0px;
+	padding: 0px;
+	text-align: center;
 }
 
 .stocks {
-  height: 40%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  text-align: center;
+	height: 40%;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-evenly;
+	text-align: center;
 }
 
 .stocks div {
-  height: 100%;
-  width: 12%;
-  border-radius: 10%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+	height: 100%;
+	width: 12%;
+	border-radius: 10%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
 }
 
 .tiles-holder {
-  width: 40%;
-  height: 100%;
+	width: 40%;
+	height: 100%;
 }
 
 .tiles-holder h2 {
-  height: 30%;
-  width: 100%;
-  padding: 0px;
-  margin: 0px;
-  text-align: center;
+	height: 30%;
+	width: 100%;
+	padding: 0px;
+	margin: 0px;
+	text-align: center;
 }
 
 .tiles {
-  height: 70%;
-  width: 100%;
-  display: flex;
-  justify-content: space-evenly;
+	height: 70%;
+	width: 100%;
+	display: flex;
+	justify-content: space-evenly;
 }
 
 .tile {
-  height: 50%;
-  width: 11%;
-  font-size: 120%;
-  border: 1px solid black;
-  border-radius: 5%;
-  text-align: center;
-  align-content: center;
-  outline: none;
+	height: 50%;
+	width: 11%;
+	font-size: 120%;
+	border: 1px solid black;
+	border-radius: 5%;
+	text-align: center;
+	align-content: center;
+	outline: none;
+	opacity: 1;
+	transition: opacity 1000ms linear;
 }
 
 .disabled {
-  background-color: lightgray;
-  border: 1px solid lightgray;
-  color: gray;
+	background-color: lightgray;
+	border: 1px solid lightgray;
+	color: gray;
 }
 
 .enabled {
-  background-color: white;
+	background-color: white;
 }
+
 .waiting-area {
-  height: 480px;
-  width: 340px;
-  border: 1px solid gray;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  border-radius: 3px;
-
-  background: white;
-  box-shadow: 0px 0px 3px 1px gray;
+	height: 480px;
+	width: 340px;
+	border: 1px solid gray;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	border-radius: 3px;
+	background: white;
+	box-shadow: 0px 0px 3px 1px gray;
 }
 
 .img-medium {
-  width: 96px;
-  height: 96px;
+	width: 96px;
+	height: 96px;
 }
 
 .game-container {
-  width: 100%;
-  height: 100%;
+	width: 100%;
+	height: 100%;
 }
 
 #overlay {
-  height: 100%;
-  width: 100%;
-  position: fixed;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(85, 90, 85, 0.3);
+	height: 100%;
+	width: 100%;
+	position: fixed;
+	display: none;
+	justify-content: center;
+	align-items: center;
+	background-color: rgba(85, 90, 85, 0.3);
 }
 
 #activity-log {
-  height: 100%;
-  width: 100%;
-  background-color: white;
-  overflow: scroll;
-  border-radius: 3%;
-  box-shadow: 0px 0px 25px -3px rgba(0, 0, 0, 0.75);
-  transition: transform 0.2s;
+	height: 100%;
+	width: 100%;
+	background-color: white;
+	overflow: scroll;
+	border-radius: 3%;
+	box-shadow: 0px 0px 25px -3px rgba(0, 0, 0, 0.75);
+	transition: transform 0.2s;
 }
 
 #activity-log-icon:hover {
-  transform: scale(1.5);
+	transform: scale(1.5);
 }
 
 #close-overlay-btn {
-  align-self: flex-end;
-  height: 25px;
-  width: 25px;
+	align-self: flex-end;
+	height: 25px;
+	width: 25px;
 }
 
 #log-container {
-  height: 50%;
-  width: 20%;
-  display: flex;
-  flex-direction: column;
+	height: 50%;
+	width: 20%;
+	display: flex;
+	flex-direction: column;
 }

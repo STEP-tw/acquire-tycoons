@@ -150,9 +150,12 @@ const placeTile = function(document) {
       displayStatus(document, message);
       return;
     }
+    tile.style.opacity = 0;
     fetchGameData(document);
+    setTimeout(() => {
+      tile.remove();
+    }, 1000);
   })();
-  event.target.remove();
 };
 
 const getTileButton = function(document, tile) {
