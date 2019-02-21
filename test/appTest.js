@@ -177,7 +177,9 @@ describe('GET /game-data', function() {
         .get('/log')
         .set('Cookie', [`gameId=${gameID}; playerId=${playerId}`])
         .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect('["You got 6000rs"]')
+        .expect(
+          `[{"log":"You got 6000rs","time":"${new Date().toLocaleTimeString()}"}]`
+        )
         .expect(200, done);
     });
     it('should fetch all the logs from the activty log', function(done) {

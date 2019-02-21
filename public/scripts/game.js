@@ -280,8 +280,20 @@ const initialize = function(document) {
   document.getElementById('activity-log-icon').onclick = showLog;
 };
 
-const createLogHtml = function(log) {
-  return `<p style="margin-left:10px;font-size:20px;">${log}</p>`;
+const createLogHtml = function({ log, time }) {
+  const div = createElement(document, 'div');
+  setAttribute(div, 'className', 'log-message');
+
+  const logSpan = createElement(document, 'span');
+  logSpan.innerText = log;
+
+  const timeSpan = createElement(document, 'span');
+  timeSpan.innerText = time;
+
+  div.appendChild(logSpan);
+  div.appendChild(timeSpan);
+
+  return div;
 };
 
 const closeOverlay = function() {
@@ -293,11 +305,16 @@ const showLog = function() {
   document.getElementById('overlay').style.display = 'flex';
   document.getElementById('overlay').style.zIndex = 0;
   document.getElementById('close-overlay-btn').onclick = closeOverlay;
+
   fetch('/log')
     .then(response => response.json())
-    .then(logs => {
-      let logsHtml = logs.map(createLogHtml).join('');
-      document.getElementById('activity-log').innerHTML = logsHtml;
+    .then(logsData => {
+      let logs = logsData.map(createLogHtml);
+
+      const activityLog = document.getElementById('activity-log-body');
+      activityLog.innerHTML = '';
+
+      appendChilds(activityLog, logs);
     });
 };
 

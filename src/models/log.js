@@ -4,7 +4,8 @@ class ActivityLog {
   }
 
   addLog(log) {
-    this.logs.push(log);
+    let time = new Date().toLocaleTimeString();
+    this.logs.unshift({ log, time });
   }
 
   getLogs() {
