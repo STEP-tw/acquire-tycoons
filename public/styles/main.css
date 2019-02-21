@@ -297,9 +297,6 @@ main {
   width: 100%;
   overflow: scroll;
   font-size: 20px;
-
-  display: flex;
-  flex-direction: column;
 }
 
 #activity-log-icon:hover {
