@@ -153,9 +153,6 @@ const placeTile = function(document) {
     }
     tile.style.opacity = 0;
     fetchGameData(document);
-    setTimeout(() => {
-      tile.remove();
-    }, 1000);
   })();
 };
 
