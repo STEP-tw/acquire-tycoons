@@ -1,8 +1,10 @@
 const request = require('supertest');
-const GameManager = require('../src/models/game_manager');
-const Game = require('../src/models/game');
-const Player = require('../src/models/player');
-const ActivityLog = require('../src/models/activity_log');
+const GameManager = require('../src/models/game_manager.js');
+const Game = require('../src/models/game.js');
+const Player = require('../src/models/player.js');
+const Tile = require('../src/models/tile.js');
+const TurnManager = require('../src/models/turn_manager.js');
+const ActivityLog = require('../src/models/activity_log.js');
 const sinon = require('sinon');
 const { expect } = require('chai');
 const { initializeGame } = require('../src/util.js');
@@ -222,16 +224,16 @@ describe('GET /game-data', function() {
 });
 
 describe('GET /place-tile', function() {
-  let gameID, firstTileOfHost;
+  let gameID, firstTileOfHost, game, player2;
   beforeEach(function() {
     const random = () => 0;
     app.gameManager = new GameManager();
-    const game = new Game(3, random, new ActivityLog(mockedDate));
+    game = new Game(3, random, new ActivityLog(mockedDate));
     const host = new Player('Arnab', 0);
     game.addPlayer(host);
     app.gameManager.addGame(game);
     gameID = app.gameManager.getLatestId();
-    const player2 = new Player('Dheeraj', 1);
+    player2 = new Player('Dheeraj', 1);
     game.addPlayer(player2);
     const player3 = new Player('Srushti', 2);
     game.addPlayer(player3);
@@ -239,12 +241,12 @@ describe('GET /place-tile', function() {
     firstTileOfHost = host.tiles[0];
   });
 
-  it('should place tile when gameId cookie is valid', function(done) {
+  it('should provide error when gameId cookie is not valid', function(done) {
     request(app)
       .post('/place-tile')
-      .set('Cookie', [`gameId=${gameID};playerId=0`])
+      .set('Cookie', ['gameId=12;playerId=1'])
       .send({ tileValue: firstTileOfHost.getValue() })
-      .expect({ error: false, message: '' })
+      .expect({ error: true, message: 'No Such Game with ID 12' })
       .expect('Content-Type', 'application/json; charset=utf-8')
       .expect(200, done);
   });
@@ -252,7 +254,7 @@ describe('GET /place-tile', function() {
   it('should provide error message when tile is not valid', function(done) {
     request(app)
       .post('/place-tile')
-      .set('Cookie', [`gameId=${gameID};playerId=0`])
+      .set('Cookie', [`gameId=${gameID}`, `playerId=0`])
       .send({ tileValue: '12B' })
       .expect({ error: true, message: 'You don\'t have 12B tile' })
       .expect('Content-Type', 'application/json; charset=utf-8')
@@ -262,9 +264,67 @@ describe('GET /place-tile', function() {
   it('should provide error when gameId cookie is not valid', function(done) {
     request(app)
       .post('/place-tile')
-      .set('Cookie', ['gameId=12;playerId=1'])
-      .send({ tileValue: firstTileOfHost.getValue() })
-      .expect({ error: true, message: 'No Such Game with ID 12' })
+      .set('Cookie', [`gameId=${gameID}`, 'playerId=1'])
+      .send({ tileValue: player2.tiles[5].getValue() })
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200, done);
+  });
+
+  it('should not provide error when gameId cookie is valid, given tile is unIncorporatedTile', function(done) {
+    game.changeTurn();
+    request(app)
+      .post('/place-tile')
+      .set('Cookie', [`gameId=${gameID}`, 'playerId=1'])
+      .send({ tileValue: player2.tiles[0].getValue() })
+      .expect('{"error":false,"message":""}')
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200, done);
+  });
+
+  it('should not provide error when gameId cookie is valid, given tile can grow corporation', function(done) {
+    const tile1 = new Tile({ row: 2, column: 1 }, '2C');
+    const tile2 = new Tile({ row: 3, column: 1 }, '2D');
+    game.corporations[0].addTile(tile1);
+    game.corporations[0].addTile(tile2);
+    request(app)
+      .post('/place-tile')
+      .set('Cookie', [`gameId=${gameID}`, 'playerId=1'])
+      .send({ tileValue: player2.tiles[4].getValue() })
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200, done);
+  });
+});
+
+describe('POST /establish-corporation', function() {
+  let gameID, game, player2, firstTileOfHost;
+  beforeEach(function() {
+    const random = () => 0;
+    app.gameManager = new GameManager();
+    game = new Game(3, random, new ActivityLog(mockedDate));
+    const host = new Player('Arnab', 0);
+    game.addPlayer(host);
+    app.gameManager.addGame(game);
+    gameID = app.gameManager.getLatestId();
+    player2 = new Player('Dheeraj', 1);
+    game.addPlayer(player2);
+    const player3 = new Player('Srushti', 2);
+    game.addPlayer(player3);
+    initializeGame(game);
+    game.turnManager.addStack(
+      'placedTile',
+      new Tile({ row: 1, column: 1 }, '2B')
+    );
+    game.turnManager.addStack('adjacentTile', [
+      new Tile({ row: 0, column: 1 }, '2A')
+    ]);
+    firstTileOfHost = host.tiles[0];
+  });
+
+  it('should provide gameData to establish selected corporation', function(done) {
+    request(app)
+      .post('/establish-corporation')
+      .set('Cookie', [`gameId=${gameID}`, 'playerId=1'])
+      .send({ corporationName: 'Sackson' })
       .expect('Content-Type', 'application/json; charset=utf-8')
       .expect(200, done);
   });

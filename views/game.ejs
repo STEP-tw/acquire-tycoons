@@ -8,12 +8,24 @@
   </head>
   <body>
     <section id="overlay">
-      <section class="log-container">
+      <section class="log-container" id="activity-log">
         <section class="activity-log-header">
           <span style="margin-left: 33.333%">ACTIVITY LOG</span>
           <img src="/images/close-btn.png" id="close-overlay-btn" />
         </section>
         <section class="activity-log-body" id="activity-log-body"></section>
+      </section>
+    </section>
+    <section id="found-corporation-overlay">
+      <section
+        id="found-corporation"
+        class="found-corporation"
+        style="display:none;border:1px solid black;"
+      >
+        <div class="establish-corp-heading">
+          Select a corporation to establish
+        </div>
+        <div id="corporation-btns"></div>
       </section>
     </section>
     <header id="game-header" style="display: none">

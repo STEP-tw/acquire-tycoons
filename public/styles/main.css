@@ -270,6 +270,35 @@ main {
   height: 100%;
 }
 
+.found-corporation {
+  height: 40%;
+  width: 70%;
+  border: 1px solid black;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+
+  box-shadow: 0px 0px 3px 1px gray;
+}
+
+.Quantum-btn,
+.Phoenix-btn,
+.America-btn,
+.Hydra-btn,
+.Fusion-btn,
+.Sackson-btn,
+.Zeta-btn {
+  height: 30%;
+  width: 25%;
+}
+
+.establish-corp-heading {
+  font-size: 30px;
+  color: black;
+}
+
 #overlay {
   height: 100%;
   width: 100%;
@@ -325,5 +354,11 @@ main {
   border-bottom: dotted lightgrey 1px;
 
   display: flex;
+<<<<<<< HEAD
   justify-content: space-between;
+=======
+  flex-direction: column;
+
+  position: relative;
+>>>>>>>  [#7] Gayatri/Srushti - Implement Found Corporation
 }

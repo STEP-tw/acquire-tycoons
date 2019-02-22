@@ -13,14 +13,14 @@ describe('Corporation', function() {
         lowerLimit: 2,
         majority: 3000,
         minority: 1500,
-        stockPrice: 200
+        marketPrice: 200
       },
       {
         upperLimit: 6,
         lowerLimit: 3,
         majority: 4000,
         minority: 2000,
-        stockPrice: 400
+        marketPrice: 400
       }
     ];
 
@@ -81,14 +81,14 @@ describe(' createCorporationInstance', function() {
           lowerLimit: 2,
           majority: 3000,
           minority: 1500,
-          stockPrice: 200
+          marketPrice: 200
         },
         {
           upperLimit: 6,
           lowerLimit: 3,
           majority: 4000,
           minority: 2000,
-          stockPrice: 400
+          marketPrice: 400
         }
       ]
     };
@@ -156,6 +156,60 @@ describe(' createCorporationInstance', function() {
         }
       ];
       expect(corporation.getTiles()).to.deep.equal(expectedOutput);
+    });
+  });
+
+  describe('toggleFound', function() {
+    it('should toggle the isFound property of corporation after founding corporation', function() {
+      corporation.toggleFound();
+      expect(corporation.getFoundStatus()).true;
+    });
+  });
+
+  describe('deductStocks', function() {
+    it('should deduct given number of stocks from available stocks', function() {
+      corporation.deductStocks(3);
+      expect(corporation.getStocks()).to.equal(22);
+    });
+  });
+
+  describe('concatTiles', function() {
+    it('should concat provided tiles in corporation\'s tiles', function() {
+      const position = {
+        row: 0,
+        column: 2
+      };
+      const value = '3A';
+      const tile = new Tile(position, value);
+      corporation.addTile(tile);
+      const tile2 = new Tile(position, value);
+      corporation.concatTiles([tile2]);
+      const actualOutput = corporation.getTiles();
+      const expectedOutput = [
+        {
+          corporation: 'Sackson',
+          id: '3A'
+        },
+        {
+          corporation: 'Sackson',
+          id: '3A'
+        }
+      ];
+      expect(actualOutput).to.deep.equal(expectedOutput);
+    });
+  });
+
+  describe('doesContains', function() {
+    it('should return true when corporation contains provided tile', function() {
+      const position = {
+        row: 0,
+        column: 2
+      };
+      const value = '3A';
+      const tile = new Tile(position, value);
+      corporation.addTile(tile);
+      const tile2 = new Tile(position, value);
+      expect(corporation.doesContains(tile2)).true;
     });
   });
 });

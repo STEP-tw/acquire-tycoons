@@ -5,7 +5,7 @@ const isInrange = function(range, value) {
 class Level {
   constructor(corporationSizes) {
     this.corporationSizes = corporationSizes;
-    this.defaultCorporationInfo = { stockPrice: 0, majority: 0, minority: 0 };
+    this.defaultCorporationInfo = { marketPrice: 0, majority: 0, minority: 0 };
   }
 
   findSize(size) {
@@ -17,7 +17,7 @@ class Level {
   }
 
   getStockPrice(size) {
-    return this.findSize(size).stockPrice;
+    return this.findSize(size).marketPrice;
   }
 
   getMajority(size) {

@@ -1,5 +1,5 @@
-const Game = require('../../src/models/game');
-const Player = require('../../src/models/player');
+const Game = require('../../src/models/game.js');
+const Player = require('../../src/models/player.js');
 const expect = require('chai').expect;
 const sinon = require('sinon');
 const tilesData = require('../../src/data/tiles_data.json');
@@ -7,6 +7,7 @@ const levelsData = require('../../src/data/level_data.json');
 const corporationData = require('../../src/data/corporations_data.json');
 const { getCorporations, getFaceDownCluster } = require('../../src/util.js');
 const ActivityLog = require('../../src/models/activity_log.js');
+const Tile = require('../../src/models/tile.js');
 
 describe('Game', function() {
   let game;
@@ -55,7 +56,7 @@ describe('Game', function() {
       const corporations = getCorporations(corporationData, levelsData);
       const faceDownCluster = getFaceDownCluster(tilesData);
       game.initialize(corporations, faceDownCluster);
-      expect(game.getUnincorporatedTiles()).to.have.length(4);
+      expect(game.getunIncorporatedTiles()).to.have.length(4);
     });
 
     it('getPlayersInitialTiles', function() {
@@ -201,13 +202,12 @@ describe('Game', function() {
       const corporations = getCorporations(corporationData, levelsData);
       const faceDownCluster = getFaceDownCluster(tilesData);
       game.initialize(corporations, faceDownCluster);
-
       expect(game.getCurrentPlayer().getId()).to.equals(0);
     });
   });
 
-  describe('changeTurn', function() {
-    it('should change the player turn and add log for next player', function() {
+  describe('placeTile', function() {
+    it('should return canFoundCorporation true when provided tile adjacent to unIncorporated tile', function() {
       const player1 = new Player('Swagata', 1);
       const player2 = new Player('Gayatri', 2);
       const player3 = new Player('Arnab', 3);
@@ -217,19 +217,90 @@ describe('Game', function() {
       const corporations = getCorporations(corporationData, levelsData);
       const faceDownCluster = getFaceDownCluster(tilesData);
       game.initialize(corporations, faceDownCluster);
-      game.changeTurn();
-      expect(game.getCurrentPlayer().getId()).to.equal(1);
-      expect(game.getCurrentPlayer().log).to.equals(`It's your turn`);
+
+      const unIncorporatedTile = new Tile({ row: 0, column: 1 }, '2A');
+      const placedTile = new Tile({ row: 1, column: 1 }, '2B');
+      game.resetUnincorporatedTiles();
+      game.addToUnincorporatedTiles(unIncorporatedTile);
+
+      const expectedOutput = {
+        canFoundCorporation: true,
+        canGrowCorporation: false
+      };
+
+      expect(game.placeTile(placedTile)).to.deep.equal(expectedOutput);
+    });
+
+    it('should return canGrowCorporation true when provided tile adjacent to incorporated tile', function() {
+      const player1 = new Player('Swagata', 1);
+      const player2 = new Player('Gayatri', 2);
+      const player3 = new Player('Arnab', 3);
+      game.addPlayer(player1);
+      game.addPlayer(player2);
+      game.addPlayer(player3);
+      const corporations = getCorporations(corporationData, levelsData);
+      const faceDownCluster = getFaceDownCluster(tilesData);
+      game.initialize(corporations, faceDownCluster);
+      const incorporatedTile = new Tile({ row: 0, column: 0 }, '1A');
+      const placedTile = new Tile({ row: 0, column: 1 }, '2A');
+      game.corporations[0].addTile(incorporatedTile);
+      const expectedOutput = {
+        canFoundCorporation: false,
+        canGrowCorporation: true
+      };
+
+      expect(game.placeTile(placedTile)).to.deep.equal(expectedOutput);
+    });
+
+    it('should return canGrowCorporation and canFoundCorporation false when provided tile not adjacent to incorporated tile and not founding any corporation', function() {
+      const player1 = new Player('Swagata', 1);
+      const player2 = new Player('Gayatri', 2);
+      const player3 = new Player('Arnab', 3);
+      game.addPlayer(player1);
+      game.addPlayer(player2);
+      game.addPlayer(player3);
+      const corporations = getCorporations(corporationData, levelsData);
+      const faceDownCluster = getFaceDownCluster(tilesData);
+      game.initialize(corporations, faceDownCluster);
+      const incorporatedTile = new Tile({ row: 0, column: 0 }, '1A');
+      const placedTile = new Tile({ row: 5, column: 0 }, '1F');
+      game.corporations[0].addTile(incorporatedTile);
+      const expectedOutput = {
+        canFoundCorporation: false,
+        canGrowCorporation: false
+      };
+      expect(game.placeTile(placedTile)).to.deep.equal(expectedOutput);
     });
   });
 
-  describe('provideNewTile', function() {
-    it('should change the player turn and add log for next player', function() {
+  describe('growCorporation', function() {
+    it('should add provided tile to the corporation\'s tile when tile is adjacent to corporation\'s tile', function() {
+      const player1 = new Player('Swagata', 1);
+      const player2 = new Player('Gayatri', 2);
+      const player3 = new Player('Arnab', 3);
+      game.addPlayer(player1);
+      game.addPlayer(player2);
+      game.addPlayer(player3);
       const corporations = getCorporations(corporationData, levelsData);
-      const faceDownCluster = getFaceDownCluster([]);
+      const faceDownCluster = getFaceDownCluster(tilesData);
       game.initialize(corporations, faceDownCluster);
-      game.provideNewTile();
-      expect(game.getCurrentPlayer().tiles).to.have.length(0);
+      game.corporations[0].tiles = [];
+      const incorporatedTile = new Tile({ row: 0, column: 6 }, '7A');
+      const placedTile = new Tile({ row: 0, column: 7 }, '8A');
+      game.corporations[0].addTile(incorporatedTile);
+      game.growCorporation(placedTile);
+      const actualOutput = game.corporations[0].getTiles();
+      const expectedOutput = [
+        {
+          corporation: 'Quantum',
+          id: '7A'
+        },
+        {
+          corporation: 'Quantum',
+          id: '8A'
+        }
+      ];
+      expect(actualOutput).to.deep.equal(expectedOutput);
     });
   });
 });

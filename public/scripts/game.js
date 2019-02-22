@@ -154,7 +154,7 @@ const placeTile = function(document) {
     };
 
     const response = await fetch('/place-tile', reqData);
-    const { error, message } = await response.json();
+    const { error, message, corporations } = await response.json();
     if (error) {
       displayStatus(document, message);
       return;
@@ -162,6 +162,45 @@ const placeTile = function(document) {
     tile.style.opacity = 0;
     fetchGameData(document);
   })();
+};
+
+const createCorporationsHtml = function(corporations) {
+  const corporationNames = corporations.map(corporation => corporation.name);
+  return corporationNames
+    .map(
+      name =>
+        `<button id="${name}-btn" class="${name} ${name}-btn"  
+        onclick="foundSelectedCorporation('${name}')">${name}</button>`
+    )
+    .join('');
+};
+
+const foundSelectedCorporation = function(corporationName) {
+  closeOverlay('found-corporation-overlay');
+  fetch('/establish-corporation', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify({ corporationName })
+  })
+    .then(response => response.json())
+    .then(gameData => {
+      fetchGameData(document);
+      // const gameContainer = document.getElementById('game-container');
+      // gameContainer.style.display = 'block';
+      // const header = document.getElementById('game-header');
+      // header.style.display = 'flex';
+      // displayGame(document, gameData);
+    });
+};
+
+const foundCorporation = function(document, corporations) {
+  document.getElementById('found-corporation-overlay').style.display = 'flex';
+  document.getElementById('found-corporation-overlay').style.zIndex = 0;
+  document.getElementById('found-corporation').style.display = 'flex';
+  const corporationsHtml = createCorporationsHtml(corporations);
+  document.getElementById('corporation-btns').innerHTML = corporationsHtml;
 };
 
 const getTileButton = function(document, tile) {
@@ -242,6 +281,7 @@ const performAction = function(id, document, action) {
   if (action.name != 'DO_NOTHING') clearInterval(id);
   const actions = {
     PLACE_A_TILE: setOnClickForTiles,
+    FOUND_CORPORATION: foundCorporation,
     DO_NOTHING: () => {}
   };
   actions[action.name](document, action.data);
@@ -317,15 +357,18 @@ const createLogHtml = function({ log, timeStamp }) {
   return div;
 };
 
-const closeOverlay = function() {
-  document.getElementById('overlay').style.display = 'none';
-  document.getElementById('overlay').style.zIndex = 1;
+const closeOverlay = function(id) {
+  document.getElementById(id).style.display = 'none';
+  document.getElementById(id).style.zIndex = 1;
 };
 
 const showLog = function() {
   document.getElementById('overlay').style.display = 'flex';
   document.getElementById('overlay').style.zIndex = 0;
-  document.getElementById('close-overlay-btn').onclick = closeOverlay;
+  document.getElementById('close-overlay-btn').onclick = closeOverlay.bind(
+    null,
+    'overlay'
+  );
 
   fetch('/log')
     .then(response => response.json())

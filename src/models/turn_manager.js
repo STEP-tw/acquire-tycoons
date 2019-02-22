@@ -3,6 +3,7 @@ class TurnManager {
     this.orderedPlayerIds = orderedPlayerIds;
     this.currentPlayerIndex = currentPlayerIndex;
     this.currentPlayerAction = {};
+    this.stack = {};
   }
 
   changeTurn() {
@@ -23,8 +24,18 @@ class TurnManager {
   }
 
   getAction(playerId) {
-    if (this.isCurrentPlayer(playerId)) {return this.currentPlayerAction;}
+    if (this.isCurrentPlayer(playerId)) {
+      return this.currentPlayerAction;
+    }
     return { name: 'DO_NOTHING', data: {} };
+  }
+
+  addStack(key, value) {
+    this.stack[key] = value;
+  }
+
+  getStack(key) {
+    return this.stack[key];
   }
 }
 

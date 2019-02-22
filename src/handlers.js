@@ -1,5 +1,5 @@
-const Game = require('./models/game');
-const Player = require('./models/player');
+const Game = require('./models/game.js');
+const Player = require('./models/player.js');
 const { initializeGame } = require('./util.js');
 const ActivityLog = require('./models/activity_log');
 
@@ -120,6 +120,7 @@ const serveGameData = function(req, res) {
 const placeTile = function(req, res) {
   let { tileValue } = req.body;
   let { playerId } = req.cookies;
+
   let game = req.game;
   const player = game.getPlayerById(playerId);
   const tile = player.findTileByValue(tileValue);
@@ -129,12 +130,48 @@ const placeTile = function(req, res) {
       message: `You don't have ${tileValue} tile`
     });
   }
-  game.placeTile(tile);
+
+  game.turnManager.addStack('placedTile', tile);
+  const { canFoundCorporation, canGrowCorporation } = game.placeTile(tile);
+
   player.removeTile(tile.getPosition());
   player.updateLog(`You placed tile on ${tileValue}`);
   game
     .getActivityLog()
     .addLog(`${player.getName()} placed tile ${tileValue} on board`);
+
+  if (canFoundCorporation) {
+    const corporations = game.foundCorporation(tile);
+    game.changeActionToFoundCorporation(corporations);
+    res.send({ error: false, message: '' });
+    return;
+  }
+
+  if (canGrowCorporation) {
+    game.growCorporation(tile);
+  }
+
+  if (!canFoundCorporation && !canGrowCorporation) {
+    game.addToUnincorporatedTiles(tile);
+  }
+  game.changeTurn();
+  res.send({ error: false, message: '' });
+};
+
+const establishCorporation = function(req, res) {
+  const { corporationName } = req.body;
+  const { gameId, playerId } = req.cookies;
+  const game = res.app.gameManager.getGameById(gameId);
+  const player = game.getPlayerById(playerId);
+  const corporation = game.getCorporation(corporationName);
+  const placedTile = game.turnManager.getStack('placedTile');
+  const adjacentTile = game.turnManager.getStack('adjacentTile');
+  corporation.addTile(placedTile);
+  game.removeUnIncorporatedTile(adjacentTile.concat(placedTile));
+  corporation.concatTiles(adjacentTile);
+  player.addStocks({ name: corporationName, numberOfStock: 1 });
+  corporation.deductStocks(1);
+  corporation.toggleFound();
   game.changeTurn();
   res.send({ error: false, message: '' });
 };
@@ -148,5 +185,6 @@ module.exports = {
   serveGameData,
   placeTile,
   validateGameSession,
-  validateTurn
+  validateTurn,
+  establishCorporation
 };

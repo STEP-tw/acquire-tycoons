@@ -7,8 +7,24 @@ class Corporation {
     this.level = level;
   }
 
+  toggleFound() {
+    this.isFound = true;
+  }
+
+  getFoundStatus() {
+    return this.isFound;
+  }
+
   getSize() {
     return this.tiles.length;
+  }
+
+  deductStocks(noOfStocks) {
+    this.availableStocks -= noOfStocks;
+  }
+
+  concatTiles(tiles) {
+    this.tiles = this.tiles.concat(tiles);
   }
 
   getMajority() {
@@ -46,6 +62,10 @@ class Corporation {
         corporation: name
       };
     });
+  }
+
+  doesContains(placedTile) {
+    return this.tiles.some(tile => tile.position == placedTile.position);
   }
 }
 

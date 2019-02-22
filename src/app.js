@@ -9,7 +9,8 @@ const {
   serveGameData,
   placeTile,
   validateGameSession,
-  validateTurn
+  validateTurn,
+  establishCorporation
 } = require('./handlers');
 const GameManager = require('./models/game_manager');
 const { random } = require('./util.js');
@@ -23,6 +24,13 @@ app.set('view engine', 'ejs');
 
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
+app.use((req, res, next) => {
+  // eslint-disable-next-line no-console
+  console.log(req.url);
+  // eslint-disable-next-line no-console
+  console.log(req.cookies);
+  next();
+});
 app.use(express.json());
 app.use(validateGameSession);
 app.use(validateTurn);
@@ -33,6 +41,7 @@ app.post('/place-tile', placeTile);
 app.get('/game-status', getGameStatus);
 app.get('/log', fetchLog);
 app.get('/game-data', serveGameData);
+app.post('/establish-corporation', establishCorporation);
 app.use(express.static('public'));
 
 module.exports = app;

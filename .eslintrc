@@ -43,7 +43,7 @@
         "capIsNew": true
       }
     ],
-    "id-length": ["error", { "max": 25 }],
+    "id-length": ["error", { "max": 30 }],
     "max-depth": ["error", 5],
     "object-curly-spacing": ["error", "always"],
     "curly": "error",

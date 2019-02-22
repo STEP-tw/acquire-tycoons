@@ -11,7 +11,7 @@ class Game {
     this.players = [];
     this.corporations;
     this.faceDownCluster;
-    this.uninCorporatedTiles = [];
+    this.unIncorporatedTiles = [];
     this.isStarted = false;
     this.activityLog = activityLog;
     this.lastPlacedTile = {
@@ -27,6 +27,16 @@ class Game {
 
   getNextPlayerId() {
     return this.players.length;
+  }
+
+  removeUnIncorporatedTile(tiles) {
+    tiles.forEach(tile => {
+      this.unIncorporatedTiles = this.unIncorporatedTiles.filter(
+        unIncorporatedTile => {
+          return unIncorporatedTile.value != tile.value;
+        }
+      );
+    });
   }
 
   getRandomTile() {
@@ -46,7 +56,7 @@ class Game {
 
   getInitialTiles() {
     const tiles = this.getNRandomTiles(this.getNextPlayerId());
-    this.uninCorporatedTiles = tiles;
+    this.unIncorporatedTiles = tiles;
     for (let index in tiles) {
       const player = this.players[index];
       const tile = tiles[index];
@@ -95,8 +105,8 @@ class Game {
     this.isStarted = true;
   }
 
-  getUnincorporatedTiles() {
-    return this.uninCorporatedTiles;
+  getunIncorporatedTiles() {
+    return this.unIncorporatedTiles;
   }
 
   isFull() {
@@ -145,9 +155,88 @@ class Game {
     return player.getDetails();
   }
 
+  getCorporation(name) {
+    return this.corporations
+      .filter(corporation => corporation.name == name)
+      .pop();
+  }
+
+  getAdjacent(tile) {
+    let adjacentTiles = this.unIncorporatedTiles.filter(unIncorporatedTile =>
+      tile.isNeighbour(unIncorporatedTile)
+    );
+    return adjacentTiles;
+  }
+
+  getAvailableCorporations() {
+    return this.corporations.filter(corporation => {
+      return !corporation.isFound;
+    });
+  }
+
+  foundCorporation() {
+    return this.getAvailableCorporations();
+  }
+
+  canFoundCorporation() {
+    const availableCorporations = this.getAvailableCorporations();
+    return availableCorporations.length > 0;
+  }
+
+  isAdjacentTo(tile, corporation) {
+    let temp = corporation.tiles.some(incorporatedTile =>
+      tile.isNeighbour(incorporatedTile)
+    );
+    return temp;
+  }
+
+  areCorporationsAdjacentTo(tile) {
+    let corporationsAdjacent = this.corporations.filter(corporation =>
+      this.isAdjacentTo(tile, corporation)
+    );
+    return corporationsAdjacent;
+  }
+
+  getCorporationAdjacentTo(tile) {
+    return this.corporations.filter(this.isAdjacentTo.bind(null, tile)).pop();
+  }
+
+  growCorporation(tile) {
+    let adjacentUnIncorporatedTiles = this.getAdjacent(tile);
+    this.removeUnIncorporatedTile([tile].concat(adjacentUnIncorporatedTiles));
+    const corporation = this.getCorporationAdjacentTo(tile);
+    corporation.concatTiles([tile].concat(adjacentUnIncorporatedTiles));
+  }
+
+  addToUnincorporatedTiles(tile) {
+    this.unIncorporatedTiles.push(tile);
+  }
+
+  resetUnincorporatedTiles() {
+    this.unIncorporatedTiles = [];
+  }
+
   placeTile(tile) {
     this.lastPlacedTile = tile;
-    this.uninCorporatedTiles.push(tile);
+    this.unIncorporatedTiles.push(tile);
+    const adjacentTile = this.getAdjacent(tile);
+    this.turnManager.addStack('adjacentTile', adjacentTile);
+    if (
+      adjacentTile.length >= 1 &&
+      this.canFoundCorporation() &&
+      !this.areCorporationsAdjacentTo(tile).length >= 1
+    ) {
+      return { canFoundCorporation: true, canGrowCorporation: false };
+    }
+    if (this.areCorporationsAdjacentTo(tile).length >= 1) {
+      return { canFoundCorporation: false, canGrowCorporation: true };
+    }
+    return { canFoundCorporation: false, canGrowCorporation: false };
+  }
+
+  changeActionToFoundCorporation(corporations) {
+    const action = { name: 'FOUND_CORPORATION', data: corporations };
+    this.turnManager.changeAction(action);
   }
 
   generateBoard() {
@@ -155,14 +244,14 @@ class Game {
       (initial, corporation) => initial.concat(corporation.getTiles()),
       []
     );
-    const uninCorporatedDetail = this.uninCorporatedTiles.map(tile => {
-      const corporation = 'unincorporated';
+    const unIncorporatedDetail = this.unIncorporatedTiles.map(tile => {
+      const corporation = 'unIncorporated';
       return {
         id: tile.getValue(),
         corporation
       };
     });
-    return corporationsDetail.concat(uninCorporatedDetail);
+    return corporationsDetail.concat(unIncorporatedDetail);
   }
 
   getCurrentPlayer() {
