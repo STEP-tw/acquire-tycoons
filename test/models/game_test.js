@@ -6,7 +6,7 @@ const tilesData = require('../../src/data/tiles_data.json');
 const levelsData = require('../../src/data/level_data.json');
 const corporationData = require('../../src/data/corporations_data.json');
 const { getCorporations, getFaceDownCluster } = require('../../src/util.js');
-const ActivityLog = require('../../src/models/log.js');
+const ActivityLog = require('../../src/models/activity_log.js');
 
 describe('Game', function() {
   let game;
@@ -14,7 +14,8 @@ describe('Game', function() {
     const random = sinon.stub();
     random.returns(0);
     const maxPlayers = 4;
-    game = new Game(maxPlayers, random, new ActivityLog());
+    const mockedDate = sinon.useFakeTimers().Date;
+    game = new Game(maxPlayers, random, new ActivityLog(mockedDate));
     const playerId = game.getNextPlayerId();
     const player = new Player('Dhiru', playerId);
     game.addPlayer(player);

@@ -1,8 +1,10 @@
-const ActivityLog = require('../../src/models/log');
+const ActivityLog = require('../../src/models/activity_log');
 const { expect } = require('chai');
+const sinon = require('sinon');
 
 describe('ActivityLog', function() {
-  let log = new ActivityLog();
+  const mockedDate = sinon.useFakeTimers().Date;
+  let log = new ActivityLog(mockedDate);
   describe('addLog', function() {
     it('should add the event in logs', function() {
       log.addLog('hello');

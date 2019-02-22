@@ -299,7 +299,7 @@ const initialize = function(document) {
   document.getElementById('activity-log-icon').onclick = showLog;
 };
 
-const createLogHtml = function({ log, time }) {
+const createLogHtml = function({ log, timeStamp }) {
   const div = createElement(document, 'div');
   setAttribute(div, 'className', 'log-message');
 
@@ -307,7 +307,8 @@ const createLogHtml = function({ log, time }) {
   logSpan.innerText = log;
 
   const timeSpan = createElement(document, 'span');
-  timeSpan.innerText = time;
+  const localeTime = new Date(timeStamp).toLocaleTimeString('en-US');
+  timeSpan.innerText = localeTime;
 
   div.appendChild(logSpan);
   div.appendChild(timeSpan);

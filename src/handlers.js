@@ -1,7 +1,7 @@
 const Game = require('./models/game');
 const Player = require('./models/player');
 const { initializeGame } = require('./util.js');
-const ActivityLog = require('./models/log');
+const ActivityLog = require('./models/activity_log');
 
 const fetchLog = function(req, res) {
   let { gameId } = req.cookies;
@@ -12,7 +12,7 @@ const fetchLog = function(req, res) {
 
 const hostGame = function(req, res) {
   let { host, totalPlayers } = req.body;
-  let game = new Game(totalPlayers, res.app.random, new ActivityLog());
+  let game = new Game(totalPlayers, res.app.random, new ActivityLog(Date));
   let playerId = game.getNextPlayerId();
   let hostPlayer = new Player(host, playerId);
   game.addPlayer(hostPlayer);

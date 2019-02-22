@@ -2,12 +2,14 @@ const request = require('supertest');
 const GameManager = require('../src/models/game_manager');
 const Game = require('../src/models/game');
 const Player = require('../src/models/player');
-const ActivityLog = require('../src/models/log');
+const ActivityLog = require('../src/models/activity_log');
+const sinon = require('sinon');
 const { expect } = require('chai');
 const { initializeGame } = require('../src/util.js');
 
 const app = require('../src/app.js');
 
+const mockedDate = sinon.useFakeTimers().Date;
 describe('GET /', function() {
   it('Should serve join game page', function(done) {
     request(app)
@@ -22,7 +24,7 @@ describe('POST /join-game', function() {
   beforeEach(function() {
     const random = () => 0;
     app.gameManager = new GameManager();
-    const game = new Game(3, random, new ActivityLog());
+    const game = new Game(3, random, new ActivityLog(mockedDate));
     const host = new Player('Arnab');
     game.addPlayer(host);
     app.gameManager.addGame(game);
@@ -102,7 +104,7 @@ describe('GET /game', function() {
   let gameID;
   beforeEach(function() {
     app.gameManager = new GameManager();
-    const game = new Game(3, () => 0, new ActivityLog());
+    const game = new Game(3, () => 0, new ActivityLog(mockedDate));
     const hostId = game.getNextPlayerId();
     const host = new Player('Arnab', hostId);
     game.addPlayer(host);
@@ -162,7 +164,7 @@ describe('GET /game-data', function() {
   beforeEach(function() {
     const random = () => 0;
     app.gameManager = new GameManager();
-    const game = new Game(3, random, new ActivityLog());
+    const game = new Game(3, random, new ActivityLog(mockedDate));
     const host = new Player('Arnab', 1);
     game.addPlayer(host);
     app.gameManager.addGame(game);
@@ -189,7 +191,7 @@ describe('GET /game-data', function() {
     let playerId;
     beforeEach(function() {
       app.gameManager = new GameManager();
-      const game = new Game(3, null, new ActivityLog());
+      const game = new Game(3, null, new ActivityLog(mockedDate));
       playerId = game.getNextPlayerId();
       const host = new Player('Dheeraj', playerId);
       game.addPlayer(host);
@@ -203,9 +205,9 @@ describe('GET /game-data', function() {
         .get('/log')
         .set('Cookie', [`gameId=${gameID}; playerId=${playerId}`])
         .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect(
-          `[{"log":"You got 6000rs","time":"${new Date().toLocaleTimeString()}"}]`
-        )
+        .expect([
+          { log: 'You got 6000rs', timeStamp: '1970-01-01T00:00:00.000Z' }
+        ])
         .expect(200, done);
     });
     it('should fetch all the logs from the activty log', function(done) {
@@ -224,7 +226,7 @@ describe('GET /place-tile', function() {
   beforeEach(function() {
     const random = () => 0;
     app.gameManager = new GameManager();
-    const game = new Game(3, random, new ActivityLog());
+    const game = new Game(3, random, new ActivityLog(mockedDate));
     const host = new Player('Arnab', 0);
     game.addPlayer(host);
     app.gameManager.addGame(game);
