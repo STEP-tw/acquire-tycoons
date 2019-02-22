@@ -91,8 +91,8 @@ const getGameStatus = function(req, res) {
   let { gameId } = req.cookies;
   let game = res.app.gameManager.getGameById(gameId);
   let gameStatus = game.isFull();
-  let totalJoinedPlayers = game.getNextPlayerId();
-  res.send({ isStarted: gameStatus, totalJoinedPlayers });
+  const playerNames = game.getPlayers().map(player => player.getName());
+  res.send({ isStarted: gameStatus, playerNames });
 };
 
 const renderGamePage = function(req, res) {
@@ -101,7 +101,13 @@ const renderGamePage = function(req, res) {
     res.redirect('/');
     return;
   }
-  res.render('game.html', { gameId });
+  const game = res.app.gameManager.getGameById(gameId);
+  let message = 'Waiting for other players to join';
+  if (game.isStarted) {
+    message = 'Loading game...';
+  }
+
+  res.render('game', { gameId, message });
 };
 
 const serveGameData = function(req, res) {

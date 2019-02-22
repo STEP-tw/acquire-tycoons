@@ -1,6 +1,5 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const ejs = require('ejs');
 const {
   hostGame,
   joinGame,
@@ -20,8 +19,7 @@ app.gameManager = new GameManager();
 app.random = random;
 app.urlsToValidateGame = ['/game-status', '/place-tile', '/game-data', '/log'];
 app.urlsToValidateTurn = ['/place-tile'];
-app.engine('html', ejs.renderFile);
-app.set('view engine', 'html');
+app.set('view engine', 'ejs');
 
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));

@@ -196,6 +196,10 @@ class Game {
     const lastPlacedTileId = this.lastPlacedTile.getValue();
     return { board, corporations, players, player, action, lastPlacedTileId };
   }
+
+  getPlayers() {
+    return this.players;
+  }
 }
 
 module.exports = Game;

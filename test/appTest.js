@@ -102,8 +102,9 @@ describe('GET /game', function() {
   let gameID;
   beforeEach(function() {
     app.gameManager = new GameManager();
-    const game = new Game(3, null, new ActivityLog());
-    const host = new Player('Arnab');
+    const game = new Game(3, () => 0, new ActivityLog());
+    const hostId = game.getNextPlayerId();
+    const host = new Player('Arnab', hostId);
     game.addPlayer(host);
     app.gameManager.addGame(game);
     gameID = app.gameManager.getLatestId();
@@ -122,6 +123,31 @@ describe('GET /game', function() {
       .expect('location', '/')
       .expect(302, done);
   });
+
+  it('should render gamepage with `waiting to join all players` message when game is not yet started', function(done) {
+    request(app)
+      .get('/game')
+      .set('Cookie', [`gameId=${gameID}`])
+      .expect(/Waiting for/)
+      .expect(200, done);
+  });
+
+  it('should render gamepage with `Loading game` message when game is already started', function(done) {
+    const game = app.gameManager.getGameById(gameID);
+    const player2Id = game.getNextPlayerId();
+    const player2 = new Player('Dheeraj', player2Id);
+    const player3Id = game.getNextPlayerId();
+    const player3 = new Player('Suman', player3Id);
+    game.addPlayer(player2);
+    game.addPlayer(player3);
+    initializeGame(game);
+    request(app)
+      .get('/game')
+      .set('Cookie', [`gameId=${gameID}`])
+      .expect(/Loading/)
+      .expect(200, done);
+  });
+
   it('should render gamepage given gameId cookie is valid', function(done) {
     request(app)
       .get('/game')

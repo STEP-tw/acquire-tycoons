@@ -220,7 +220,7 @@ const displayGame = function(document, gameData) {
 
 const removeWaitingArea = function(document) {
   const waitingArea = document.getElementById('waiting-area');
-  waitingArea.parentNode.removeChild(waitingArea);
+  setTimeout(() => waitingArea.remove(), 500);
 };
 
 const showGameContainer = function(document) {
@@ -259,6 +259,18 @@ const fetchGameData = function(document) {
   }, 1000);
 };
 
+const showJoinedPlayerNames = function(document, playerNames) {
+  const joinedPlayerNamesContainer = document.getElementById(
+    'joined-player-names'
+  );
+  joinedPlayerNamesContainer.innerHTML = '';
+  playerNames.forEach(playerName => {
+    const playerNameHolder = createElement(document, 'p');
+    playerNameHolder.innerText = `${playerName} joined the game.`;
+    joinedPlayerNamesContainer.appendChild(playerNameHolder);
+  });
+};
+
 const checkGameStatus = function(document) {
   const gameStatusIntervalId = setInterval(() => {
     fetch('/game-status', {
@@ -267,7 +279,8 @@ const checkGameStatus = function(document) {
     })
       .then(response => response.json())
       .then(data => {
-        const { isStarted } = data;
+        const { isStarted, playerNames } = data;
+        showJoinedPlayerNames(document, playerNames);
         if (isStarted) {
           removeWaitingArea(document);
           fetchGameData(document);
