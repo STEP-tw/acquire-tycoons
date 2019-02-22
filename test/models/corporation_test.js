@@ -159,17 +159,23 @@ describe(' createCorporationInstance', function() {
     });
   });
 
+  describe('addStocks', function() {
+    it('should add stocks in the corporation', function() {
+      corporation.addStocks(3);
+      expect(corporation.getStocks()).to.equal(28);
+    });
+  });
+  describe('deductStocks', function() {
+    it('should deduct stocks in the corporation', function() {
+      corporation.deductStocks(3);
+      expect(corporation.getStocks()).to.equal(22);
+    });
+  });
+
   describe('toggleFound', function() {
     it('should toggle the isFound property of corporation after founding corporation', function() {
       corporation.toggleFound();
       expect(corporation.getFoundStatus()).true;
-    });
-  });
-
-  describe('deductStocks', function() {
-    it('should deduct given number of stocks from available stocks', function() {
-      corporation.deductStocks(3);
-      expect(corporation.getStocks()).to.equal(22);
     });
   });
 

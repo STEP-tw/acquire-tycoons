@@ -3,7 +3,6 @@ class Corporation {
     this.name = name;
     this.tiles = [];
     this.availableStocks = 25;
-    this.isFound = false;
     this.level = level;
   }
 
@@ -19,10 +18,6 @@ class Corporation {
     return this.tiles.length;
   }
 
-  deductStocks(noOfStocks) {
-    this.availableStocks -= noOfStocks;
-  }
-
   concatTiles(tiles) {
     this.tiles = this.tiles.concat(tiles);
   }
@@ -35,6 +30,10 @@ class Corporation {
   getMinority() {
     const size = this.getSize();
     return this.level.getMinority(size);
+  }
+
+  getStatus() {
+    return this.tiles.length != 0;
   }
 
   getCurrentStockPrice() {
@@ -52,6 +51,14 @@ class Corporation {
 
   addTile(tile) {
     this.tiles.push(tile);
+  }
+
+  addStocks(noOfStocks) {
+    this.availableStocks += noOfStocks;
+  }
+
+  deductStocks(noOfStocks) {
+    this.availableStocks -= noOfStocks;
   }
 
   getTiles() {

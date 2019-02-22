@@ -1,9 +1,5 @@
 const TurnManager = require('./turn_manager.js');
-
-const flatPosition = function(position) {
-  return position.row * 12 + position.column;
-};
-
+const { flatPosition, getCorporationData, buyStocks } = require('../util.js');
 class Game {
   constructor(maxPlayers, random, activityLog) {
     this.maxPlayers = maxPlayers;
@@ -274,6 +270,38 @@ class Game {
     this.turnManager.changeTurn();
     this.turnManager.changeAction({ name: 'PLACE_A_TILE', data: {} });
     this.updateTurnLog();
+  }
+
+  buyStocks(stockDetails) {
+    const player = this.getCurrentPlayer();
+    Object.keys(stockDetails).forEach(corporationName => {
+      const noOfStocks = stockDetails[corporationName];
+      const corporation = this.corporations.find(
+        corporation => corporation.getName() == corporationName
+      );
+      buyStocks(player, corporation, noOfStocks);
+    });
+  }
+
+  getActiveCorporationsData() {
+    return this.corporations.reduce((corporations, corporation) => {
+      if (!corporation.getStatus()) {
+        return corporations;
+      }
+      const corporationData = getCorporationData(corporation);
+      return corporations.concat(corporationData);
+    }, []);
+  }
+
+  changeActionToBuyStocks() {
+    const currentPlayer = this.getCurrentPlayer();
+    const buyStocksData = {};
+
+    buyStocksData.money = currentPlayer.getMoney();
+    buyStocksData.corporations = this.getActiveCorporationsData();
+    buyStocksData.maximumLimit = 3;
+    buyStocksData.canBuy = buyStocksData.corporations.length ? true : false;
+    this.turnManager.changeAction({ name: 'BUY_STOCKS', data: buyStocksData });
   }
 
   getDetails(playerId) {

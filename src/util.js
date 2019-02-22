@@ -44,10 +44,33 @@ const createCorporationInstance = function({ name, levelId }, levelsData) {
   return new Corporation(name, level);
 };
 
+const flatPosition = function(position) {
+  return position.row * 12 + position.column;
+};
+
+const buyStocks = function(player, corporation, noOfStocks) {
+  const currentPrice = corporation.getCurrentStockPrice();
+  const moneyToDeduct = noOfStocks * currentPrice;
+  player.deductMoney(moneyToDeduct);
+  player.addStocks({ name: corporation.getName(), numberOfStock: noOfStocks });
+  corporation.deductStocks(noOfStocks);
+};
+
+const getCorporationData = function(corporation) {
+  return {
+    name: corporation.getName(),
+    currentPrice: corporation.getCurrentStockPrice(),
+    stocks: corporation.getStocks()
+  };
+};
+
 module.exports = {
   random,
   initializeGame,
   getFaceDownCluster,
   getCorporations,
-  createCorporationInstance
+  createCorporationInstance,
+  flatPosition,
+  buyStocks,
+  getCorporationData
 };
