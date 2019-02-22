@@ -287,6 +287,7 @@ const checkGameStatus = function(document) {
           clearInterval(gameStatusIntervalId);
           return;
         }
+        document.getElementById('joined-player-names').style.display = 'block';
       });
   }, 2000);
 };
