@@ -3,7 +3,6 @@ const GameManager = require('../src/models/game_manager.js');
 const Game = require('../src/models/game.js');
 const Player = require('../src/models/player.js');
 const Tile = require('../src/models/tile.js');
-const TurnManager = require('../src/models/turn_manager.js');
 const ActivityLog = require('../src/models/activity_log.js');
 const sinon = require('sinon');
 const { expect } = require('chai');

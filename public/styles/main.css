@@ -354,11 +354,5 @@ main {
   border-bottom: dotted lightgrey 1px;
 
   display: flex;
-<<<<<<< HEAD
   justify-content: space-between;
-=======
-  flex-direction: column;
-
-  position: relative;
->>>>>>>  [#7] Gayatri/Srushti - Implement Found Corporation
 }
