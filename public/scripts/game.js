@@ -132,10 +132,18 @@ const displayStatus = function(document, statusMsg) {
   setAttribute(statusDiv, 'innerText', statusMsg);
 };
 
+const disablePlayerTiles = function(document) {
+  const tiles = document.getElementById('tiles').children;
+  for (const tile of tiles) {
+    tile.className = 'tile disabled';
+    tile.onclick = '';
+  }
+};
+
 const placeTile = function(document) {
   const tile = event.target;
   const tileValue = tile.id;
-
+  disablePlayerTiles(document);
   (async function() {
     const reqData = {
       method: 'POST',

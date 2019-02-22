@@ -240,7 +240,7 @@ describe('GET /place-tile', function() {
       .expect('Content-Type', 'application/json; charset=utf-8')
       .expect(200, done);
   });
-  it('should provide error when gameId cookie is not valid', function(done) {
+  it('should provide error when playerId cookie doesn\'t match with current player id', function(done) {
     request(app)
       .post('/place-tile')
       .set('Cookie', [`gameId=${gameID};playerId=2`])
