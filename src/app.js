@@ -24,13 +24,13 @@ app.set('view engine', 'ejs');
 
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
-app.use((req, res, next) => {
-  // eslint-disable-next-line no-console
-  console.log(req.url);
-  // eslint-disable-next-line no-console
-  console.log(req.cookies);
-  next();
-});
+// app.use((req, res, next) => {
+//   // eslint-disable-next-line no-console
+//   console.log(req.url);
+//   // eslint-disable-next-line no-console
+//   console.log(req.cookies);
+//   next();
+// });
 app.use(express.json());
 app.use(validateGameSession);
 app.use(validateTurn);

@@ -218,7 +218,6 @@ class Game {
 
   placeTile(tile) {
     this.lastPlacedTile = tile;
-    this.unIncorporatedTiles.push(tile);
     const adjacentTile = this.getAdjacent(tile);
     this.turnManager.addStack('adjacentTile', adjacentTile);
     if (
@@ -228,6 +227,7 @@ class Game {
     ) {
       return { canFoundCorporation: true, canGrowCorporation: false };
     }
+
     if (this.areCorporationsAdjacentTo(tile).length >= 1) {
       return { canFoundCorporation: false, canGrowCorporation: true };
     }

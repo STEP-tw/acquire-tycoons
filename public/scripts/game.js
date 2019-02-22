@@ -183,16 +183,9 @@ const foundSelectedCorporation = function(corporationName) {
       'content-type': 'application/json'
     },
     body: JSON.stringify({ corporationName })
-  })
-    .then(response => response.json())
-    .then(gameData => {
-      fetchGameData(document);
-      // const gameContainer = document.getElementById('game-container');
-      // gameContainer.style.display = 'block';
-      // const header = document.getElementById('game-header');
-      // header.style.display = 'flex';
-      // displayGame(document, gameData);
-    });
+  }).then(() => {
+    fetchGameData(document);
+  });
 };
 
 const foundCorporation = function(document, corporations) {

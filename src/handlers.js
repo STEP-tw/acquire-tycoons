@@ -141,7 +141,7 @@ const placeTile = function(req, res) {
     .addLog(`${player.getName()} placed tile ${tileValue} on board`);
 
   if (canFoundCorporation) {
-    const corporations = game.foundCorporation(tile);
+    const corporations = game.foundCorporation();
     game.changeActionToFoundCorporation(corporations);
     res.send({ error: false, message: '' });
     return;
@@ -151,9 +151,10 @@ const placeTile = function(req, res) {
     game.growCorporation(tile);
   }
 
-  if (!canFoundCorporation && !canGrowCorporation) {
+  if (!canGrowCorporation) {
     game.addToUnincorporatedTiles(tile);
   }
+
   game.changeTurn();
   res.send({ error: false, message: '' });
 };
