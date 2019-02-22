@@ -195,6 +195,7 @@ const displayStocks = function(document, stockDetails) {
 };
 
 const highlightLastPlacedTile = function(document, tileId) {
+  if (tileId == undefined) return;
   document.getElementById(tileId).style.border = '2px solid red';
 };
 

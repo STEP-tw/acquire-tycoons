@@ -14,6 +14,11 @@ class Game {
     this.uninCorporatedTiles = [];
     this.isStarted = false;
     this.activityLog = activityLog;
+    this.lastPlacedTile = {
+      getValue: () => {
+        return;
+      }
+    };
   }
 
   addPlayer(player) {
@@ -141,11 +146,8 @@ class Game {
   }
 
   placeTile(tile) {
+    this.lastPlacedTile = tile;
     this.uninCorporatedTiles.push(tile);
-  }
-
-  getLastTile() {
-    return this.uninCorporatedTiles[this.uninCorporatedTiles.length - 1];
   }
 
   generateBoard() {
@@ -191,7 +193,7 @@ class Game {
     const players = this.getTurnData();
     const player = this.getPlayerDetails(playerId);
     const action = this.turnManager.getAction(playerId);
-    const lastPlacedTileId = this.getLastTile().getValue();
+    const lastPlacedTileId = this.lastPlacedTile.getValue();
     return { board, corporations, players, player, action, lastPlacedTileId };
   }
 }
