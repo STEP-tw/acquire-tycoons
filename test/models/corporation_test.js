@@ -172,10 +172,19 @@ describe(' createCorporationInstance', function() {
     });
   });
 
-  describe('toggleFound', function() {
-    it('should toggle the isFound property of corporation after founding corporation', function() {
-      corporation.toggleFound();
-      expect(corporation.getFoundStatus()).true;
+  describe('isActive', function() {
+    it('should return false when it doesn\'t contains any tiles', function() {
+      expect(corporation.isActive()).false;
+    });
+    it('should return true when it doesn\'t contains any tiles', function() {
+      const position = {
+        row: 0,
+        column: 2
+      };
+      const value = '3A';
+      const tile = new Tile(position, value);
+      corporation.addTile(tile);
+      expect(corporation.isActive()).true;
     });
   });
 

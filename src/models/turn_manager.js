@@ -34,8 +34,8 @@ class TurnManager {
     this.stack[key] = value;
   }
 
-  getStack(key) {
-    return this.stack[key];
+  getStack() {
+    return this.stack;
   }
 }
 

@@ -42,4 +42,8 @@ describe('TurnManager', function() {
       data: {}
     });
   });
+
+  it('getStack: should return stack', function() {
+    expect(turnManager.getStack()).to.deep.equal({});
+  });
 });

@@ -142,39 +142,36 @@ describe('Game', function() {
     });
 
     describe('placeTile', function() {
-      it('should return canFoundCorporation true when provided tile adjacent to unIncorporated tile', function() {
-        const unIncorporatedTile = new Tile({ row: 0, column: 1 }, '2A');
-        const placedTile = new Tile({ row: 1, column: 1 }, '2B');
-        game.resetUnincorporatedTiles();
-        game.addToUnincorporatedTiles(unIncorporatedTile);
-
+      it('should return error as false and changed action to FOUND_CORPORATION', function() {
+        const placedTile = '5A';
         const expectedOutput = {
-          canFoundCorporation: true,
-          canGrowCorporation: false
+          error: false,
+          message: ''
         };
 
         expect(game.placeTile(placedTile)).to.deep.equal(expectedOutput);
+        expect(game.turnManager.getAction(0).name).to.equal(
+          'FOUND_CORPORATION'
+        );
       });
 
-      it('should return canGrowCorporation true when provided tile adjacent to incorporated tile', function() {
-        const incorporatedTile = new Tile({ row: 0, column: 0 }, '1A');
-        const placedTile = new Tile({ row: 0, column: 1 }, '2A');
-        game.corporations[0].addTile(incorporatedTile);
+      it('should return error as true when player doesn\'t contains a tile', function() {
+        const placedTile = '2A';
         const expectedOutput = {
-          canFoundCorporation: false,
-          canGrowCorporation: true
+          error: true,
+          message: `You don't have ${placedTile} tile`
         };
 
         expect(game.placeTile(placedTile)).to.deep.equal(expectedOutput);
+        expect(game.turnManager.isCurrentPlayer(0)).true;
+        expect(game.turnManager.getAction(0).name).to.equal('PLACE_A_TILE');
       });
 
-      it('should return canGrowCorporation and canFoundCorporation false when provided tile not adjacent to incorporated tile and not founding any corporation', function() {
-        const incorporatedTile = new Tile({ row: 0, column: 0 }, '1A');
-        const placedTile = new Tile({ row: 5, column: 0 }, '1F');
-        game.corporations[0].addTile(incorporatedTile);
+      it('should return error as false when player place a tile which is not adjacent to any tile', function() {
+        const placedTile = '6A';
         const expectedOutput = {
-          canFoundCorporation: false,
-          canGrowCorporation: false
+          error: false,
+          message: ''
         };
         expect(game.placeTile(placedTile)).to.deep.equal(expectedOutput);
       });

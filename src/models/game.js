@@ -164,19 +164,15 @@ class Game {
     return adjacentTiles;
   }
 
-  getAvailableCorporations() {
+  getInActiveCorporations() {
     return this.corporations.filter(corporation => {
-      return !corporation.isFound;
+      return !corporation.isActive();
     });
   }
 
-  foundCorporation() {
-    return this.getAvailableCorporations();
-  }
-
   canFoundCorporation() {
-    const availableCorporations = this.getAvailableCorporations();
-    return availableCorporations.length > 0;
+    const inActiveCorporations = this.getInActiveCorporations();
+    return inActiveCorporations.length > 0;
   }
 
   isAdjacentTo(tile, corporation) {
@@ -194,40 +190,81 @@ class Game {
   }
 
   getCorporationAdjacentTo(tile) {
-    return this.corporations.filter(this.isAdjacentTo.bind(null, tile)).pop();
+    return this.corporations.find(this.isAdjacentTo.bind(null, tile));
   }
 
   growCorporation(tile) {
     let adjacentUnIncorporatedTiles = this.getAdjacent(tile);
-    this.removeUnIncorporatedTile([tile].concat(adjacentUnIncorporatedTiles));
+    this.removeUnIncorporatedTile(adjacentUnIncorporatedTiles.concat(tile));
     const corporation = this.getCorporationAdjacentTo(tile);
-    corporation.concatTiles([tile].concat(adjacentUnIncorporatedTiles));
+    corporation.concatTiles(adjacentUnIncorporatedTiles.concat(tile));
+  }
+
+  establishCorporation(corporationName) {
+    const player = this.getCurrentPlayer();
+    const corporation = this.getCorporation(corporationName);
+    const stack = this.turnManager.getStack();
+    const placedTile = stack['placedTile'];
+    const adjacentTile = stack['adjacentTile'];
+    corporation.addTile(placedTile);
+    this.removeUnIncorporatedTile(adjacentTile.concat(placedTile));
+    corporation.concatTiles(adjacentTile);
+    player.addStocks({ name: corporationName, numberOfStock: 1 });
+    corporation.deductStocks(1);
+    this.activityLog.addLog(
+      `${player.getName()} established ${corporationName}`
+    );
+    this.changeTurn();
   }
 
   addToUnincorporatedTiles(tile) {
     this.unIncorporatedTiles.push(tile);
   }
 
-  resetUnincorporatedTiles() {
-    this.unIncorporatedTiles = [];
-  }
-
-  placeTile(tile) {
+  placeTile(tileValue) {
+    const player = this.getCurrentPlayer();
+    const tile = player.findTileByValue(tileValue);
+    if (!tile) {
+      return {
+        error: true,
+        message: `You don't have ${tileValue} tile`
+      };
+    }
     this.lastPlacedTile = tile;
     const adjacentTile = this.getAdjacent(tile);
+
+    this.turnManager.addStack('placedTile', tile);
     this.turnManager.addStack('adjacentTile', adjacentTile);
-    if (
+    const inActiveCorporations = this.getInActiveCorporations();
+    const growingCorporation = this.getCorporationAdjacentTo(tile);
+    const canFoundCorporation =
       adjacentTile.length >= 1 &&
-      this.canFoundCorporation() &&
-      !this.areCorporationsAdjacentTo(tile).length >= 1
-    ) {
-      return { canFoundCorporation: true, canGrowCorporation: false };
+      inActiveCorporations.length > 0 &&
+      growingCorporation == undefined;
+    const canGrowCorporation = growingCorporation != undefined;
+
+    player.removeTile(tile.getPosition());
+    player.updateLog(`You placed tile on ${tileValue}`);
+    this.getActivityLog().addLog(
+      `${player.getName()} placed tile ${tileValue} on board`
+    );
+
+    if (canFoundCorporation) {
+      const corporations = this.getInActiveCorporations();
+      this.changeActionToFoundCorporation(corporations);
+      return { error: false, message: '' };
     }
 
-    if (this.areCorporationsAdjacentTo(tile).length >= 1) {
-      return { canFoundCorporation: false, canGrowCorporation: true };
+    if (canGrowCorporation) {
+      this.growCorporation(tile);
     }
-    return { canFoundCorporation: false, canGrowCorporation: false };
+
+    if (!canGrowCorporation) {
+      this.addToUnincorporatedTiles(tile);
+    }
+
+    this.changeTurn();
+    return { error: false, message: '' };
   }
 
   changeActionToFoundCorporation(corporations) {

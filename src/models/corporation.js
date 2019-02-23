@@ -6,12 +6,8 @@ class Corporation {
     this.level = level;
   }
 
-  toggleFound() {
-    this.isFound = true;
-  }
-
-  getFoundStatus() {
-    return this.isFound;
+  isActive() {
+    return this.tiles.length != 0;
   }
 
   getSize() {

@@ -119,62 +119,16 @@ const serveGameData = function(req, res) {
 
 const placeTile = function(req, res) {
   let { tileValue } = req.body;
-  let { playerId } = req.cookies;
-
   let game = req.game;
-  const player = game.getPlayerById(playerId);
-  const tile = player.findTileByValue(tileValue);
-  if (!tile) {
-    return res.send({
-      error: true,
-      message: `You don't have ${tileValue} tile`
-    });
-  }
-
-  game.turnManager.addStack('placedTile', tile);
-  const { canFoundCorporation, canGrowCorporation } = game.placeTile(tile);
-
-  player.removeTile(tile.getPosition());
-  player.updateLog(`You placed tile on ${tileValue}`);
-  game
-    .getActivityLog()
-    .addLog(`${player.getName()} placed tile ${tileValue} on board`);
-
-  if (canFoundCorporation) {
-    const corporations = game.foundCorporation();
-    game.changeActionToFoundCorporation(corporations);
-    res.send({ error: false, message: '' });
-    return;
-  }
-
-  if (canGrowCorporation) {
-    game.growCorporation(tile);
-  }
-
-  if (!canGrowCorporation) {
-    game.addToUnincorporatedTiles(tile);
-  }
-
-  game.changeTurn();
-  res.send({ error: false, message: '' });
+  const status = game.placeTile(tileValue);
+  res.send(status);
 };
 
 const establishCorporation = function(req, res) {
   const { corporationName } = req.body;
-  const { gameId, playerId } = req.cookies;
-  const game = res.app.gameManager.getGameById(gameId);
-  const player = game.getPlayerById(playerId);
-  const corporation = game.getCorporation(corporationName);
-  const placedTile = game.turnManager.getStack('placedTile');
-  const adjacentTile = game.turnManager.getStack('adjacentTile');
-  corporation.addTile(placedTile);
-  game.removeUnIncorporatedTile(adjacentTile.concat(placedTile));
-  corporation.concatTiles(adjacentTile);
-  player.addStocks({ name: corporationName, numberOfStock: 1 });
-  corporation.deductStocks(1);
-  corporation.toggleFound();
-  game.changeTurn();
-  res.send({ error: false, message: '' });
+  const game = req.game;
+  game.establishCorporation(corporationName);
+  res.end();
 };
 
 module.exports = {

@@ -295,7 +295,7 @@ describe('GET /place-tile', function() {
 });
 
 describe('POST /establish-corporation', function() {
-  let gameID, game, player2, firstTileOfHost;
+  let gameID, game;
   beforeEach(function() {
     const random = () => 0;
     app.gameManager = new GameManager();
@@ -304,25 +304,18 @@ describe('POST /establish-corporation', function() {
     game.addPlayer(host);
     app.gameManager.addGame(game);
     gameID = app.gameManager.getLatestId();
-    player2 = new Player('Dheeraj', 1);
+    const player2 = new Player('Dheeraj', 1);
     game.addPlayer(player2);
     const player3 = new Player('Srushti', 2);
     game.addPlayer(player3);
     initializeGame(game);
-    game.turnManager.addStack(
-      'placedTile',
-      new Tile({ row: 1, column: 1 }, '2B')
-    );
-    game.turnManager.addStack('adjacentTile', [
-      new Tile({ row: 0, column: 1 }, '2A')
-    ]);
-    firstTileOfHost = host.tiles[0];
   });
 
   it('should provide gameData to establish selected corporation', function(done) {
+    game.placeTile('5A');
     request(app)
       .post('/establish-corporation')
-      .set('Cookie', [`gameId=${gameID}`, 'playerId=1'])
+      .set('Cookie', [`gameId=${gameID}`, 'playerId=0'])
       .send({ corporationName: 'Sackson' })
       .expect('Content-Type', 'application/json; charset=utf-8')
       .expect(200, done);
@@ -331,7 +324,7 @@ describe('POST /establish-corporation', function() {
     request(app)
       .post('/place-tile')
       .set('Cookie', [`gameId=${gameID};playerId=2`])
-      .send({ tileValue: firstTileOfHost.getValue() })
+      .send({ tileValue: '5A' })
       .expect({ error: true, message: 'It\'s not your turn' })
       .expect('Content-Type', 'application/json; charset=utf-8')
       .expect(200, done);
