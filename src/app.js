@@ -10,7 +10,8 @@ const {
   placeTile,
   validateGameSession,
   validateTurn,
-  establishCorporation
+  establishCorporation,
+  buyStocks
 } = require('./handlers');
 const GameManager = require('./models/game_manager');
 const { random } = require('./util.js');
@@ -48,6 +49,7 @@ app.get('/game-status', getGameStatus);
 app.get('/log', fetchLog);
 app.get('/game-data', serveGameData);
 app.post('/establish-corporation', establishCorporation);
+app.post('/confirm-buy', buyStocks);
 app.use(express.static('public'));
 
 module.exports = app;

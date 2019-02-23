@@ -214,7 +214,7 @@ class Game {
     this.activityLog.addLog(
       `${player.getName()} established ${corporationName}`
     );
-    this.changeTurn();
+    this.changeActionToBuyStocks();
   }
 
   addToUnincorporatedTiles(tile) {
@@ -238,9 +238,9 @@ class Game {
     const inActiveCorporations = this.getInActiveCorporations();
     const growingCorporation = this.getCorporationAdjacentTo(tile);
     const canFoundCorporation =
-      adjacentTile.length >= 1 &&
-      inActiveCorporations.length > 0 &&
-      growingCorporation == undefined;
+			adjacentTile.length >= 1 &&
+			inActiveCorporations.length > 0 &&
+			growingCorporation == undefined;
     const canGrowCorporation = growingCorporation != undefined;
 
     player.removeTile(tile.getPosition());
@@ -262,8 +262,7 @@ class Game {
     if (!canGrowCorporation) {
       this.addToUnincorporatedTiles(tile);
     }
-
-    this.changeTurn();
+    this.changeActionToBuyStocks();
     return { error: false, message: '' };
   }
 
@@ -318,6 +317,7 @@ class Game {
       );
       buyStocks(player, corporation, noOfStocks);
     });
+    this.changeTurn();
   }
 
   getActiveCorporationsData() {
@@ -331,13 +331,15 @@ class Game {
   }
 
   changeActionToBuyStocks() {
+    if (this.getInActiveCorporations().length == 7) {
+      this.changeTurn();
+      return;
+    }
     const currentPlayer = this.getCurrentPlayer();
     const buyStocksData = {};
 
     buyStocksData.money = currentPlayer.getMoney();
     buyStocksData.corporations = this.getActiveCorporationsData();
-    buyStocksData.maximumLimit = 3;
-    buyStocksData.canBuy = buyStocksData.corporations.length ? true : false;
     this.turnManager.changeAction({ name: 'BUY_STOCKS', data: buyStocksData });
   }
 
