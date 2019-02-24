@@ -206,8 +206,10 @@ class Game {
     const stack = this.turnManager.getStack();
     const placedTile = stack['placedTile'];
     const adjacentTile = stack['adjacentTile'];
+
     corporation.addTile(placedTile);
     this.removeUnIncorporatedTile(adjacentTile.concat(placedTile));
+
     corporation.concatTiles(adjacentTile);
     player.addStocks({ name: corporationName, numberOfStock: 1 });
     corporation.deductStocks(1);
@@ -238,9 +240,9 @@ class Game {
     const inActiveCorporations = this.getInActiveCorporations();
     const growingCorporation = this.getCorporationAdjacentTo(tile);
     const canFoundCorporation =
-			adjacentTile.length >= 1 &&
-			inActiveCorporations.length > 0 &&
-			growingCorporation == undefined;
+      adjacentTile.length >= 1 &&
+      inActiveCorporations.length > 0 &&
+      growingCorporation == undefined;
     const canGrowCorporation = growingCorporation != undefined;
 
     player.removeTile(tile.getPosition());

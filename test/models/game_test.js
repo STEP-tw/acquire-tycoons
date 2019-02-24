@@ -9,9 +9,9 @@ const { getCorporations, getFaceDownCluster } = require('../../src/util.js');
 const ActivityLog = require('../../src/models/activity_log.js');
 const Tile = require('../../src/models/tile.js');
 
-describe('Game', function () {
+describe('Game', function() {
   let game;
-  beforeEach(function () {
+  beforeEach(function() {
     const random = sinon.stub();
     random.returns(0);
     const maxPlayers = 4;
@@ -22,21 +22,21 @@ describe('Game', function () {
     game.addPlayer(player);
   });
 
-  describe('Before Initialize', function () {
-    it('addPlayer: should add player to game', function () {
+  describe('Before Initialize', function() {
+    it('addPlayer: should add player to game', function() {
       const playerId = game.getNextPlayerId();
       const player = new Player('Sai', playerId);
       game.addPlayer(player);
       expect(game.getNextPlayerId()).to.equal(2);
     });
 
-    it('should return false when current player number is not equal to maximum player number', function () {
+    it('should return false when current player number is not equal to maximum player number', function() {
       expect(game.isFull()).to.equal(false);
     });
   });
 
-  describe('initialize', function () {
-    it('getUnincorpratedTiles', function () {
+  describe('initialize', function() {
+    it('getUnincorpratedTiles', function() {
       const player1 = new Player('Swagata', 1);
       const player2 = new Player('Gayatri', 2);
       const player3 = new Player('Arnab', 3);
@@ -49,7 +49,7 @@ describe('Game', function () {
       expect(game.getunIncorporatedTiles()).to.have.length(4);
     });
 
-    it('getPlayersInitialTiles', function () {
+    it('getPlayersInitialTiles', function() {
       const player1 = new Player('Swagata', 1);
       const player2 = new Player('Gayatri', 2);
       const player3 = new Player('Arnab', 3);
@@ -61,8 +61,8 @@ describe('Game', function () {
       game.initialize(corporations, faceDownCluster);
       expect(game.players[1].getTiles()).to.have.length(6);
     });
-    describe('isFull', function () {
-      it('should return true when current player number is equal to maximum player number', function () {
+    describe('isFull', function() {
+      it('should return true when current player number is equal to maximum player number', function() {
         const player1 = new Player('Swagata', 1);
         const player2 = new Player('Gayatri', 2);
         const player3 = new Player('Arnab', 3);
@@ -72,13 +72,13 @@ describe('Game', function () {
         expect(game.isFull()).to.equal(true);
       });
 
-      it('should return false when current player number is not equal to maximum player number', function () {
+      it('should return false when current player number is not equal to maximum player number', function() {
         expect(game.isFull()).to.equal(false);
       });
     });
   });
 
-  describe('getGameStatus', function () {
+  describe('getGameStatus', function() {
     beforeEach(() => {
       const player1 = new Player('Swagata', 1);
       const player2 = new Player('Gayatri', 2);
@@ -87,11 +87,11 @@ describe('Game', function () {
       game.addPlayer(player2);
       game.addPlayer(player3);
     });
-    it('should return false when game is not initialized', function () {
+    it('should return false when game is not initialized', function() {
       expect(game.getGameStatus()).false;
     });
 
-    it('should return true when game is initialized', function () {
+    it('should return true when game is initialized', function() {
       const corporations = getCorporations(corporationData, levelsData);
       const faceDownCluster = getFaceDownCluster(tilesData);
       game.initialize(corporations, faceDownCluster);
@@ -99,8 +99,8 @@ describe('Game', function () {
     });
   });
 
-  describe('provideNewTile', function () {
-    it('should change the player turn and add log for next player', function () {
+  describe('provideNewTile', function() {
+    it('should change the player turn and add log for next player', function() {
       const corporations = getCorporations(corporationData, levelsData);
       const faceDownCluster = getFaceDownCluster([]);
       game.initialize(corporations, faceDownCluster);
@@ -109,7 +109,7 @@ describe('Game', function () {
     });
   });
 
-  describe('After Initialize', function () {
+  describe('After Initialize', function() {
     beforeEach(() => {
       const player1 = new Player('Swagata', 1);
       const player2 = new Player('Gayatri', 2);
@@ -121,16 +121,16 @@ describe('Game', function () {
       const faceDownCluster = getFaceDownCluster(tilesData);
       game.initialize(corporations, faceDownCluster);
     });
-    describe('initialize', function () {
-      it('getUnincorpratedTiles', function () {
+    describe('initialize', function() {
+      it('getUnincorpratedTiles', function() {
         expect(game.getunIncorporatedTiles()).to.have.length(4);
       });
 
-      it('getPlayersInitialTiles', function () {
+      it('getPlayersInitialTiles', function() {
         expect(game.players[1].getTiles()).to.have.length(6);
       });
 
-      it('getRandomTile', function () {
+      it('getRandomTile', function() {
         expect(game.getRandomTile()).to.deep.equal({
           position: {
             row: 2,
@@ -141,8 +141,8 @@ describe('Game', function () {
       });
     });
 
-    describe('placeTile', function () {
-      it('should return error as false and changed action to FOUND_CORPORATION', function () {
+    describe('placeTile', function() {
+      it('should return error as false and changed action to FOUND_CORPORATION', function() {
         const placedTile = '5A';
         const expectedOutput = {
           error: false,
@@ -155,7 +155,18 @@ describe('Game', function () {
         );
       });
 
-      it('should return error as true when player doesn\'t contains a tile', function () {
+      it('should return error as false and changed action to DO_NOTHING', function() {
+        const placedTile = '5A';
+        const expectedOutput = {
+          error: false,
+          message: ''
+        };
+
+        expect(game.placeTile(placedTile)).to.deep.equal(expectedOutput);
+        expect(game.turnManager.getAction(2).name).to.equal('DO_NOTHING');
+      });
+
+      it('should return error as true when player doesn\'t contains a tile', function() {
         const placedTile = '2A';
         const expectedOutput = {
           error: true,
@@ -167,7 +178,7 @@ describe('Game', function () {
         expect(game.turnManager.getAction(0).name).to.equal('PLACE_A_TILE');
       });
 
-      it('should return error as false when player place a tile which is not adjacent to any tile', function () {
+      it('should return error as false when player place a tile which is not adjacent to any tile', function() {
         const placedTile = '6A';
         const expectedOutput = {
           error: false,
@@ -175,9 +186,33 @@ describe('Game', function () {
         };
         expect(game.placeTile(placedTile)).to.deep.equal(expectedOutput);
       });
+
+      it('should grow the corporation if the placed tile is adjacent to the corporation', function() {
+        const tile1 = new Tile(
+          {
+            row: 1,
+            column: 4
+          },
+          '5B'
+        );
+        const tile2 = new Tile(
+          {
+            row: 1,
+            column: 5
+          },
+          '6B'
+        );
+
+        game.corporations[0].addTile(tile1);
+        game.corporations[0].addTile(tile2);
+        const placedTile = '6A';
+        game.placeTile(placedTile);
+        expect(game.corporations[0].tiles.length).to.equal(3);
+      });
     });
-    describe('getCorporationsDetail', function () {
-      it('should return current details of corporation', function () {
+
+    describe('getCorporationsDetail', function() {
+      it('should return current details of corporation', function() {
         const expectedOutput = [
           {
             name: 'Quantum',
@@ -225,8 +260,8 @@ describe('Game', function () {
         expect(game.getCorporationsDetail()).to.deep.equal(expectedOutput);
       });
     });
-    describe('growCorporation', function () {
-      it('should add provided tile to the corporation\'s tile when tile is adjacent to corporation\'s tile', function () {
+    describe('growCorporation', function() {
+      it('should add provided tile to the corporation\'s tile when tile is adjacent to corporation\'s tile', function() {
         game.corporations[0].tiles = [];
         const incorporatedTile = new Tile({ row: 0, column: 6 }, '7A');
         const placedTile = new Tile({ row: 0, column: 7 }, '8A');
@@ -246,31 +281,65 @@ describe('Game', function () {
         expect(actualOutput).to.deep.equal(expectedOutput);
       });
     });
-    describe('getDetails', function () {
-      it('should return details', function () {
+
+    describe('removeUnIncorporatedTile', function() {
+      it('should remove given tiles from unIncorporated tiles', function() {
+        let tile = new Tile({ row: 0, column: 0 }, '1A');
+        game.removeUnIncorporatedTile([tile]);
+        expect(game.getunIncorporatedTiles().length).to.equals(3);
+      });
+    });
+
+    describe('getCorporation', function() {
+      it('should return corporation of given name', function() {
+        let actualOutput = game.getCorporation('Hydra');
+        expect(actualOutput.name).to.equal('Hydra');
+        expect(actualOutput.tiles.length).to.equal(0);
+        expect(actualOutput.availableStocks).to.equal(25);
+      });
+    });
+
+    describe('canFoundCorporation', function() {
+      it('should return true if there are corporations available to establish', function() {
+        expect(game.canFoundCorporation()).to.equal(true);
+      });
+    });
+
+    describe('areCorporationsAdjacentTo', function() {
+      it('should return all the corporations that are adjacent to given tile', function() {
+        game.corporations[0].addTile(new Tile({ row: 3, column: 3 }, '4D'));
+        let actualOutput = game.areCorporationsAdjacentTo(
+          new Tile({ row: 3, column: 4 }, '5D')
+        );
+        expect(actualOutput.length).to.equal(1);
+      });
+    });
+
+    describe('getDetails', function() {
+      it('should return details', function() {
         expect(game.getDetails(1).board).to.have.length(4);
       });
     });
 
-    describe('getCurrentPlayer', function () {
-      it('should return the current player as 0 when initialized', function () {
+    describe('getCurrentPlayer', function() {
+      it('should return the current player as 0 when initialized', function() {
         expect(game.getCurrentPlayer().getId()).to.equals(0);
       });
     });
 
-    describe('changeTurn', function () {
-      it('should change the player turn and add log for next player', function () {
+    describe('changeTurn', function() {
+      it('should change the player turn and add log for next player', function() {
         game.changeTurn();
         expect(game.getCurrentPlayer().getId()).to.equal(1);
         expect(game.getCurrentPlayer().log).to.equals(`It's your turn`);
       });
     });
 
-    describe('getActiveCorporationsData', function () {
-      it('should return empty array when no corporation is Active', function () {
+    describe('getActiveCorporationsData', function() {
+      it('should return empty array when no corporation is Active', function() {
         expect(game.getActiveCorporationsData()).to.deep.equal([]);
       });
-      it('should return the Sackson corporation Details', function () {
+      it('should return the Sackson corporation Details', function() {
         const sackson = game.corporations[6];
         sackson.addTile('4A');
         sackson.addTile('5A');
@@ -280,15 +349,15 @@ describe('Game', function () {
       });
     });
 
-    describe('changeActionToBuyStocks', function () {
-      it('shouldn\'t change the action to buy stocks when there are no active corporation and change the turn', function () {
+    describe('changeActionToBuyStocks', function() {
+      it('shouldn\'t change the action to buy stocks when there are no active corporation and change the turn', function() {
         game.changeActionToBuyStocks();
         const action = game.turnManager.getAction(0);
         expect(action.name).to.equal('DO_NOTHING');
         const currentPlayerAction = game.turnManager.getAction(1);
         expect(currentPlayerAction.name).to.equal('PLACE_A_TILE');
       });
-      it('should change the action to buy stocks', function () {
+      it('should change the action to buy stocks', function() {
         game.corporations[0].addTile('4A');
         game.changeActionToBuyStocks();
         const action = game.turnManager.getAction(0);
@@ -297,8 +366,8 @@ describe('Game', function () {
       });
     });
 
-    describe('buyStocks', function () {
-      it(`shouldn't buy stocks when the current player don't want to buy anything`, function () {
+    describe('buyStocks', function() {
+      it(`shouldn't buy stocks when the current player don't want to buy anything`, function() {
         game.buyStocks({});
         const currentPlayer = game.getCurrentPlayer();
         expect(currentPlayer.getStocks()).to.deep.equal({
@@ -311,7 +380,7 @@ describe('Game', function () {
           Sackson: 0
         });
       });
-      it(`should buy stocks when the current player want to buy`, function () {
+      it(`should buy stocks when the current player want to buy`, function() {
         game.buyStocks({ Zeta: 2 });
         const currentPlayer = game.players[0];
         expect(currentPlayer.getStocks()).to.deep.equal({
@@ -323,6 +392,21 @@ describe('Game', function () {
           Zeta: 2,
           Sackson: 0
         });
+      });
+    });
+
+    describe('establishCorporation', function() {
+      it('should found a coporation of given name', function() {
+        game.turnManager.addStack(
+          'placedTile',
+          new Tile({ row: 0, column: 1 }, '2A')
+        );
+        game.turnManager.addStack('adjacentTile', [
+          new Tile({ row: 0, column: 2 }, '3A')
+        ]);
+        game.establishCorporation('Hydra');
+        expect(game.corporations[3].tiles.length).to.equal(2);
+        expect(game.getunIncorporatedTiles().length).to.equal(2);
       });
     });
   });
