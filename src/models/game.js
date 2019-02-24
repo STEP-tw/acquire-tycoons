@@ -1,5 +1,10 @@
 const TurnManager = require('./turn_manager.js');
-const { flatPosition, getCorporationData, buyStocks } = require('../util.js');
+const {
+  getTileWithCorporationName,
+  flatPosition,
+  getCorporationData,
+  buyStocks
+} = require('../util.js');
 class Game {
   constructor(maxPlayers, random, activityLog) {
     this.maxPlayers = maxPlayers;
@@ -101,7 +106,7 @@ class Game {
     this.isStarted = true;
   }
 
-  getunIncorporatedTiles() {
+  getUnincorporatedTiles() {
     return this.unIncorporatedTiles;
   }
 
@@ -157,11 +162,19 @@ class Game {
       .pop();
   }
 
-  getAdjacent(tile) {
-    let adjacentTiles = this.unIncorporatedTiles.filter(unIncorporatedTile =>
+  getUnincorporatedNeighbors(tile) {
+    return this.unIncorporatedTiles.filter(unIncorporatedTile =>
       tile.isNeighbour(unIncorporatedTile)
     );
-    return adjacentTiles;
+  }
+
+  getIncorporatedNeighbors(tile) {
+    return this.corporations.reduce((incorporatedNeighbors, corporation) => {
+      const neighbors = corporation
+        .getTiles()
+        .filter(corporationTile => tile.isNeighbour(corporationTile));
+      return incorporatedNeighbors.concat(neighbors);
+    }, []);
   }
 
   getInActiveCorporations() {
@@ -170,16 +183,10 @@ class Game {
     });
   }
 
-  canFoundCorporation() {
-    const inActiveCorporations = this.getInActiveCorporations();
-    return inActiveCorporations.length > 0;
-  }
-
   isAdjacentTo(tile, corporation) {
-    let temp = corporation.tiles.some(incorporatedTile =>
+    return corporation.tiles.some(incorporatedTile =>
       tile.isNeighbour(incorporatedTile)
     );
-    return temp;
   }
 
   areCorporationsAdjacentTo(tile) {
@@ -194,7 +201,7 @@ class Game {
   }
 
   growCorporation(tile) {
-    let adjacentUnIncorporatedTiles = this.getAdjacent(tile);
+    let adjacentUnIncorporatedTiles = this.getUnincorporatedNeighbors(tile);
     this.removeUnIncorporatedTile(adjacentUnIncorporatedTiles.concat(tile));
     const corporation = this.getCorporationAdjacentTo(tile);
     corporation.concatTiles(adjacentUnIncorporatedTiles.concat(tile));
@@ -223,6 +230,12 @@ class Game {
     this.unIncorporatedTiles.push(tile);
   }
 
+  getAdjacentTiles(tile) {
+    const unIncorporatedNeighbors = this.getUnincorporatedNeighbors(tile);
+    const incorporatedNeighbors = this.getIncorporatedNeighbors(tile);
+    return unIncorporatedNeighbors.concat(incorporatedNeighbors);
+  }
+
   placeTile(tileValue) {
     const player = this.getCurrentPlayer();
     const tile = player.findTileByValue(tileValue);
@@ -232,40 +245,49 @@ class Game {
         message: `You don't have ${tileValue} tile`
       };
     }
+
+    const adjacentTiles = this.getAdjacentTiles(tile);
+    const status = { error: false, message: '' };
     this.lastPlacedTile = tile;
-    const adjacentTile = this.getAdjacent(tile);
-
-    this.turnManager.addStack('placedTile', tile);
-    this.turnManager.addStack('adjacentTile', adjacentTile);
-    const inActiveCorporations = this.getInActiveCorporations();
-    const growingCorporation = this.getCorporationAdjacentTo(tile);
-    const canFoundCorporation =
-      adjacentTile.length >= 1 &&
-      inActiveCorporations.length > 0 &&
-      growingCorporation == undefined;
-    const canGrowCorporation = growingCorporation != undefined;
-
-    player.removeTile(tile.getPosition());
-    player.updateLog(`You placed tile on ${tileValue}`);
+    this.updatePlayer(tile);
+    this.updateStack(tile, adjacentTiles);
     this.getActivityLog().addLog(
       `${player.getName()} placed tile ${tileValue} on board`
     );
 
-    if (canFoundCorporation) {
-      const corporations = this.getInActiveCorporations();
-      this.changeActionToFoundCorporation(corporations);
-      return { error: false, message: '' };
+    if (adjacentTiles.length) {
+      this.foundOrGrowCorporation(tile);
+      return status;
     }
+    this.addToUnincorporatedTiles(tile);
+    this.changeTurn();
+    return status;
+  }
 
-    if (canGrowCorporation) {
+  foundOrGrowCorporation(tile) {
+    const hasGrownCorporation = this.getCorporationAdjacentTo(tile);
+    const inActiveCorporations = this.getInActiveCorporations();
+
+    if (hasGrownCorporation) {
       this.growCorporation(tile);
+      this.changeTurn();
+      return;
     }
 
-    if (!canGrowCorporation) {
-      this.addToUnincorporatedTiles(tile);
+    if (inActiveCorporations.length) {
+      this.changeActionToFoundCorporation(inActiveCorporations);
+      return;
     }
-    this.changeActionToBuyStocks();
-    return { error: false, message: '' };
+  }
+
+  updatePlayer(tile) {
+    this.getCurrentPlayer().removeTile(tile.getPosition());
+    this.getCurrentPlayer().updateLog(`You placed tile on ${tile.getValue()}`);
+  }
+
+  updateStack(tile, adjacentTiles) {
+    this.turnManager.addStack('placedTile', tile);
+    this.turnManager.addStack('adjacentTile', adjacentTiles);
   }
 
   changeActionToFoundCorporation(corporations) {
@@ -275,7 +297,8 @@ class Game {
 
   generateBoard() {
     const corporationsDetail = this.corporations.reduce(
-      (initial, corporation) => initial.concat(corporation.getTiles()),
+      (initial, corporation) =>
+        initial.concat(getTileWithCorporationName(corporation)),
       []
     );
     const unIncorporatedDetail = this.unIncorporatedTiles.map(tile => {

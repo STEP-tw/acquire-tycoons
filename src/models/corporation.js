@@ -58,13 +58,7 @@ class Corporation {
   }
 
   getTiles() {
-    const name = this.name;
-    return this.tiles.map(tile => {
-      return {
-        id: tile.getValue(),
-        corporation: name
-      };
-    });
+    return this.tiles;
   }
 
   doesContains(placedTile) {

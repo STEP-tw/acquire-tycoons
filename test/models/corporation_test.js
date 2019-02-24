@@ -151,8 +151,11 @@ describe(' createCorporationInstance', function() {
       corporation.addTile(tile);
       const expectedOutput = [
         {
-          id: '3A',
-          corporation: 'Sackson'
+          position: {
+            row: 0,
+            column: 2
+          },
+          value: '3A'
         }
       ];
       expect(corporation.getTiles()).to.deep.equal(expectedOutput);
@@ -185,32 +188,6 @@ describe(' createCorporationInstance', function() {
       const tile = new Tile(position, value);
       corporation.addTile(tile);
       expect(corporation.isActive()).true;
-    });
-  });
-
-  describe('concatTiles', function() {
-    it('should concat provided tiles in corporation\'s tiles', function() {
-      const position = {
-        row: 0,
-        column: 2
-      };
-      const value = '3A';
-      const tile = new Tile(position, value);
-      corporation.addTile(tile);
-      const tile2 = new Tile(position, value);
-      corporation.concatTiles([tile2]);
-      const actualOutput = corporation.getTiles();
-      const expectedOutput = [
-        {
-          corporation: 'Sackson',
-          id: '3A'
-        },
-        {
-          corporation: 'Sackson',
-          id: '3A'
-        }
-      ];
-      expect(actualOutput).to.deep.equal(expectedOutput);
     });
   });
 

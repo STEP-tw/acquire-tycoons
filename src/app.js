@@ -33,9 +33,14 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use((req, res, next) => {
   // eslint-disable-next-line no-console
-  console.log(req.url);
+  console.log('URL:', req.url);
   // eslint-disable-next-line no-console
-  console.log(req.cookies);
+  console.log('METHOD:', req.method);
+  // eslint-disable-next-line no-console
+  console.log('COOKIES:', req.cookies);
+  // eslint-disable-next-line no-console
+  console.log('--------------------------');
+
   next();
 });
 app.use(express.json());

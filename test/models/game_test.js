@@ -10,7 +10,7 @@ const ActivityLog = require('../../src/models/activity_log.js');
 const Tile = require('../../src/models/tile.js');
 
 describe('Game', function() {
-  let game;
+  let game, player1;
   beforeEach(function() {
     const random = sinon.stub();
     random.returns(0);
@@ -18,8 +18,8 @@ describe('Game', function() {
     const mockedDate = sinon.useFakeTimers().Date;
     game = new Game(maxPlayers, random, new ActivityLog(mockedDate));
     const playerId = game.getNextPlayerId();
-    const player = new Player('Dhiru', playerId);
-    game.addPlayer(player);
+    player1 = new Player('Dhiru', playerId);
+    game.addPlayer(player1);
   });
 
   describe('Before Initialize', function() {
@@ -46,7 +46,7 @@ describe('Game', function() {
       const corporations = getCorporations(corporationData, levelsData);
       const faceDownCluster = getFaceDownCluster(tilesData);
       game.initialize(corporations, faceDownCluster);
-      expect(game.getunIncorporatedTiles()).to.have.length(4);
+      expect(game.getUnincorporatedTiles()).to.have.length(4);
     });
 
     it('getPlayersInitialTiles', function() {
@@ -110,20 +110,21 @@ describe('Game', function() {
   });
 
   describe('After Initialize', function() {
+    let player2, player3, player4;
     beforeEach(() => {
-      const player1 = new Player('Swagata', 1);
-      const player2 = new Player('Gayatri', 2);
-      const player3 = new Player('Arnab', 3);
-      game.addPlayer(player1);
+      player2 = new Player('Swagata', 1);
+      player3 = new Player('Gayatri', 2);
+      player4 = new Player('Arnab', 3);
       game.addPlayer(player2);
       game.addPlayer(player3);
+      game.addPlayer(player4);
       const corporations = getCorporations(corporationData, levelsData);
       const faceDownCluster = getFaceDownCluster(tilesData);
       game.initialize(corporations, faceDownCluster);
     });
     describe('initialize', function() {
       it('getUnincorpratedTiles', function() {
-        expect(game.getunIncorporatedTiles()).to.have.length(4);
+        expect(game.getUnincorporatedTiles()).to.have.length(4);
       });
 
       it('getPlayersInitialTiles', function() {
@@ -142,7 +143,7 @@ describe('Game', function() {
     });
 
     describe('placeTile', function() {
-      it('should return error as false and changed action to FOUND_CORPORATION', function() {
+      it('should change action to FOUND_CORPORATION when current player placing a tile', function() {
         const placedTile = '5A';
         const expectedOutput = {
           error: false,
@@ -150,12 +151,14 @@ describe('Game', function() {
         };
 
         expect(game.placeTile(placedTile)).to.deep.equal(expectedOutput);
+        expect(player1.tiles.length).to.equal(5);
         expect(game.turnManager.getAction(0).name).to.equal(
           'FOUND_CORPORATION'
         );
+        expect(game.getCurrentPlayer()).to.deep.equal(player1);
       });
 
-      it('should return error as false and changed action to DO_NOTHING', function() {
+      it('should change action to DO_NOTHING when someone else places a tile', function() {
         const placedTile = '5A';
         const expectedOutput = {
           error: false,
@@ -163,10 +166,12 @@ describe('Game', function() {
         };
 
         expect(game.placeTile(placedTile)).to.deep.equal(expectedOutput);
+        expect(player1.tiles.length).to.equal(5);
         expect(game.turnManager.getAction(2).name).to.equal('DO_NOTHING');
+        expect(game.getCurrentPlayer()).to.deep.equal(player1);
       });
 
-      it('should return error as true when player doesn\'t contains a tile', function() {
+      it('should return error when player doesn\'t contains a tile', function() {
         const placedTile = '2A';
         const expectedOutput = {
           error: true,
@@ -174,20 +179,25 @@ describe('Game', function() {
         };
 
         expect(game.placeTile(placedTile)).to.deep.equal(expectedOutput);
-        expect(game.turnManager.isCurrentPlayer(0)).true;
+        expect(player1.tiles.length).to.equal(6);
         expect(game.turnManager.getAction(0).name).to.equal('PLACE_A_TILE');
+        expect(game.turnManager.isCurrentPlayer(0)).true;
       });
 
-      it('should return error as false when player place a tile which is not adjacent to any tile', function() {
+      it('should change action to DO_NOTHING and change turn, for placing unincorporated tile', function() {
         const placedTile = '6A';
         const expectedOutput = {
           error: false,
           message: ''
         };
+
         expect(game.placeTile(placedTile)).to.deep.equal(expectedOutput);
+        expect(player1.tiles.length).to.equal(6);
+        expect(game.turnManager.getAction(0).name).to.equal('DO_NOTHING');
+        expect(game.getCurrentPlayer()).to.deep.equal(player2);
       });
 
-      it('should grow the corporation if the placed tile is adjacent to the corporation', function() {
+      it('should grow the corporation if the placed tile is adjacent to the corporation and change turn', function() {
         const tile1 = new Tile(
           {
             row: 1,
@@ -195,6 +205,7 @@ describe('Game', function() {
           },
           '5B'
         );
+
         const tile2 = new Tile(
           {
             row: 1,
@@ -207,7 +218,9 @@ describe('Game', function() {
         game.corporations[0].addTile(tile2);
         const placedTile = '6A';
         game.placeTile(placedTile);
+        expect(player1.tiles.length).to.equal(6);
         expect(game.corporations[0].tiles.length).to.equal(3);
+        expect(game.getCurrentPlayer()).to.deep.equal(player2);
       });
     });
 
@@ -270,12 +283,12 @@ describe('Game', function() {
         const actualOutput = game.corporations[0].getTiles();
         const expectedOutput = [
           {
-            corporation: 'Quantum',
-            id: '7A'
+            position: { row: 0, column: 6 },
+            value: '7A'
           },
           {
-            corporation: 'Quantum',
-            id: '8A'
+            position: { row: 0, column: 7 },
+            value: '8A'
           }
         ];
         expect(actualOutput).to.deep.equal(expectedOutput);
@@ -286,7 +299,7 @@ describe('Game', function() {
       it('should remove given tiles from unIncorporated tiles', function() {
         let tile = new Tile({ row: 0, column: 0 }, '1A');
         game.removeUnIncorporatedTile([tile]);
-        expect(game.getunIncorporatedTiles().length).to.equals(3);
+        expect(game.getUnincorporatedTiles().length).to.equals(3);
       });
     });
 
@@ -296,12 +309,6 @@ describe('Game', function() {
         expect(actualOutput.name).to.equal('Hydra');
         expect(actualOutput.tiles.length).to.equal(0);
         expect(actualOutput.availableStocks).to.equal(25);
-      });
-    });
-
-    describe('canFoundCorporation', function() {
-      it('should return true if there are corporations available to establish', function() {
-        expect(game.canFoundCorporation()).to.equal(true);
       });
     });
 
@@ -406,7 +413,7 @@ describe('Game', function() {
         ]);
         game.establishCorporation('Hydra');
         expect(game.corporations[3].tiles.length).to.equal(2);
-        expect(game.getunIncorporatedTiles().length).to.equal(2);
+        expect(game.getUnincorporatedTiles().length).to.equal(2);
       });
     });
   });
