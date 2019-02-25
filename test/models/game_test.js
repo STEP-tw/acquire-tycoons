@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const Game = require('../../src/models/game.js');
 const Player = require('../../src/models/player.js');
 const expect = require('chai').expect;
@@ -171,7 +173,7 @@ describe('Game', function() {
         expect(game.getCurrentPlayer()).to.deep.equal(player1);
       });
 
-      it('should return error when player doesn\'t contains a tile', function() {
+      it("should return error when player doesn't contains a tile", function() {
         const placedTile = '2A';
         const expectedOutput = {
           error: true,
@@ -197,7 +199,7 @@ describe('Game', function() {
         expect(game.getCurrentPlayer()).to.deep.equal(player2);
       });
 
-      it('should grow the corporation if the placed tile is adjacent to the corporation and change turn', function() {
+      it('should grow the corporation if the placed tile is adjacent to the corporation and action should change to buy stocks', function() {
         const tile1 = new Tile(
           {
             row: 1,
@@ -218,9 +220,56 @@ describe('Game', function() {
         game.corporations[0].addTile(tile2);
         const placedTile = '6A';
         game.placeTile(placedTile);
-        expect(player1.tiles.length).to.equal(6);
+        expect(player1.tiles.length).to.equal(5);
         expect(game.corporations[0].tiles.length).to.equal(3);
-        expect(game.getCurrentPlayer()).to.deep.equal(player2);
+        expect(game.getCurrentPlayer()).to.deep.equal(player1);
+        expect(game.turnManager.getAction(0).name).to.equal('BUY_STOCKS');
+      });
+
+      it("should add all connected tiles to the corporation's tile when tile is adjacent to corporation's tile", function() {
+        game.corporations[0].tiles = [];
+
+        const unincorporatedTile1 = new Tile({ row: 0, column: 8 }, '9A');
+        const unincorporatedTile2 = new Tile({ row: 1, column: 8 }, '9B');
+
+        const incorporatedTile1 = new Tile({ row: 0, column: 6 }, '7A');
+        const incorporatedTile2 = new Tile({ row: 0, column: 5 }, '6A');
+
+        const placedTile = '8A';
+
+        game.corporations[0].addTile(incorporatedTile1);
+        game.corporations[0].addTile(incorporatedTile2);
+
+        game.addToUnincorporatedTiles([
+          unincorporatedTile1,
+          unincorporatedTile2
+        ]);
+
+        game.placeTile(placedTile);
+        const actualOutput = game.corporations[0].getTiles();
+        const expectedOutput = [
+          {
+            position: { row: 0, column: 6 },
+            value: '7A'
+          },
+          {
+            position: { row: 0, column: 5 },
+            value: '6A'
+          },
+          {
+            position: { row: 0, column: 8 },
+            value: '9A'
+          },
+          {
+            position: { row: 1, column: 8 },
+            value: '9B'
+          },
+          {
+            position: { row: 0, column: 7 },
+            value: '8A'
+          }
+        ];
+        expect(actualOutput).to.deep.equal(expectedOutput);
       });
     });
 
@@ -274,17 +323,45 @@ describe('Game', function() {
       });
     });
     describe('growCorporation', function() {
-      it('should add provided tile to the corporation\'s tile when tile is adjacent to corporation\'s tile', function() {
+      it("should add provided tile to the corporation's tile when tile is adjacent to corporation's tile", function() {
         game.corporations[0].tiles = [];
-        const incorporatedTile = new Tile({ row: 0, column: 6 }, '7A');
+
+        const unincorporatedTile1 = new Tile({ row: 0, column: 8 }, '9A');
+        const unincorporatedTile2 = new Tile({ row: 1, column: 8 }, '9B');
+
+        const incorporatedTile1 = new Tile({ row: 0, column: 6 }, '7A');
+        const incorporatedTile2 = new Tile({ row: 0, column: 5 }, '6A');
+
         const placedTile = new Tile({ row: 0, column: 7 }, '8A');
-        game.corporations[0].addTile(incorporatedTile);
-        game.growCorporation(placedTile);
+
+        game.corporations[0].addTile(incorporatedTile1);
+        game.corporations[0].addTile(incorporatedTile2);
+
+        game.addToUnincorporatedTiles([
+          unincorporatedTile1,
+          unincorporatedTile2
+        ]);
+
+        const allConnectedTiles = [unincorporatedTile1, unincorporatedTile2];
+        game.growCorporation(placedTile, allConnectedTiles);
+
         const actualOutput = game.corporations[0].getTiles();
         const expectedOutput = [
           {
             position: { row: 0, column: 6 },
             value: '7A'
+          },
+          {
+            position: { row: 0, column: 5 },
+            value: '6A'
+          },
+          {
+            position: { row: 0, column: 8 },
+            value: '9A'
+          },
+          {
+            position: { row: 1, column: 8 },
+            value: '9B'
           },
           {
             position: { row: 0, column: 7 },
@@ -357,7 +434,7 @@ describe('Game', function() {
     });
 
     describe('changeActionToBuyStocks', function() {
-      it('shouldn\'t change the action to buy stocks when there are no active corporation and change the turn', function() {
+      it("shouldn't change the action to buy stocks when there are no active corporation and change the turn", function() {
         game.changeActionToBuyStocks();
         const action = game.turnManager.getAction(0);
         expect(action.name).to.equal('DO_NOTHING');
@@ -414,6 +491,39 @@ describe('Game', function() {
         game.establishCorporation('Hydra');
         expect(game.corporations[3].tiles.length).to.equal(2);
         expect(game.getUnincorporatedTiles().length).to.equal(2);
+      });
+
+      it('should grow corporation and includes all connected unincorporated tiles to the corporation', function() {
+        game.turnManager.addStack(
+          'placedTile',
+          new Tile({ row: 0, column: 4 }, '5A')
+        );
+        game.turnManager.addStack('adjacentTile', [
+          new Tile({ row: 0, column: 0 }, '1A'),
+          new Tile({ row: 0, column: 1 }, '2A'),
+          new Tile({ row: 0, column: 2 }, '3A'),
+          new Tile({ row: 0, column: 3 }, '4A'),
+          new Tile({ row: 0, column: 5 }, '6A')
+        ]);
+        game.establishCorporation('Sackson');
+        expect(game.corporations[6].tiles.length).to.equal(6);
+        expect(game.getCurrentPlayer()).to.deep.equal(player1);
+        expect(game.turnManager.getAction(0).name).to.equal('BUY_STOCKS');
+      });
+    });
+
+    describe('getConnectedNeighbours', () => {
+      it('should give list of all connected neighbors of given tile', () => {
+        const placeTile = new Tile({ row: 0, column: 4 }, '5A');
+        const expectedNeighbor = [
+          { position: { row: 0, column: 3 }, value: '4A' },
+          { position: { row: 0, column: 2 }, value: '3A' },
+          { position: { row: 0, column: 1 }, value: '2A' },
+          { position: { row: 0, column: 0 }, value: '1A' }
+        ];
+        expect(game.getConnectedNeighbours(placeTile)).to.deep.equal(
+          expectedNeighbor
+        );
       });
     });
   });

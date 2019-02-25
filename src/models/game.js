@@ -1,3 +1,4 @@
+/* eslint-disable */
 const TurnManager = require('./turn_manager.js');
 const {
   getTileWithCorporationName,
@@ -200,11 +201,24 @@ class Game {
     return this.corporations.find(this.isAdjacentTo.bind(null, tile));
   }
 
-  growCorporation(tile) {
-    let adjacentUnIncorporatedTiles = this.getUnincorporatedNeighbors(tile);
-    this.removeUnIncorporatedTile(adjacentUnIncorporatedTiles.concat(tile));
+  getConnectedNeighbours(tile, allNeighbor = []) {
+    const neighbors = this.getUnincorporatedNeighbors(tile).filter(
+      x => !allNeighbor.includes(x)
+    );
+    if (neighbors.length == 0) {
+      return allNeighbor;
+    }
+    allNeighbor = allNeighbor.concat(neighbors);
+    for (let neighbor of neighbors) {
+      allNeighbor = this.getConnectedNeighbours(neighbor, allNeighbor);
+    }
+    return allNeighbor;
+  }
+
+  growCorporation(tile, allConnectedTiles) {
     const corporation = this.getCorporationAdjacentTo(tile);
-    corporation.concatTiles(adjacentUnIncorporatedTiles.concat(tile));
+    this.removeUnIncorporatedTile(allConnectedTiles);
+    corporation.concatTiles(allConnectedTiles.concat(tile));
   }
 
   establishCorporation(corporationName) {
@@ -227,7 +241,7 @@ class Game {
   }
 
   addToUnincorporatedTiles(tile) {
-    this.unIncorporatedTiles.push(tile);
+    this.unIncorporatedTiles = this.unIncorporatedTiles.concat(tile);
   }
 
   getAdjacentTiles(tile) {
@@ -250,7 +264,6 @@ class Game {
     const status = { error: false, message: '' };
     this.lastPlacedTile = tile;
     this.updatePlayer(tile);
-    this.updateStack(tile, adjacentTiles);
     this.getActivityLog().addLog(
       `${player.getName()} placed tile ${tileValue} on board`
     );
@@ -260,7 +273,7 @@ class Game {
       return status;
     }
     this.addToUnincorporatedTiles(tile);
-    this.changeTurn();
+    this.changeActionToBuyStocks();
     return status;
   }
 
@@ -268,9 +281,12 @@ class Game {
     const hasGrownCorporation = this.getCorporationAdjacentTo(tile);
     const inActiveCorporations = this.getInActiveCorporations();
 
+    const allConnectedTiles = this.getConnectedNeighbours(tile);
+    this.updateStack(tile, allConnectedTiles);
+
     if (hasGrownCorporation) {
-      this.growCorporation(tile);
-      this.changeTurn();
+      this.growCorporation(tile, allConnectedTiles);
+      this.changeActionToBuyStocks();
       return;
     }
 
