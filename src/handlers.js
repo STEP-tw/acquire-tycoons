@@ -1,3 +1,4 @@
+/*eslint-disable */
 const Game = require('./models/game.js');
 const Player = require('./models/player.js');
 const { initializeGame } = require('./util.js');
@@ -12,7 +13,7 @@ const fetchLog = function(req, res) {
 
 const hostGame = function(req, res) {
   let { host, totalPlayers } = req.body;
-  let game = new Game(totalPlayers, () => 0, new ActivityLog(Date));
+  let game = new Game(totalPlayers, res.app.random, new ActivityLog(Date));
   let playerId = game.getNextPlayerId();
   let hostPlayer = new Player(host, playerId);
   game.addPlayer(hostPlayer);
@@ -82,7 +83,7 @@ const validateTurn = function(req, res, next) {
   const { playerId } = req.cookies;
   const game = req.game;
   if (!game.isCurrentPlayer(playerId)) {
-    return res.send({ error: true, message: 'It\'s not your turn' });
+    return res.send({ error: true, message: "It's not your turn" });
   }
   next();
 };

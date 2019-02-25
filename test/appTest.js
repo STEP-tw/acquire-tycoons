@@ -1,3 +1,5 @@
+/*eslint-disable */
+
 const request = require('supertest');
 const GameManager = require('../src/models/game_manager.js');
 const Game = require('../src/models/game.js');
@@ -228,14 +230,17 @@ describe('GET /place-tile', function() {
     const random = () => 0;
     app.gameManager = new GameManager();
     game = new Game(3, random, new ActivityLog(mockedDate));
+
     const host = new Player('Arnab', 0);
     game.addPlayer(host);
     app.gameManager.addGame(game);
     gameID = app.gameManager.getLatestId();
+
     player2 = new Player('Dheeraj', 1);
     game.addPlayer(player2);
     const player3 = new Player('Srushti', 2);
     game.addPlayer(player3);
+
     initializeGame(game);
     firstTileOfHost = host.tiles[0];
   });
@@ -255,7 +260,7 @@ describe('GET /place-tile', function() {
       .post('/place-tile')
       .set('Cookie', [`gameId=${gameID}`, `playerId=0`])
       .send({ tileValue: '12B' })
-      .expect({ error: true, message: 'You don\'t have 12B tile' })
+      .expect({ error: true, message: "You don't have 12B tile" })
       .expect('Content-Type', 'application/json; charset=utf-8')
       .expect(200, done);
   });
@@ -292,6 +297,16 @@ describe('GET /place-tile', function() {
       .expect('Content-Type', 'application/json; charset=utf-8')
       .expect(200, done);
   });
+
+  it("should provide error when playerId cookie doesn't match with current player id", function(done) {
+    request(app)
+      .post('/place-tile')
+      .set('Cookie', [`gameId=${gameID};playerId=2`])
+      .send({ tileValue: '5A' })
+      .expect({ error: true, message: "It's not your turn" })
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200, done);
+  });
 });
 
 describe('POST /establish-corporation', function() {
@@ -301,32 +316,35 @@ describe('POST /establish-corporation', function() {
     app.gameManager = new GameManager();
     game = new Game(3, random, new ActivityLog(mockedDate));
     const host = new Player('Arnab', 0);
+
     game.addPlayer(host);
     app.gameManager.addGame(game);
     gameID = app.gameManager.getLatestId();
+
     const player2 = new Player('Dheeraj', 1);
     game.addPlayer(player2);
     const player3 = new Player('Srushti', 2);
     game.addPlayer(player3);
+
     initializeGame(game);
+    game.turnManager.addStack(
+      'placedTile',
+      new Tile({ row: 0, column: 4 }, '5A')
+    );
+    game.turnManager.addStack('adjacentTile', [
+      new Tile({ row: 0, column: 0 }, '1A'),
+      new Tile({ row: 0, column: 1 }, '2A'),
+      new Tile({ row: 0, column: 2 }, '3A'),
+      new Tile({ row: 0, column: 3 }, '4A'),
+      new Tile({ row: 0, column: 5 }, '6A')
+    ]);
   });
 
   it('should provide gameData to establish selected corporation', function(done) {
-    game.placeTile('5A');
     request(app)
       .post('/establish-corporation')
       .set('Cookie', [`gameId=${gameID}`, 'playerId=0'])
       .send({ corporationName: 'Sackson' })
-      .expect('Content-Type', 'application/json; charset=utf-8')
-      .expect(200, done);
-  });
-  it('should provide error when playerId cookie doesn\'t match with current player id', function(done) {
-    request(app)
-      .post('/place-tile')
-      .set('Cookie', [`gameId=${gameID};playerId=2`])
-      .send({ tileValue: '5A' })
-      .expect({ error: true, message: 'It\'s not your turn' })
-      .expect('Content-Type', 'application/json; charset=utf-8')
       .expect(200, done);
   });
 });

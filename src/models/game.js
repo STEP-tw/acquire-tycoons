@@ -185,16 +185,15 @@ class Game {
   }
 
   isAdjacentTo(tile, corporation) {
-    return corporation.tiles.some(incorporatedTile =>
-      tile.isNeighbour(incorporatedTile)
-    );
+    return corporation
+      .getTiles()
+      .some(incorporatedTile => tile.isNeighbour(incorporatedTile));
   }
 
   areCorporationsAdjacentTo(tile) {
-    let corporationsAdjacent = this.corporations.filter(corporation =>
+    return this.corporations.filter(corporation =>
       this.isAdjacentTo(tile, corporation)
     );
-    return corporationsAdjacent;
   }
 
   getCorporationAdjacentTo(tile) {
