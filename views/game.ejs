@@ -2,8 +2,13 @@
 <html>
   <head>
     <title>ACQUIRE</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Raleway"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" type="text/css" href="/styles/main.css" />
-    <link rel="stylesheet" href="/styles/background.css" />
+    <script src="/scripts/buy_stocks.js"></script>
+    <script src="/scripts/establish_corporation.js"></script>
     <script src="/scripts/game.js"></script>
   </head>
 
@@ -69,16 +74,10 @@
         <div id="corporation-btns"></div>
       </section>
     </section>
+
     <header id="game-header" style="display: none">
-      <h3>ACQUIRE</h3>
-      <div>
-        <img src="/images/information-card.png" />
-        <img
-          src="/images/activity-log.png"
-          id="activity-log-icon"
-          title="Activity Log"
-        />
-      </div>
+      <h1 class="app-title">ACQUIRE</h1>
+      <span class="player-name-header" id="player-name">Hi Dheeraj!</span>
     </header>
     <main>
       <section class="waiting-area" id="waiting-area">
@@ -88,42 +87,52 @@
         <img class="img-medium" src="/images/loading.gif" alt="loading" />
       </section>
       <section id="game-container" style="display: none" class="game-container">
-        <section class="status">
-          <h2 id="status"></h2>
+        <section class="game-top">
+          <div class="status-bar" id="player-log">
+            You got tile 3A.
+          </div>
         </section>
-        <section class="mainBody">
-          <section class="players" id="players"></section>
-          <section class="game-board" id="game-board"></section>
-          <section class="corporation-info">
-            <table>
+        <section class="game-main">
+          <div class="player-names-section">
+            <div class="player-names" id="player-names-container"></div>
+          </div>
+          <div class="game-board-container" id="game-board-container"></div>
+
+          <div class="game-information-container">
+            <table class="corporation-details">
               <thead>
-                <td>
-                  Corporation
-                </td>
-                <td>
-                  Size
-                </td>
-                <td>Price</td>
-                <td>Stocks</td>
+                <th>Corporation</th>
+                <th>Size</th>
+                <th>Price</th>
+                <th>Stocks</th>
               </thead>
-              <tbody id="corporations"></tbody>
+              <tbody id="corporation-details-body"></tbody>
             </table>
-          </section>
+            <div class="activity-log">
+              <h3 class="heading-medium">Activity Log</h3>
+              <ul id="activity-log"></ul>
+            </div>
+          </div>
         </section>
-        <section class="user-info">
-          <section class="money">
+        <section class="player-info">
+          <div class="money-section flex-column">
             <h2>Money</h2>
-            <span>$</span>
-            <label id="money"></label>
-          </section>
-          <section class="tiles-holder">
+            <div class="player-money" id="player-money">$6000</div>
+          </div>
+          <div class="tiles-section flex-column">
             <h2>Tiles</h2>
-            <div class="tiles" id="tiles"></div>
-          </section>
-          <section class="stocks-holder">
+            <div
+              class="tiles  flex-row-space-evenly"
+              id="player-tiles-container"
+            ></div>
+          </div>
+          <div class="stocks-section flex-column">
             <h2>Stocks</h2>
-            <div class="stocks" id="stocks"></div>
-          </section>
+            <div
+              class="flex-row-space-evenly"
+              id="player-stocks-container"
+            ></div>
+          </div>
         </section>
       </section>
     </main>

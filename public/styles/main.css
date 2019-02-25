@@ -3,15 +3,26 @@ body {
   margin: 0px;
   height: 100%;
   width: 100%;
+  font-family: 'Raleway', sans-serif;
 }
 
 header {
-  font-size: 30px;
   height: 6%;
   display: flex;
   justify-content: space-between;
-  margin: auto 2%;
   align-items: center;
+  border-bottom: 2px solid gray;
+
+  box-sizing: border-box;
+}
+
+.app-title {
+  margin-left: 1%;
+}
+
+.player-name-header {
+  font-size: 18px;
+  margin-right: 1%;
 }
 
 main {
@@ -21,220 +32,299 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-top: 1px solid black;
   background: whitesmoke;
 }
 
-.status {
-  height: 4%;
+.game-container {
   width: 100%;
-  padding-top: 1%;
+  height: 100%;
+  background-color: white;
+}
+
+.table {
+  height: 70%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+.app-title {
+  margin-left: 1%;
+}
+
+.game-top {
+  height: 6%;
   display: flex;
   justify-content: center;
-}
-
-.status h2 {
-  height: 80%;
-  width: 60%;
-  margin: 0px;
-  padding-left: 1%;
-  font-size: 120%;
-}
-
-.mainBody {
-  height: 68%;
-  display: flex;
   align-items: center;
 }
 
-.user-info {
-  height: 18%;
-  width: 99%;
-  border: 1px solid black;
+.game-main {
+  height: 78%;
   display: flex;
-  margin-left: 0.5%;
-  /* align-items: center; */
-  justify-content: space-around;
 }
 
-.players,
-.game-board,
-.hotels-info {
-  height: 92%;
+.game-information-container {
+  width: 26%;
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.activity-log {
+  padding: 4px;
+  height: 45%;
+  width: 90%;
+  border: 1px solid gray;
+}
+
+.heading-medium {
+  text-align: center;
+  color: rgb(50, 50, 50);
+}
+
+.player-info {
+  height: 16%;
+  outline: 1px solid black;
+}
+
+.game-board-container {
+  width: 58%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .game-board {
-  width: 60%;
-  display: flex;
-  align-items: center;
+  height: 97%;
+  width: 97%;
+  background: whitesmoke;
 }
 
-.players {
-  width: 15%;
-  height: 92%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.players div {
-  width: 60%;
-  height: 16.66%;
-  border: 1px solid black;
-  font-size: 150%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.players p {
-  margin: 0px;
+.board-tile {
+  font-family: Arial, Helvetica, sans-serif;
   text-align: center;
+  height: 11.1111%;
+  width: 8.3333%;
+  color: rgb(55, 55, 55);
+  background-color: #e6e6e6;
 }
 
-.board {
-  height: 100%;
-  width: 98%;
-  border: 1px solid black;
+.unincorporated-tile {
+  background: rgb(177, 177, 177);
 }
 
-.board td {
-  width: 8.33%;
-  text-align: center;
-  height: 11.11%;
-  border: 1px solid black;
-  border-radius: 5%;
+.last-placed-tile {
+  border: 2px solid rgb(58, 58, 58);
 }
 
-.corporation-info {
-  width: 40%;
-  height: 92%;
+.status-bar {
+  width: 58%;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
 }
 
-.corporation-info table {
-  width: 100%;
-  height: 100%;
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-
-.corporation-info thead {
-  height: 12%;
-  font-weight: bold;
-}
-
-.corporation-info tbody {
-  height: 84%;
-}
-
-.corporation-info td {
-  height: 12%;
-  text-align: center;
-  border: 1px solid black;
-}
-
-.activity-info img {
-  width: 18%;
+.player-names {
   height: 60%;
-  padding-left: 15%;
-  padding-right: 16%;
-  margin: 0px;
-}
-
-.activity-info section {
-  width: 100%;
-  height: 50%;
-  margin: 0px;
+  width: 90%;
   display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
-.activity-info span {
-  width: 50%;
-  height: 50%;
-  margin: 0px;
-  align-self: flex-start;
-  border: 0px solid black;
-  text-align: center;
-}
-
-.money {
-  width: 10%;
-  height: 100%;
-  text-align: center;
-  font-size: 150%;
-}
-
-.money h2 {
-  height: 40%;
-  margin: 0px;
-  padding: 0px;
-  font-size: unset;
-  text-align: center;
-}
-
-.stocks-holder {
-  width: 50%;
-  height: 100%;
-}
-
-.stocks-holder h2 {
-  height: 40%;
-  margin: 0px;
-  padding: 0px;
-  text-align: center;
-}
-
-.stocks {
-  height: 40%;
+.player-name {
+  height: 16.66%;
   width: 100%;
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: space-evenly;
-  text-align: center;
+  border: 1px solid gray;
 }
 
-.stocks div {
-  height: 100%;
-  width: 12%;
-  border-radius: 10%;
+.current-player {
+  background: #66c993;
+  color: white;
+  font-size: 18px;
+  width: 102%;
+  box-shadow: -6px 0 6px -6px #333, 6px 0 6px -6px #333;
+  border-radius: 3px;
+}
+
+.player-name-header {
+  font-size: 18px;
+  margin-right: 1%;
+}
+
+.player-names-section {
+  width: 16%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+.corporation-details {
+  padding: 4px;
+  border-collapse: collapse;
+  font-size: 18px;
+  color: rgb(50, 50, 50);
+  background: white;
+  width: 90%;
+  text-align: center;
+  height: 48%;
+  border: 1px solid gray;
+}
+
+.corporation-details th {
+  font-size: 20px;
+  font-weight: bolder;
+}
+
+.corporation-details tr {
+  border-bottom: 1px solid rgb(102, 101, 101);
+}
+
+ul {
+  padding: 8px;
+  list-style: none;
+}
+
+ul > li {
+  margin-bottom: 8px;
+  border-bottom: 1px dotted gray;
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex-column {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
 }
 
-.tiles-holder {
-  width: 40%;
-  height: 100%;
+.flex-row-space-evenly {
+  display: flex;
+  justify-content: space-evenly;
 }
 
-.tiles-holder h2 {
-  height: 30%;
-  width: 100%;
-  padding: 0px;
-  margin: 0px;
+.money-section {
+  width: 15%;
   text-align: center;
+  border-right: 1px solid gray;
+}
+
+.tiles-section {
+  width: 40%;
+  text-align: center;
+  border-right: 1px solid gray;
 }
 
 .tiles {
-  height: 70%;
+  height: 50%;
   width: 100%;
-  display: flex;
-  justify-content: space-evenly;
 }
 
-.tile {
-  height: 50%;
-  width: 11%;
-  font-size: 120%;
-  border: 1px solid black;
-  border-radius: 5%;
+.stocks-section {
   text-align: center;
-  align-content: center;
-  outline: none;
+  width: 45%;
+}
+
+.player-info {
+  display: flex;
+}
+
+.player-money {
+  color: rgb(85, 85, 85);
+  font-size: 22px;
+}
+
+.player-tile {
+  cursor: pointer;
+  font-family: Arial, Helvetica, sans-serif;
+
+  box-shadow: 0px 0px 1px black;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 3px;
+  border: 1px solid gray;
+
+  height: 92%;
+  width: 10%;
+
+  color: #555454;
+  background: white;
   opacity: 1;
   transition: opacity 1000ms linear;
+}
+
+.player-tile:hover {
+  border: 1px solid black;
+  box-shadow: 0px 0px 1px black;
+  font-weight: bold;
+  color: black;
+}
+
+.player-stock > p {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.player-stock {
+  color: rgb(50, 50, 50);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 70px;
+  height: 60px;
+  border: 1px solid gray;
+  border-radius: 3px;
+}
+
+.stock-count {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.phoenix-color {
+  background-color: #a590dc;
+}
+
+.hydra-color {
+  background-color: #fc9f5b;
+}
+
+.fusion-color {
+  background-color: #76c788;
+}
+
+.america-color {
+  background-color: #5ca4df;
+}
+
+.zeta-color {
+  background-color: #ffd761;
+}
+
+.sackson-color {
+  background-color: rgb(245, 136, 143);
+}
+
+.quantum-color {
+  background-color: #6bc3d1;
 }
 
 .disabled {
@@ -243,8 +333,11 @@ main {
   color: gray;
 }
 
-.enabled {
-  background-color: white;
+.disabled:hover {
+  cursor: default;
+  border: 1px solid lightgray;
+  font-weight: normal;
+  color: gray;
 }
 
 .waiting-area {
@@ -263,11 +356,6 @@ main {
 .img-medium {
   width: 96px;
   height: 96px;
-}
-
-.game-container {
-  width: 100%;
-  height: 100%;
 }
 
 .found-corporation {
@@ -338,10 +426,6 @@ main {
   width: 100%;
   overflow: scroll;
   font-size: 20px;
-}
-
-#activity-log-icon:hover {
-  transform: scale(1.5);
 }
 
 #close-overlay-btn {
@@ -416,8 +500,4 @@ main {
 #error-msg-at-buying {
   height: 10%;
   text-align: center;
-}
-
-table {
-  height: 70%;
 }
