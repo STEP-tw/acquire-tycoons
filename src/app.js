@@ -24,9 +24,14 @@ app.urlsToValidateGame = [
   '/place-tile',
   '/game-data',
   '/log',
-  '/establish-corporation'
+  '/establish-corporation',
+  '/confirm-buy'
 ];
-app.urlsToValidateTurn = ['/place-tile', '/establish-corporation'];
+app.urlsToValidateTurn = [
+  '/place-tile',
+  '/establish-corporation',
+  '/confirm-buy'
+];
 app.set('view engine', 'ejs');
 
 app.use(cookieParser());

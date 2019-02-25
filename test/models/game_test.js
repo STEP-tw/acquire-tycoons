@@ -11,6 +11,12 @@ const { getCorporations, getFaceDownCluster } = require('../../src/util.js');
 const ActivityLog = require('../../src/models/activity_log.js');
 const Tile = require('../../src/models/tile.js');
 
+const generateTiles = function(row, noOfTiles) {
+  return new Array(noOfTiles).fill(row).map((elem, index) => {
+    return new Tile({ row: 0, column: index }, index + 1 + elem);
+  });
+};
+
 describe('Game', function() {
   let game, player1;
   beforeEach(function() {
@@ -523,6 +529,117 @@ describe('Game', function() {
         ];
         expect(game.getConnectedNeighbours(placeTile)).to.deep.equal(
           expectedNeighbor
+        );
+      });
+    });
+
+    describe('getStockHolders', function() {
+      it('shouldn\'t provide any stock holders of given corporation at beginning', function() {
+        expect(game.getStockHolders('Sackson')).to.length(0);
+      });
+      it('should provide (all the stock holders of given corporation', function() {
+        player1.addStocks({ name: 'Sackson', numberOfStock: 2 });
+        player2.addStocks({ name: 'Sackson', numberOfStock: 2 });
+        expect(game.getStockHolders('Sackson')).to.length(2);
+      });
+    });
+
+    describe('distributeMajorityMinority', function() {
+      it('should distribute stock holder bonuses to single stock holder if there is only single stock holder of the corporation', function() {
+        game.corporations[6].addTile(new Tile({ row: 1, column: 1 }, '2B'));
+        game.corporations[6].addTile(new Tile({ row: 1, column: 2 }, '3B'));
+        player1.addStocks({ name: 'Sackson', numberOfStock: 2 });
+        game.distributeMajorityMinority('Sackson');
+        expect(player1.getMoney()).to.equal(9000);
+      });
+
+      it('should distribute majority bonus to majorStockHolder and minority bonus to minor stock holder if there are single major and minor stockholder', function() {
+        game.corporations[6].addTile(new Tile({ row: 1, column: 1 }, '2B'));
+        game.corporations[6].addTile(new Tile({ row: 1, column: 2 }, '3B'));
+        player1.addStocks({ name: 'Sackson', numberOfStock: 2 });
+        player2.addStocks({ name: 'Sackson', numberOfStock: 1 });
+        game.distributeMajorityMinority('Sackson');
+        expect(player1.getMoney()).to.equal(8000);
+        expect(player2.getMoney()).to.equal(7000);
+      });
+
+      it('should distribute average of majority bonus and minority bonus if there are more than one major stock holders', function() {
+        game.corporations[6].addTile(new Tile({ row: 1, column: 1 }, '2B'));
+        game.corporations[6].addTile(new Tile({ row: 1, column: 2 }, '3B'));
+        player1.addStocks({ name: 'Sackson', numberOfStock: 2 });
+        player2.addStocks({ name: 'Sackson', numberOfStock: 2 });
+        game.distributeMajorityMinority('Sackson');
+        expect(player1.getMoney()).to.equal(7500);
+        expect(player2.getMoney()).to.equal(7500);
+      });
+
+      it('should distribute average of minority bonus if there are more than one minor stock holder', function() {
+        game.corporations[6].addTile(new Tile({ row: 1, column: 1 }, '2B'));
+        game.corporations[6].addTile(new Tile({ row: 1, column: 2 }, '3B'));
+        player1.addStocks({ name: 'Sackson', numberOfStock: 2 });
+        player2.addStocks({ name: 'Sackson', numberOfStock: 1 });
+        player3.addStocks({ name: 'Sackson', numberOfStock: 1 });
+        game.distributeMajorityMinority('Sackson');
+        expect(player1.getMoney()).to.equal(8000);
+        expect(player2.getMoney()).to.equal(6500);
+        expect(player3.getMoney()).to.equal(6500);
+      });
+    });
+
+    describe('hasEnded', function() {
+      it('should return true if the game end condition satisfied', function() {
+        game.corporations[0].tiles = generateTiles('A', 11);
+        expect(game.hasEnded()).true;
+      });
+      it('should return true if the game end condition satisfied', function() {
+        game.corporations[0].tiles = generateTiles('A', 11);
+        game.corporations[3].tiles = generateTiles('D', 11);
+        expect(game.hasEnded()).true;
+      });
+
+      it('should return false if there is any active corporation size less than 11', function() {
+        game.corporations[0].tiles = generateTiles('A', 10);
+        game.corporations[2].tiles = generateTiles('C', 11);
+
+        expect(game.hasEnded()).false;
+      });
+
+      it('should return true if there is any active corporation size more than 41', function() {
+        game.corporations[0].tiles = generateTiles('A', 11);
+        game.corporations[0].tiles = game.corporations[0].tiles.concat(
+          generateTiles('B', 11)
+        );
+        game.corporations[0].tiles = game.corporations[0].tiles.concat(
+          generateTiles('C', 11)
+        );
+        game.corporations[0].tiles = game.corporations[0].tiles.concat(
+          generateTiles('D', 11)
+        );
+
+        game.corporations[1].tiles = generateTiles('E', 9);
+        expect(game.hasEnded()).true;
+      });
+    });
+
+    describe('checkGameEnd', function() {
+      it('should change the action to BUY_STOCKS if the game has not ended', function() {
+        game.corporations[0].tiles = generateTiles('A', 9);
+        game.checkGameEnd();
+        expect(game.turnManager.getAction(0).name).to.equal('BUY_STOCKS');
+      });
+
+      it('should change the action to END_GAME if the game has not ended', function() {
+        const expectedOutput = [
+          { playerName: 'Arnab', money: 6000, rank: 1 },
+          { playerName: 'Gayatri', money: 6000, rank: 2 },
+          { playerName: 'Swagata', money: 6000, rank: 3 },
+          { playerName: 'Dhiru', money: 6000, rank: 4 }
+        ];
+        game.corporations[0].tiles = generateTiles('A', 11);
+        game.checkGameEnd();
+        expect(game.turnManager.getAction(0).name).to.equal('END_GAME');
+        expect(game.turnManager.getAction(0).data).to.deep.equal(
+          expectedOutput
         );
       });
     });

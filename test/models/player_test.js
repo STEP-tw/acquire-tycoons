@@ -156,4 +156,46 @@ describe('Player', function() {
       expect(player.getId()).to.equal(0);
     });
   });
+
+  describe('hasStocksOf', function() {
+    it('should return true if the player contains stocks of given corporation', function() {
+      let actualOutput = player.hasStocksOf('Sackson');
+      expect(actualOutput).false;
+    });
+    it('should return true if the player contains stocks of given corporation', function() {
+      player.addStocks({ name: 'Sackson', numberOfStock: 4 });
+      let actualOutput = player.hasStocksOf('Sackson');
+      expect(actualOutput).true;
+    });
+  });
+
+  describe('SellStocks', function() {
+    it('should sell all the stocks of given corporation the player has and give player money in exchange', function() {
+      const corporation = {
+        getCurrentStockPrice: () => 400,
+        getName: () => 'Sackson',
+        addStocks: () => {
+          return;
+        }
+      };
+      player.sellStocks(corporation, 4);
+      expect(player.getMoney()).to.be.equal(7600);
+    });
+  });
+
+  describe('SellAllStocks', function() {
+    it('should sell all the stocks of given corporation the player has', function() {
+      const corporation = {
+        getCurrentStockPrice: () => 400,
+        getName: () => 'Sackson',
+        addStocks: () => {
+          return;
+        }
+      };
+      player.addStocks({ name: 'Sackson', numberOfStock: 4 });
+      player.sellAllStocks(corporation);
+      expect(player.getMoney()).to.be.equal(7600);
+      expect(player.getStocksOf('Sackson')).to.equal(0);
+    });
+  });
 });

@@ -117,7 +117,7 @@ const displayCorporations = function(document, corporationsData) {
   const corporationsDiv = document.getElementById('corporations');
   corporationsDiv.innerHTML = '';
   const corporations = corporationsData.map(
-		createCorporationRow.bind(null, document)
+    createCorporationRow.bind(null, document)
   );
   appendChilds(corporationsDiv, corporations);
 };
@@ -135,7 +135,7 @@ const placeTile = function(document) {
       body: JSON.stringify({ tileValue })
     };
 
-		const response = await fetch('/place-tile', reqData);
+    const response = await fetch('/place-tile', reqData);
     const { error, message } = await response.json();
     if (error) {
       displayStatus(document, message);
@@ -186,6 +186,19 @@ const foundSelectedCorporation = function(corporationName) {
   }).then(() => {
     fetchGameData(document);
   });
+};
+
+const showGameResults = function(id, document, gameResults) {
+  clearInterval(id);
+  const gameResultsHtml = gameResults
+    .map(gameResult => {
+      const { playerName, rank, money } = gameResult;
+      return `<tr><td>${rank}</td><td>${playerName}</td><td>${money}</td></tr>`;
+    })
+    .join('');
+  document.getElementById('game-end-overlay').style.display = 'flex';
+  document.getElementById('game-end-overlay').style.zIndex = 0;
+  document.getElementById('game-results-body').innerHTML = gameResultsHtml;
 };
 
 const foundCorporation = function(document, corporations) {
@@ -271,12 +284,14 @@ const setOnClickForTiles = function(document) {
 };
 
 const performAction = function(id, document, action) {
+  console.log(action);
   if (action.name != 'DO_NOTHING') clearInterval(id);
   const actions = {
     PLACE_A_TILE: setOnClickForTiles,
     FOUND_CORPORATION: foundCorporation,
     DO_NOTHING: () => {},
-    BUY_STOCKS: generateBuyStockContainer
+    BUY_STOCKS: generateBuyStockContainer,
+    END_GAME: showGameResults.bind(null, id)
   };
   actions[action.name](document, action.data);
 };
@@ -357,11 +372,11 @@ const closeOverlay = function(id) {
 };
 
 const showLog = function() {
-  document.getElementById('overlay').style.display = 'flex';
-  document.getElementById('overlay').style.zIndex = 0;
+  document.getElementById('activity-log-overlay').style.display = 'flex';
+  document.getElementById('activity-log-overlay').style.zIndex = 0;
   document.getElementById('close-overlay-btn').onclick = closeOverlay.bind(
     null,
-    'overlay'
+    'activity-log-overlay'
   );
 
   fetch('/log')

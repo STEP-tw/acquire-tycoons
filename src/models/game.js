@@ -1,10 +1,13 @@
-/* eslint-disable */
+const _ = require('lodash');
 const TurnManager = require('./turn_manager.js');
 const {
   getTileWithCorporationName,
   flatPosition,
   getCorporationData,
-  buyStocks
+  buyStocks,
+  distributeReward,
+  getStockHoldersByCount,
+  getStocksCount
 } = require('../util.js');
 class Game {
   constructor(maxPlayers, random, activityLog) {
@@ -202,7 +205,7 @@ class Game {
 
   getConnectedNeighbours(tile, allNeighbor = []) {
     const neighbors = this.getUnincorporatedNeighbors(tile).filter(
-      x => !allNeighbor.includes(x)
+      tile => !allNeighbor.includes(tile)
     );
     if (neighbors.length == 0) {
       return allNeighbor;
@@ -226,17 +229,15 @@ class Game {
     const stack = this.turnManager.getStack();
     const placedTile = stack['placedTile'];
     const adjacentTile = stack['adjacentTile'];
-
     corporation.addTile(placedTile);
     this.removeUnIncorporatedTile(adjacentTile.concat(placedTile));
-
     corporation.concatTiles(adjacentTile);
     player.addStocks({ name: corporationName, numberOfStock: 1 });
     corporation.deductStocks(1);
     this.activityLog.addLog(
       `${player.getName()} established ${corporationName}`
     );
-    this.changeActionToBuyStocks();
+    this.checkGameEnd();
   }
 
   addToUnincorporatedTiles(tile) {
@@ -272,8 +273,93 @@ class Game {
       return status;
     }
     this.addToUnincorporatedTiles(tile);
-    this.changeActionToBuyStocks();
+    this.checkGameEnd();
     return status;
+  }
+
+  getStockHolders(corporationName) {
+    return this.players.filter(player => player.hasStocksOf(corporationName));
+  }
+
+  distributeMajorityMinority(corporationName) {
+    const corporation = this.getCorporation(corporationName);
+    const majorityStockHolderBonus = corporation.getMajority();
+    const minorityStockHolderBonus = corporation.getMinority();
+    const stockHolders = this.getStockHolders(corporationName);
+    const stocksCountList = stockHolders.map(
+      getStocksCount.bind(null, corporationName)
+    );
+
+    const uniqueStocksCountList = _.uniq(stocksCountList);
+    const sortedStocksCountList = _.sortBy(uniqueStocksCountList);
+    const majorStocksCount = _.last(sortedStocksCountList);
+
+    const majorStockHolders = getStockHoldersByCount(
+      corporationName,
+      stockHolders,
+      majorStocksCount
+    );
+
+    if (majorStockHolders.length > 1 || stockHolders.length == 1) {
+      const majorityReward =
+        (majorityStockHolderBonus + minorityStockHolderBonus) /
+        majorStockHolders.length;
+      distributeReward(majorStockHolders, majorityReward);
+      return;
+    }
+    distributeReward(majorStockHolders, majorityStockHolderBonus);
+    const minorStocksCount = _.nth(sortedStocksCountList, -2);
+    const minorStockHolders = getStockHoldersByCount(
+      corporationName,
+      stockHolders,
+      minorStocksCount
+    );
+    const minorityReward = minorityStockHolderBonus / minorStockHolders.length;
+    distributeReward(minorStockHolders, minorityReward);
+  }
+
+  getResults() {
+    this.getActiveCorporations().forEach(corporation => {
+      this.players.forEach(player => player.sellAllStocks(corporation));
+      this.distributeMajorityMinority(corporation.getName());
+    });
+    const sortedPlayers = _.sortBy(this.players, 'money').reverse();
+    const results = sortedPlayers.map((player, index) => ({
+      playerName: player.getName(),
+      money: player.getMoney(),
+      rank: index + 1
+    }));
+    return results;
+  }
+
+  getActiveCorporations() {
+    return this.corporations.filter(corporation => corporation.isActive());
+  }
+
+  hasEnded() {
+    const activeCorporations = this.getActiveCorporations();
+    if (activeCorporations.length < 1) {
+      return false;
+    }
+
+    const areAllCorporationsSafe = activeCorporations.every(
+      corporation => corporation.getSize() >= 11
+    );
+
+    const isAnyCorporationAbove41 = activeCorporations.some(
+      corporation => corporation.getSize() >= 41
+    );
+    return areAllCorporationsSafe || isAnyCorporationAbove41;
+  }
+
+  checkGameEnd() {
+    if (this.hasEnded()) {
+      const gameResults = this.getResults();
+      this.turnManager.changeAction({ name: 'END_GAME', data: gameResults });
+      this.turnManager.setActionGlobal();
+      return;
+    }
+    this.changeActionToBuyStocks();
   }
 
   foundOrGrowCorporation(tile) {
@@ -285,7 +371,7 @@ class Game {
 
     if (hasGrownCorporation) {
       this.growCorporation(tile, allConnectedTiles);
-      this.changeActionToBuyStocks();
+      this.checkGameEnd();
       return;
     }
 

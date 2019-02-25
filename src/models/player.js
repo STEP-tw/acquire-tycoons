@@ -98,6 +98,25 @@ class Player {
     const status = this.log;
     return { name, money, stocks, tiles, status };
   }
+
+  hasStocksOf(corporationName) {
+    return this.stocks[corporationName] > 0;
+  }
+
+  sellStocks(corporation, numberOfStocks) {
+    this.stocks[corporation.getName()] -= numberOfStocks;
+    corporation.addStocks(numberOfStocks);
+    const sellingPrice = numberOfStocks * corporation.getCurrentStockPrice();
+    this.addMoney(sellingPrice);
+  }
+
+  sellAllStocks(corporation) {
+    this.sellStocks(corporation, this.stocks[corporation.getName()]);
+  }
+
+  getStocksOf(corporationName) {
+    return this.stocks[corporationName];
+  }
 }
 
 module.exports = Player;

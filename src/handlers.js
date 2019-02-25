@@ -1,4 +1,3 @@
-/*eslint-disable */
 const Game = require('./models/game.js');
 const Player = require('./models/player.js');
 const { initializeGame } = require('./util.js');
@@ -83,7 +82,7 @@ const validateTurn = function(req, res, next) {
   const { playerId } = req.cookies;
   const game = req.game;
   if (!game.isCurrentPlayer(playerId)) {
-    return res.send({ error: true, message: "It's not your turn" });
+    return res.send({ error: true, message: 'It\'s not your turn' });
   }
   next();
 };

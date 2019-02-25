@@ -29,7 +29,7 @@
       "error",
       {
         "skipBlankLines": true,
-        "max": 400
+        "max": 600
       }
     ],
     "max-len": ["warn", 80],
@@ -43,7 +43,7 @@
         "capIsNew": true
       }
     ],
-    "id-length": ["error", { "max": 30 }],
+    "id-length": ["error", { "max": 30, "exceptions": ["_"] }],
     "max-depth": ["error", 5],
     "object-curly-spacing": ["error", "always"],
     "curly": "error",

@@ -75,6 +75,24 @@ const getCorporationData = function(corporation) {
   };
 };
 
+const distributeReward = function(stockHolders, reward) {
+  stockHolders.forEach(stockHolder => stockHolder.addMoney(reward));
+};
+
+const getStockHoldersByCount = function(
+  corporationName,
+  stockHolders,
+  stocksCount
+) {
+  return stockHolders.filter(
+    stockHolder => stockHolder.getStocksOf(corporationName) == stocksCount
+  );
+};
+
+const getStocksCount = function(corporationName, stockHolder) {
+  return stockHolder.getStocksOf(corporationName);
+};
+
 module.exports = {
   random,
   initializeGame,
@@ -84,5 +102,8 @@ module.exports = {
   flatPosition,
   buyStocks,
   getCorporationData,
-  getTileWithCorporationName
+  getTileWithCorporationName,
+  getStockHoldersByCount,
+  distributeReward,
+  getStocksCount
 };

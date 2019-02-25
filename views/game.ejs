@@ -1,112 +1,131 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>ACQUIRE</title>
+    <link rel="stylesheet" type="text/css" href="/styles/main.css" />
+    <link rel="stylesheet" href="/styles/background.css" />
+    <script src="/scripts/game.js"></script>
+  </head>
 
-<head>
-	<title>ACQUIRE</title>
-	<link rel="stylesheet" type="text/css" href="/styles/main.css" />
-	<link rel="stylesheet" href="/styles/background.css" />
-	<script src="/scripts/game.js"></script>
-</head>
+  <body>
+    <section id="activity-log-overlay" class="overlay">
+      <section class="log-container" id="activity-log">
+        <section class="activity-log-header">
+          <span style="margin-left: 33.333%">ACTIVITY LOG</span>
+          <img src="/images/close-btn.png" id="close-overlay-btn" />
+        </section>
+        <section class="activity-log-body" id="activity-log-body"></section>
+      </section>
+    </section>
+    <section class="overlay" id="game-end-overlay">
+      <section id="game-results" class="game-results">
+        <h1>Game Results</h1>
+        <table>
+          <thead>
+            <th>Rank</th>
+            <th>Player Name</th>
+            <th>Money</th>
+          </thead>
+          <tbody id="game-results-body"></tbody>
+        </table>
+      </section>
+    </section>
 
-<body>
-	<section id="overlay">
-		<section class="log-container" id="activity-log">
-			<section class="activity-log-header">
-				<span style="margin-left: 33.333%">ACTIVITY LOG</span>
-				<img src="/images/close-btn.png" id="close-overlay-btn" />
-			</section>
-			<section class="activity-log-body" id="activity-log-body"></section>
-		</section>
-	</section>
+    <section id="overlay-buy-stock" class="overlay-buy-stock">
+      <section class="buy-stock-container">
+        <div class="buy-stocks-money" id="buy-stocks-money"></div>
+        <table class="table">
+          <thead>
+            <tr>
+              <td>
+                Corporations
+              </td>
+              <td>
+                Shares
+              </td>
+              <td>
+                Price
+              </td>
+            </tr>
+          </thead>
+          <tbody id="buy-stocks-body"></tbody>
+        </table>
+        <div id="error-msg-at-buying"></div>
+        <div class="done-button-div">
+          <button id="done-button">Done</button>
+        </div>
+      </section>
+    </section>
 
-	<section id="overlay-buy-stock" class="overlay-buy-stock">
-		<section class="buy-stock-container">
-			<div class="buy-stocks-money" id="buy-stocks-money"></div>
-			<table class="table">
-				<thead>
-					<tr>
-						<td>
-							Corporations
-						</td>
-						<td>
-							Shares
-						</td>
-						<td>
-							Price
-						</td>
-					</tr>
-				</thead>
-				<tbody id="buy-stocks-body">
-				</tbody>
-			</table>
-			<div id='error-msg-at-buying'></div>
-			<div class='done-button-div'><button id='done-button'>Done</button></div>
-		</section>
-	</section>
-
-
-	<section id="found-corporation-overlay">
-		<section id="found-corporation" class="found-corporation" style="display:none;border:1px solid black;">
-			<div class="establish-corp-heading">
-				Select a corporation to establish
-			</div>
-			<div id="corporation-btns"></div>
-		</section>
-	</section>
-	<header id="game-header" style="display: none">
-		<h3>ACQUIRE</h3>
-		<div>
-			<img src="/images/information-card.png" />
-			<img src="/images/activity-log.png" id="activity-log-icon" title="Activity Log" />
-		</div>
-	</header>
-	<main>
-		<section class="waiting-area" id="waiting-area">
-			<p style="text-align:center" id="game-id">Game Id:<%= gameId %></p>
-			<p><%= message %></p>
-			<div id="joined-player-names" style="display:none"></div>
-			<img class="img-medium" src="/images/loading.gif" alt="loading" />
-		</section>
-		<section id="game-container" style="display: none" class="game-container">
-			<section class="status">
-				<h2 id="status"></h2>
-			</section>
-			<section class="mainBody">
-				<section class="players" id="players"></section>
-				<section class="game-board" id="game-board"></section>
-				<section class="corporation-info">
-					<table>
-						<thead>
-							<td>
-								Corporation
-							</td>
-							<td>
-								Size
-							</td>
-							<td>Price</td>
-							<td>Stocks</td>
-						</thead>
-						<tbody id="corporations"></tbody>
-					</table>
-				</section>
-			</section>
-			<section class="user-info">
-				<section class="money">
-					<h2>Money</h2>
-					<span>$</span>
-					<label id="money"></label>
-				</section>
-				<section class="tiles-holder">
-					<h2>Tiles</h2>
-					<div class="tiles" id="tiles"></div>
-				</section>
-				<section class="stocks-holder">
-					<h2>Stocks</h2>
-					<div class="stocks" id="stocks"></div>
-				</section>
-			</section>
-		</section>
-	</main>
-</body>
-
+    <section id="found-corporation-overlay">
+      <section
+        id="found-corporation"
+        class="found-corporation"
+        style="display:none;border:1px solid black;"
+      >
+        <div class="establish-corp-heading">
+          Select a corporation to establish
+        </div>
+        <div id="corporation-btns"></div>
+      </section>
+    </section>
+    <header id="game-header" style="display: none">
+      <h3>ACQUIRE</h3>
+      <div>
+        <img src="/images/information-card.png" />
+        <img
+          src="/images/activity-log.png"
+          id="activity-log-icon"
+          title="Activity Log"
+        />
+      </div>
+    </header>
+    <main>
+      <section class="waiting-area" id="waiting-area">
+        <p style="text-align:center" id="game-id">Game Id:<%= gameId %></p>
+        <p><%= message %></p>
+        <div id="joined-player-names" style="display:none"></div>
+        <img class="img-medium" src="/images/loading.gif" alt="loading" />
+      </section>
+      <section id="game-container" style="display: none" class="game-container">
+        <section class="status">
+          <h2 id="status"></h2>
+        </section>
+        <section class="mainBody">
+          <section class="players" id="players"></section>
+          <section class="game-board" id="game-board"></section>
+          <section class="corporation-info">
+            <table>
+              <thead>
+                <td>
+                  Corporation
+                </td>
+                <td>
+                  Size
+                </td>
+                <td>Price</td>
+                <td>Stocks</td>
+              </thead>
+              <tbody id="corporations"></tbody>
+            </table>
+          </section>
+        </section>
+        <section class="user-info">
+          <section class="money">
+            <h2>Money</h2>
+            <span>$</span>
+            <label id="money"></label>
+          </section>
+          <section class="tiles-holder">
+            <h2>Tiles</h2>
+            <div class="tiles" id="tiles"></div>
+          </section>
+          <section class="stocks-holder">
+            <h2>Stocks</h2>
+            <div class="stocks" id="stocks"></div>
+          </section>
+        </section>
+      </section>
+    </main>
+  </body>
 </html>

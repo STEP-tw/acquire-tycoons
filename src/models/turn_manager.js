@@ -4,15 +4,23 @@ class TurnManager {
     this.currentPlayerIndex = currentPlayerIndex;
     this.currentPlayerAction = {};
     this.stack = {};
+    this.isActionGlobal = false;
+  }
+
+  setActionGlobal() {
+    this.isActionGlobal = true;
+  }
+
+  isCurrentPlayer(id) {
+    return (
+      this.isActionGlobal ||
+      this.orderedPlayerIds[this.currentPlayerIndex] == id
+    );
   }
 
   changeTurn() {
     this.currentPlayerIndex =
       (this.currentPlayerIndex + 1) % this.orderedPlayerIds.length;
-  }
-
-  isCurrentPlayer(id) {
-    return this.orderedPlayerIds[this.currentPlayerIndex] == id;
   }
 
   changeAction(action) {

@@ -1,5 +1,3 @@
-/*eslint-disable */
-
 const request = require('supertest');
 const GameManager = require('../src/models/game_manager.js');
 const Game = require('../src/models/game.js');
@@ -260,7 +258,7 @@ describe('GET /place-tile', function() {
       .post('/place-tile')
       .set('Cookie', [`gameId=${gameID}`, `playerId=0`])
       .send({ tileValue: '12B' })
-      .expect({ error: true, message: "You don't have 12B tile" })
+      .expect({ error: true, message: 'You don\'t have 12B tile' })
       .expect('Content-Type', 'application/json; charset=utf-8')
       .expect(200, done);
   });
@@ -298,12 +296,12 @@ describe('GET /place-tile', function() {
       .expect(200, done);
   });
 
-  it("should provide error when playerId cookie doesn't match with current player id", function(done) {
+  it('should provide error when playerId cookie doesn\'t match with current player id', function(done) {
     request(app)
       .post('/place-tile')
       .set('Cookie', [`gameId=${gameID};playerId=2`])
       .send({ tileValue: '5A' })
-      .expect({ error: true, message: "It's not your turn" })
+      .expect({ error: true, message: 'It\'s not your turn' })
       .expect('Content-Type', 'application/json; charset=utf-8')
       .expect(200, done);
   });
@@ -345,6 +343,36 @@ describe('POST /establish-corporation', function() {
       .post('/establish-corporation')
       .set('Cookie', [`gameId=${gameID}`, 'playerId=0'])
       .send({ corporationName: 'Sackson' })
+      .expect(200, done);
+  });
+});
+
+describe('/buy-stocks', function() {
+  let game, gameID;
+  beforeEach(function() {
+    const random = () => 0;
+    app.gameManager = new GameManager();
+    game = new Game(3, random, new ActivityLog(mockedDate));
+    const host = new Player('Arnab', 0);
+
+    game.addPlayer(host);
+    app.gameManager.addGame(game);
+    gameID = app.gameManager.getLatestId();
+
+    const player2 = new Player('Dheeraj', 1);
+    game.addPlayer(player2);
+    const player3 = new Player('Srushti', 2);
+    game.addPlayer(player3);
+
+    initializeGame(game);
+    game.placeTile('4A');
+    game.establishCorporation('Sackson');
+  });
+  it('should buy-stocks of sackson', function(done) {
+    request(app)
+      .post('/confirm-buy')
+      .set('Cookie', [`gameId=${gameID}`, 'playerId=0'])
+      .send({ Sackson: 2 })
       .expect(200, done);
   });
 });
