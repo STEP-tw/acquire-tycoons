@@ -5,7 +5,6 @@ const {
   flatPosition,
   getCorporationData,
   buyStocks,
-  distributeReward,
   getStockHoldersByCount,
   getStocksCount
 } = require('../util.js');
@@ -291,12 +290,14 @@ class Game {
         defunctCorporation
       } = this.getMergingCorporations(adjacentCorporations);
       this.merger(survivingCorporation, defunctCorporation, tile);
-      return;
+      return status;
     }
 
     if (adjacentCorporations.length == 1) {
       this.getCurrentPlayer().removeTile(tile.getPosition());
-      this.getCurrentPlayer().updateLog(`You placed tile on ${tile.getValue()}`);
+      this.getCurrentPlayer().updateLog(
+        `You placed tile on ${tile.getValue()}`
+      );
       this.growCorporation(tile, allConnectedTiles);
       this.checkGameEnd();
       return status;
@@ -304,7 +305,9 @@ class Game {
 
     if (inActiveCorporations.length) {
       this.getCurrentPlayer().removeTile(tile.getPosition());
-      this.getCurrentPlayer().updateLog(`You placed tile on ${tile.getValue()}`);
+      this.getCurrentPlayer().updateLog(
+        `You placed tile on ${tile.getValue()}`
+      );
       this.changeActionToFoundCorporation(inActiveCorporations);
       return status;
     }
@@ -316,6 +319,15 @@ class Game {
 
   getStockHolders(corporationName) {
     return this.players.filter(player => player.hasStocksOf(corporationName));
+  }
+
+  distributeReward(stockHolders, reward, rewardName) {
+    stockHolders.forEach(stockHolder => {
+      stockHolder.addMoney(reward);
+      this.activityLog.addLog(
+        `${stockHolder.name} got ${reward} as ${rewardName}`
+      );
+    });
   }
 
   distributeMajorityMinority(corporationName) {
@@ -341,10 +353,18 @@ class Game {
       const majorityReward =
         (majorityStockHolderBonus + minorityStockHolderBonus) /
         majorStockHolders.length;
-      distributeReward(majorStockHolders, majorityReward);
+      this.distributeReward(
+        majorStockHolders,
+        majorityReward,
+        'majority and minority bonus'
+      );
       return;
     }
-    distributeReward(majorStockHolders, majorityStockHolderBonus);
+    this.distributeReward(
+      majorStockHolders,
+      majorityStockHolderBonus,
+      'majority bonus'
+    );
     const minorStocksCount = _.nth(sortedStocksCountList, -2);
     const minorStockHolders = getStockHoldersByCount(
       corporationName,
@@ -352,7 +372,7 @@ class Game {
       minorStocksCount
     );
     const minorityReward = minorityStockHolderBonus / minorStockHolders.length;
-    distributeReward(minorStockHolders, minorityReward);
+    this.distributeReward(minorStockHolders, minorityReward, 'minority bonus');
   }
 
   getResults() {
@@ -487,7 +507,6 @@ class Game {
     this.turnManager.changeAction({ name: 'BUY_STOCKS', data: buyStocksData });
   }
 
-
   getDetails(playerId) {
     const board = this.generateBoard();
     const corporations = this.getCorporationsDetail();
@@ -508,6 +527,10 @@ class Game {
 
   merger(survivingCorporation, defunctCorporation, tile) {
     const defunctCorporationName = defunctCorporation.getName();
+    const survivingCorporationName = survivingCorporation.getName();
+    this.activityLog.addLog(
+      `${defunctCorporationName} merged with ${survivingCorporationName}`
+    );
     this.distributeMajorityMinority(defunctCorporationName);
     this.players.forEach(player => player.sellAllStocks(defunctCorporation));
     const defunctTiles = defunctCorporation.getTiles();

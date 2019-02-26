@@ -75,10 +75,6 @@ const getCorporationData = function(corporation) {
   };
 };
 
-const distributeReward = function(stockHolders, reward) {
-  stockHolders.forEach(stockHolder => stockHolder.addMoney(reward));
-};
-
 const getStockHoldersByCount = function(
   corporationName,
   stockHolders,
@@ -104,6 +100,5 @@ module.exports = {
   getCorporationData,
   getTileWithCorporationName,
   getStockHoldersByCount,
-  distributeReward,
   getStocksCount
 };
