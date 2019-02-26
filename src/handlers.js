@@ -3,16 +3,16 @@ const Player = require('./models/player.js');
 const { initializeGame } = require('./util.js');
 const ActivityLog = require('./models/activity_log');
 
-const fetchLog = function(req, res) {
+const fetchLog = function (req, res) {
   let { gameId } = req.cookies;
   let game = res.app.gameManager.getGameById(gameId);
   let logs = game.activityLog.getLogs();
   res.send(logs);
 };
 
-const hostGame = function(req, res) {
+const hostGame = function (req, res) {
   let { host, totalPlayers } = req.body;
-  let game = new Game(totalPlayers, () => 0, new ActivityLog(Date));
+  let game = new Game(totalPlayers, res.app.random, new ActivityLog(Date));
   let playerId = game.getNextPlayerId();
   let hostPlayer = new Player(host, playerId);
   game.addPlayer(hostPlayer);
@@ -23,7 +23,7 @@ const hostGame = function(req, res) {
   res.send({ gameId });
 };
 
-const joinGame = function(req, res) {
+const joinGame = function (req, res) {
   const { gameID, playerName } = req.body;
   const { gameManager } = res.app;
 
@@ -50,7 +50,7 @@ const joinGame = function(req, res) {
   }
 };
 
-const validateGameSession = function(req, res, next) {
+const validateGameSession = function (req, res, next) {
   if (!res.app.urlsToValidateGame.includes(req.url)) {
     next();
     return;
@@ -73,7 +73,7 @@ const validateGameSession = function(req, res, next) {
   next();
 };
 
-const validateTurn = function(req, res, next) {
+const validateTurn = function (req, res, next) {
   if (!res.app.urlsToValidateTurn.includes(req.url)) {
     next();
     return;
@@ -87,7 +87,7 @@ const validateTurn = function(req, res, next) {
   next();
 };
 
-const getGameStatus = function(req, res) {
+const getGameStatus = function (req, res) {
   let { gameId } = req.cookies;
   let game = res.app.gameManager.getGameById(gameId);
   let gameStatus = game.isFull();
@@ -95,7 +95,7 @@ const getGameStatus = function(req, res) {
   res.send({ isStarted: gameStatus, playerNames });
 };
 
-const renderGamePage = function(req, res) {
+const renderGamePage = function (req, res) {
   const { gameId } = req.cookies;
   if (!res.app.gameManager.doesGameExist(gameId)) {
     res.redirect('/');
@@ -110,28 +110,28 @@ const renderGamePage = function(req, res) {
   res.render('game', { gameId, message });
 };
 
-const serveGameData = function(req, res) {
+const serveGameData = function (req, res) {
   const { gameId, playerId } = req.cookies;
   const game = res.app.gameManager.getGameById(gameId);
   const gameData = game.getDetails(playerId);
   res.send(gameData);
 };
 
-const placeTile = function(req, res) {
+const placeTile = function (req, res) {
   let { tileValue } = req.body;
   let game = req.game;
   const status = game.placeTile(tileValue);
   res.send(status);
 };
 
-const establishCorporation = function(req, res) {
+const establishCorporation = function (req, res) {
   const { corporationName } = req.body;
   const game = req.game;
   game.establishCorporation(corporationName);
   res.end();
 };
 
-const buyStocks = function(req, res) {
+const buyStocks = function (req, res) {
   const details = req.body;
   const { gameId } = req.cookies;
   const game = res.app.gameManager.getGameById(gameId);

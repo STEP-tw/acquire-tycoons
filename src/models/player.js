@@ -17,6 +17,10 @@ class Player {
     this.initialTile = '';
   }
 
+  getLog() {
+    return this.log;
+  }
+
   setInitialTile(tile) {
     this.initialTile = tile;
   }

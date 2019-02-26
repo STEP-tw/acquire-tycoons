@@ -4,13 +4,13 @@ class Tile {
     this.value = value;
   }
 
-  isNeighbour(tile) {
-    return this.getNeighbours().some(position => {
+  isNeighbor(tile) {
+    return this.getNeighbors().some(position => {
       return isSamePositions(tile.position, position);
     });
   }
 
-  getNeighbours() {
+  getNeighbors() {
     const { row, column } = this.position;
     return [
       {

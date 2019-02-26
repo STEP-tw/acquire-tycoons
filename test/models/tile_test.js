@@ -9,26 +9,26 @@ describe('Tile', function() {
     const value = '1A';
     tile = new Tile(position, value);
   });
-  describe('isNeighbour', function() {
+  describe('isNeighbor', function() {
     it('should return true when provided tile is adjacent to column of any other tile', function() {
       const adjacentPosition = { row: 1, column: 2 };
-      const neighbourTile = new Tile(adjacentPosition);
+      const neighborTile = new Tile(adjacentPosition);
 
-      expect(tile.isNeighbour(neighbourTile)).true;
+      expect(tile.isNeighbor(neighborTile)).true;
     });
 
     it('should return true when provided tile is adjacent to row of any other tile', function() {
       const adjacentPosition = { row: 2, column: 1 };
-      const neighbourTile = new Tile(adjacentPosition);
+      const neighborTile = new Tile(adjacentPosition);
 
-      expect(tile.isNeighbour(neighbourTile)).true;
+      expect(tile.isNeighbor(neighborTile)).true;
     });
 
     it('should return false when provided tile is not adjacent to any other tile', function() {
       const adjacentPosition = { row: 2, column: 2 };
-      const neighbourTile = new Tile(adjacentPosition);
+      const neighborTile = new Tile(adjacentPosition);
 
-      expect(tile.isNeighbour(neighbourTile)).false;
+      expect(tile.isNeighbor(neighborTile)).false;
     });
   });
 
@@ -46,8 +46,8 @@ describe('Tile', function() {
     });
   });
 
-  describe('getNeighbours', function() {
-    it('should return all the neighbouring positions', function() {
+  describe('getNeighbors', function() {
+    it('should return all the neighboring positions', function() {
       const expectedOutput = [
         { row: 2, column: 1 },
         { row: 0, column: 1 },
@@ -55,7 +55,7 @@ describe('Tile', function() {
         { row: 1, column: 0 }
       ];
 
-      expect(tile.getNeighbours()).to.deep.equal(expectedOutput);
+      expect(tile.getNeighbors()).to.deep.equal(expectedOutput);
     });
   });
 
