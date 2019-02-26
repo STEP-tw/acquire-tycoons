@@ -142,10 +142,6 @@ class Game {
     return corporationsDetail;
   }
 
-  getActivityLog() {
-    return this.activityLog;
-  }
-
   getPlayerById(id) {
     return this.players.find(player => player.isSame(id));
   }
@@ -169,15 +165,6 @@ class Game {
     return this.unIncorporatedTiles.filter(unIncorporatedTile =>
       tile.isNeighbor(unIncorporatedTile)
     );
-  }
-
-  getIncorporatedNeighbors(tile) {
-    return this.corporations.reduce((incorporatedNeighbors, corporation) => {
-      const neighbors = corporation
-        .getTiles()
-        .filter(corporationTile => tile.isNeighbor(corporationTile));
-      return incorporatedNeighbors.concat(neighbors);
-    }, []);
   }
 
   getInActiveCorporations() {
@@ -216,10 +203,13 @@ class Game {
     return allNeighbor;
   }
 
-  growCorporation(tile, allConnectedTiles) {
+  growCorporation(tile) {
+    const allConnectedTiles = this.getConnectedNeighbors(tile);
+    this.updateStack(tile, allConnectedTiles);
     const corporation = this.getCorporationAdjacentTo(tile).pop();
     this.removeUnIncorporatedTile(allConnectedTiles);
     corporation.concatTiles(allConnectedTiles.concat(tile));
+    this.checkGameEnd();
   }
 
   establishCorporation(corporationName) {
@@ -243,10 +233,28 @@ class Game {
     this.unIncorporatedTiles = this.unIncorporatedTiles.concat(tile);
   }
 
-  getAdjacentTiles(tile) {
-    const unIncorporatedNeighbors = this.getUnincorporatedNeighbors(tile);
-    const incorporatedNeighbors = this.getIncorporatedNeighbors(tile);
-    return unIncorporatedNeighbors.concat(incorporatedNeighbors);
+  isGrowingCorporation(tile) {
+    return this.getCorporationAdjacentTo(tile).length == 1;
+  }
+
+  isMerger(tile) {
+    return this.getCorporationAdjacentTo(tile).length > 1;
+  }
+
+  isFoundingCorporation(tile) {
+    return this.getUnincorporatedNeighbors(tile).length > 0
+      && !this.isGrowingCorporation(tile);
+  }
+
+  isUnplayableTile(tile) {
+    return this.isFoundingCorporation(tile)
+      && this.getInActiveCorporations().length == 0;
+  }
+
+  validatePlacedTile(tile) {
+    const log = `You can't place ${tile.getValue()} place any other tile`;
+    this.getCurrentPlayer().updateLog(log);
+    return { error: true, message: log };
   }
 
   placeTile(tileValue) {
@@ -259,62 +267,59 @@ class Game {
       };
     }
 
-    const adjacentTiles = this.getAdjacentTiles(tile);
-    let status = { error: false, message: '' };
-    this.lastPlacedTile = tile;
-    this.getActivityLog().addLog(
-      `${player.getName()} placed tile ${tileValue} on board`
-    );
+    let placedUnincorporatedTile = true;
+    let log = `${player.getName()} placed tile ${tileValue} on board`;
+    const status = { error: false, message: '' };
 
-    if (adjacentTiles.length) {
-      status = this.foundOrGrowCorporation(tile);
-      return status;
+    if (this.isUnplayableTile(tile)) {
+      return this.validatePlacedTile(tile);
     }
+
     this.updatePlayer(tile);
-    this.addToUnincorporatedTiles(tile);
-    this.checkGameEnd();
+    this.updateGameStatus(tile, log);
+
+    if (this.isMerger(tile)) {
+      this.merger(tile);
+    }
+
+    if (this.isGrowingCorporation(tile)) {
+      this.growCorporation(tile);
+      placedUnincorporatedTile = false;
+    }
+
+    if (this.isFoundingCorporation(tile)) {
+      this.foundCorporation(tile);
+      placedUnincorporatedTile = false;
+    }
+
+    if (placedUnincorporatedTile) {
+      this.addToUnincorporatedTiles(tile);
+      this.changeActionToBuyStocks();
+    }
+
     return status;
   }
 
-  foundOrGrowCorporation(tile) {
-    const adjacentCorporations = this.getCorporationAdjacentTo(tile);
-    const inActiveCorporations = this.getInActiveCorporations();
-    const status = { error: false, message: '' };
+  updatePlayer(tile) {
+    this.getCurrentPlayer().removeTile(tile.getPosition());
+    this.getCurrentPlayer().updateLog(`You placed tile on ${tile.getValue()}`);
+  }
 
+  updateStack(tile, adjacentTiles) {
+    this.turnManager.addStack('placedTile', tile);
+    this.turnManager.addStack('adjacentTile', adjacentTiles);
+  }
+
+  updateGameStatus(tile, log) {
+    this.activityLog.addLog(log);
+    this.lastPlacedTile = tile;
+  }
+
+  foundCorporation(tile) {
+    const inActiveCorporations = this.getInActiveCorporations();
     const allConnectedTiles = this.getConnectedNeighbors(tile);
     this.updateStack(tile, allConnectedTiles);
-
-    if (adjacentCorporations.length > 1) {
-      const {
-        survivingCorporation,
-        defunctCorporation
-      } = this.getMergingCorporations(adjacentCorporations);
-      this.merger(survivingCorporation, defunctCorporation, tile);
-      return status;
-    }
-
-    if (adjacentCorporations.length == 1) {
-      this.getCurrentPlayer().removeTile(tile.getPosition());
-      this.getCurrentPlayer().updateLog(
-        `You placed tile on ${tile.getValue()}`
-      );
-      this.growCorporation(tile, allConnectedTiles);
-      this.checkGameEnd();
-      return status;
-    }
-
-    if (inActiveCorporations.length) {
-      this.getCurrentPlayer().removeTile(tile.getPosition());
-      this.getCurrentPlayer().updateLog(
-        `You placed tile on ${tile.getValue()}`
-      );
-      this.changeActionToFoundCorporation(inActiveCorporations);
-      return status;
-    }
-
-    const log = `You can't place ${tile.getValue()} place any other tile`;
-    this.getCurrentPlayer().updateLog(log);
-    return { error: true, message: log };
+    this.changeActionToFoundCorporation(inActiveCorporations);
   }
 
   getStockHolders(corporationName) {
@@ -419,16 +424,6 @@ class Game {
     this.changeActionToBuyStocks();
   }
 
-  updatePlayer(tile) {
-    this.getCurrentPlayer().removeTile(tile.getPosition());
-    this.getCurrentPlayer().updateLog(`You placed tile on ${tile.getValue()}`);
-  }
-
-  updateStack(tile, adjacentTiles) {
-    this.turnManager.addStack('placedTile', tile);
-    this.turnManager.addStack('adjacentTile', adjacentTiles);
-  }
-
   changeActionToFoundCorporation(corporations) {
     const action = { name: 'FOUND_CORPORATION', data: corporations };
     this.turnManager.changeAction(action);
@@ -525,17 +520,26 @@ class Game {
     return this.activityLog.getLogs();
   }
 
-  merger(survivingCorporation, defunctCorporation, tile) {
+  merger(tile) {
+    const adjacentCorporations = this.getCorporationAdjacentTo(tile);
+    const {
+      survivingCorporation,
+      defunctCorporation
+    } = this.getMergingCorporations(adjacentCorporations);
     const defunctCorporationName = defunctCorporation.getName();
     const survivingCorporationName = survivingCorporation.getName();
     this.activityLog.addLog(
       `${defunctCorporationName} merged with ${survivingCorporationName}`
     );
+
     this.distributeMajorityMinority(defunctCorporationName);
     this.players.forEach(player => player.sellAllStocks(defunctCorporation));
+
     const defunctTiles = defunctCorporation.getTiles();
+
     defunctCorporation.resetTiles();
     survivingCorporation.concatTiles(defunctTiles.concat(tile));
+
     this.changeActionToBuyStocks();
   }
 

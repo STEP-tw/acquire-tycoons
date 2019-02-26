@@ -625,6 +625,9 @@ describe('Game', function () {
     });
 
     describe('hasEnded', function () {
+      it('should return false when initialized', function () {
+        expect(game.hasEnded()).false;
+      });
       it('should return true if the game end condition satisfied', function () {
         game.corporations[0].tiles = generateTiles('A', 11);
         expect(game.hasEnded()).true;
@@ -685,15 +688,15 @@ describe('Game', function () {
 });
 
 
-describe('merger of two different size corporations', function() {
-  it('should merge defunct corporation to surviving corporation', function() {
+describe('merger of two different size corporations', function () {
+  it('should merge defunct corporation to surviving corporation', function () {
     const game = merger();
     game.placeTile('3A');
     expect(game.getCorporation('Quantum').isActive()).true;
     expect(game.getCorporation('Phoenix').isActive()).false;
   });
 
-  it('should return ', function() {
+  it('should return ', function () {
     const game = merger_small_big();
     game.placeTile('3A');
     expect(game.getCorporation('Quantum').isActive()).false;

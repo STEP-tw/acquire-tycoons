@@ -3,8 +3,8 @@ const Player = require('./models/player.js');
 const { initializeGame } = require('./util.js');
 const ActivityLog = require('./models/activity_log');
 const { validateGameSession, validateTurn } = require('./validators');
-
-const hostGame = function(req, res) {
+// const { merger } = require('../helpers/main.js')
+const hostGame = function (req, res) {
   let { host, totalPlayers } = req.body;
   let game = new Game(totalPlayers, res.app.random, new ActivityLog(Date));
   let playerId = game.getNextPlayerId();
@@ -17,7 +17,7 @@ const hostGame = function(req, res) {
   res.send({ gameId });
 };
 
-const joinGame = function(req, res) {
+const joinGame = function (req, res) {
   const { gameID, playerName } = req.body;
   const { gameManager } = res.app;
 
@@ -40,11 +40,12 @@ const joinGame = function(req, res) {
   res.cookie('playerId', `${playerId}`);
   res.send({ error: false, message: '' });
   if (game.isFull()) {
+    // gameManager.games[gameID] = merger();
     initializeGame(game);
   }
 };
 
-const getGameStatus = function(req, res) {
+const getGameStatus = function (req, res) {
   let { gameId } = req.cookies;
   let game = res.app.gameManager.getGameById(gameId);
   let gameStatus = game.isFull();
@@ -52,7 +53,7 @@ const getGameStatus = function(req, res) {
   res.send({ isStarted: gameStatus, playerNames });
 };
 
-const renderGamePage = function(req, res) {
+const renderGamePage = function (req, res) {
   const { gameId } = req.cookies;
   if (!res.app.gameManager.doesGameExist(gameId)) {
     res.redirect('/');
@@ -67,7 +68,7 @@ const renderGamePage = function(req, res) {
   res.render('game', { gameId, message });
 };
 
-const serveGameData = function(req, res) {
+const serveGameData = function (req, res) {
   const { playerId } = req.cookies;
   const { game } = req;
   const gameData = game.getDetails(playerId);
@@ -75,21 +76,21 @@ const serveGameData = function(req, res) {
   res.send(gameData);
 };
 
-const placeTile = function(req, res) {
+const placeTile = function (req, res) {
   let { tileValue } = req.body;
   let game = req.game;
   const status = game.placeTile(tileValue);
   res.send(status);
 };
 
-const establishCorporation = function(req, res) {
+const establishCorporation = function (req, res) {
   const { corporationName } = req.body;
   const game = req.game;
   game.establishCorporation(corporationName);
   res.end();
 };
 
-const buyStocks = function(req, res) {
+const buyStocks = function (req, res) {
   const details = req.body;
   const { gameId } = req.cookies;
   const game = res.app.gameManager.getGameById(gameId);
