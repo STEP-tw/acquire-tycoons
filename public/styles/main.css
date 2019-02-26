@@ -81,15 +81,24 @@ p {
   align-items: center;
 }
 
-.activity-log {
+.activity-log-section {
   padding: 4px;
   height: 45%;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: lighter;
+  color: #454545;
   width: 90%;
   border: 1px solid gray;
 }
 
+.activity-log {
+  height: 80%;
+  overflow-y: auto;
+}
+
 .heading-medium {
   text-align: center;
+  margin-bottom: 0px;
   color: rgb(50, 50, 50);
 }
 
@@ -177,7 +186,6 @@ p {
 .corporation-details {
   padding: 4px;
   border-collapse: collapse;
-  font-size: 18px;
   color: rgb(50, 50, 50);
   background: white;
   width: 90%;
@@ -187,7 +195,7 @@ p {
 }
 
 .corporation-details th {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bolder;
 }
 
@@ -196,7 +204,8 @@ p {
 }
 
 ul {
-  padding: 8px;
+  padding-left: 8px;
+  padding-bottom: 2px;
   list-style: none;
 }
 
@@ -409,23 +418,6 @@ ul > li {
   justify-content: center;
   align-items: center;
   background-color: rgba(85, 90, 85, 0.3);
-}
-
-.activity-log-header {
-  height: 10%;
-  width: 100%;
-  font-size: 25px;
-  border-bottom: 2px solid darkgray;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.activity-log-body {
-  height: 90%;
-  width: 100%;
-  overflow: scroll;
-  font-size: 20px;
 }
 
 #close-overlay-btn {

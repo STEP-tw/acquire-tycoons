@@ -13,15 +13,6 @@
   </head>
 
   <body>
-    <section id="activity-log-overlay" class="overlay">
-      <section class="log-container" id="activity-log">
-        <section class="activity-log-header">
-          <span style="margin-left: 33.333%">ACTIVITY LOG</span>
-          <img src="/images/close-btn.png" id="close-overlay-btn" />
-        </section>
-        <section class="activity-log-body" id="activity-log-body"></section>
-      </section>
-    </section>
     <section class="overlay" id="game-end-overlay">
       <section id="game-results" class="game-results">
         <h1>Game Results</h1>
@@ -77,7 +68,7 @@
 
     <header id="game-header" style="display: none">
       <h1 class="app-title">ACQUIRE</h1>
-      <span class="player-name-header" id="player-name">Hi Dheeraj!</span>
+      <span class="player-name-header" id="player-name"></span>
     </header>
     <main>
       <section class="waiting-area" id="waiting-area">
@@ -88,9 +79,7 @@
       </section>
       <section id="game-container" style="display: none" class="game-container">
         <section class="game-top">
-          <div class="status-bar" id="player-log">
-            You got tile 3A.
-          </div>
+          <div class="status-bar" id="player-log"></div>
         </section>
         <section class="game-main">
           <div class="player-names-section">
@@ -108,9 +97,9 @@
               </thead>
               <tbody id="corporation-details-body"></tbody>
             </table>
-            <div class="activity-log">
+            <div class="activity-log-section">
               <h3 class="heading-medium">Activity Log</h3>
-              <ul id="activity-log"></ul>
+              <ul id="activity-log" class="activity-log"></ul>
             </div>
           </div>
         </section>

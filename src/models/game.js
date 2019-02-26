@@ -491,6 +491,10 @@ class Game {
   getPlayers() {
     return this.players;
   }
+
+  getLogs() {
+    return this.activityLog.getLogs();
+  }
 }
 
 module.exports = Game;

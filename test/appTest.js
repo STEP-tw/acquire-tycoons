@@ -186,40 +186,6 @@ describe('GET /game-data', function() {
       .expect('Content-Type', 'application/json; charset=utf-8')
       .expect(200, done);
   });
-
-  describe('GET /log', function() {
-    let gameID;
-    let playerId;
-    beforeEach(function() {
-      app.gameManager = new GameManager();
-      const game = new Game(3, null, new ActivityLog(mockedDate));
-      playerId = game.getNextPlayerId();
-      const host = new Player('Dheeraj', playerId);
-      game.addPlayer(host);
-      app.gameManager.addGame(game);
-      game.activityLog.addLog('You got 6000rs');
-      gameID = app.gameManager.getLatestId();
-    });
-
-    it('should fetch all the logs from the activty log', function(done) {
-      request(app)
-        .get('/log')
-        .set('Cookie', [`gameId=${gameID}; playerId=${playerId}`])
-        .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect([
-          { log: 'You got 6000rs', timeStamp: '1970-01-01T00:00:00.000Z' }
-        ])
-        .expect(200, done);
-    });
-    it('should fetch all the logs from the activty log', function(done) {
-      request(app)
-        .get('/log')
-        .set('Cookie', [`gameId=${gameID}; playerId=1`])
-        .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect({ error: true, message: 'No Such Player with ID 1' })
-        .expect(200, done);
-    });
-  });
 });
 
 describe('GET /place-tile', function() {
@@ -292,6 +258,16 @@ describe('GET /place-tile', function() {
       .post('/place-tile')
       .set('Cookie', [`gameId=${gameID}`, 'playerId=1'])
       .send({ tileValue: player2.tiles[4].getValue() })
+      .expect('Content-Type', 'application/json; charset=utf-8')
+      .expect(200, done);
+  });
+
+  it('should provide error when playerId is invalid', function(done) {
+    request(app)
+      .post('/place-tile')
+      .set('Cookie', [`gameId=${gameID};playerId=5`])
+      .send({ tileValue: '5A' })
+      .expect({ error: true, message: 'No Such Player with ID 5' })
       .expect('Content-Type', 'application/json; charset=utf-8')
       .expect(200, done);
   });

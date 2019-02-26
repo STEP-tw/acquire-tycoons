@@ -5,7 +5,6 @@ const {
   joinGame,
   getGameStatus,
   renderGamePage,
-  fetchLog,
   serveGameData,
   placeTile,
   validateGameSession,
@@ -56,7 +55,6 @@ app.post('/join-game', joinGame);
 app.post('/host-game', hostGame);
 app.post('/place-tile', placeTile);
 app.get('/game-status', getGameStatus);
-app.get('/log', fetchLog);
 app.get('/game-data', serveGameData);
 app.post('/establish-corporation', establishCorporation);
 app.post('/confirm-buy', buyStocks);
