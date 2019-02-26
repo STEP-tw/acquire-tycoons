@@ -29,7 +29,7 @@
       "error",
       {
         "skipBlankLines": true,
-        "max": 600
+        "max": 1000
       }
     ],
     "max-len": ["warn", 80],

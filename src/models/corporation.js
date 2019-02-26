@@ -64,6 +64,10 @@ class Corporation {
   doesContains(placedTile) {
     return this.tiles.some(tile => tile.position == placedTile.position);
   }
+
+  resetTiles(){
+    this.tiles = [];
+  }
 }
 
 module.exports = Corporation;

@@ -1,4 +1,3 @@
-/* eslint-disable */
 const expect = require('chai').expect;
 const sinon = require('sinon');
 
@@ -12,6 +11,9 @@ const ActivityLog = require('../../src/models/activity_log.js');
 const Tile = require('../../src/models/tile.js');
 
 const { getCorporations, getFaceDownCluster } = require('../../src/util.js');
+
+
+const { merger, merger_small_big } = require('../../helpers/main.js');
 
 const generateTiles = function (row, noOfTiles) {
   return new Array(noOfTiles).fill(row).map((elem, index) => {
@@ -182,7 +184,7 @@ describe('Game', function () {
         expect(game.getCurrentPlayer()).to.deep.equal(player1);
       });
 
-      it("should return error when player doesn't contains a tile", function () {
+      it('should return error when player doesn\'t contains a tile', function () {
         const placedTile = '2A';
         const expectedOutput = {
           error: true,
@@ -239,7 +241,7 @@ describe('Game', function () {
         expect(game.turnManager.getAction(0).name).to.equal('BUY_STOCKS');
       });
 
-      it("should add all connected tiles to the corporation's tile when tile is adjacent to corporation's tile", function () {
+      it('should add all connected tiles to the corporation\'s tile when tile is adjacent to corporation\'s tile', function () {
         game.corporations[0].tiles = [];
 
         const unincorporatedTile1 = new Tile({ row: 0, column: 8 }, '9A');
@@ -365,7 +367,7 @@ describe('Game', function () {
       });
     });
     describe('growCorporation', function () {
-      it("should add provided tile to the corporation's tile when tile is adjacent to corporation's tile", function () {
+      it('should add provided tile to the corporation\'s tile when tile is adjacent to corporation\'s tile', function () {
         game.corporations[0].tiles = [];
 
         const unincorporatedTile1 = new Tile({ row: 0, column: 8 }, '9A');
@@ -476,7 +478,7 @@ describe('Game', function () {
     });
 
     describe('changeActionToBuyStocks', function () {
-      it("shouldn't change the action to buy stocks when there are no active corporation and change the turn", function () {
+      it('shouldn\'t change the action to buy stocks when there are no active corporation and change the turn', function () {
         game.changeActionToBuyStocks();
         const action = game.turnManager.getAction(0);
         expect(action.name).to.equal('DO_NOTHING');
@@ -679,5 +681,22 @@ describe('Game', function () {
         );
       });
     });
+  });
+});
+
+
+describe('merger of two different size corporations', function() {
+  it('should merge defunct corporation to surviving corporation', function() {
+    const game = merger();
+    game.placeTile('3A');
+    expect(game.getCorporation('Quantum').isActive()).true;
+    expect(game.getCorporation('Phoenix').isActive()).false;
+  });
+
+  it('should return ', function() {
+    const game = merger_small_big();
+    game.placeTile('3A');
+    expect(game.getCorporation('Quantum').isActive()).false;
+    expect(game.getCorporation('Phoenix').isActive()).true;
   });
 });
