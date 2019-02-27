@@ -176,6 +176,10 @@ const displayPlayerTiles = function(document, tileValues) {
   });
 };
 
+const redirectToHomepage = function(document) {
+  document.location.href = '/';
+};
+
 const showGameResults = function(id, document, gameResults) {
   clearInterval(id);
   const gameResultsHtml = gameResults
@@ -184,8 +188,7 @@ const showGameResults = function(id, document, gameResults) {
       return `<tr><td>${rank}</td><td>${playerName}</td><td>${money}</td></tr>`;
     })
     .join('');
-  document.getElementById('game-end-overlay').style.display = 'flex';
-  document.getElementById('game-end-overlay').style.zIndex = 0;
+  document.getElementById('game-results-overlay').style.display = 'flex';
   document.getElementById('game-results-body').innerHTML = gameResultsHtml;
 };
 

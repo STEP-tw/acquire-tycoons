@@ -367,21 +367,6 @@ ul > li {
   height: 96px;
 }
 
-.game-results {
-  height: 30%;
-  width: 30%;
-  background-color: white;
-  border: 1px solid black;
-  display: flex;
-  flex-direction: column;
-  font-size: 20px;
-  border-radius: 3%;
-  text-align: center;
-  box-shadow: 0px 0px 25px -3px rgba(0, 0, 0, 0.75);
-  justify-content: flex-start;
-  align-items: center;
-}
-
 .overlay {
   height: 100%;
   width: 100%;
@@ -456,7 +441,8 @@ ul > li {
   align-items: center;
 }
 
-.buy-stocks-table {
+.buy-stocks-table,
+.game-results-table {
   width: 85%;
 
   margin-top: 4%;
@@ -464,11 +450,13 @@ ul > li {
   border-collapse: collapse;
 }
 
-.buy-stocks-table td {
+.buy-stocks-table td,
+.game-results-table td {
   padding: 8px;
 }
 
-.buy-stocks-table th {
+.buy-stocks-table th,
+.game-results-table th {
   border-bottom: 1px solid gray;
 }
 
@@ -494,12 +482,22 @@ ul > li {
   box-shadow: 0px 0px 2px black;
 }
 
-.buy-btn {
+.btn-medium {
   margin-top: 4%;
   width: 100px;
   padding: 4px;
-  font-size: 22px;
   font-weight: lighter;
+}
+
+.play-again-btn {
+  font-size: 18px;
+  text-decoration: none;
+  text-align: center;
+  font-family: inherit;
+}
+
+.buy-btn {
+  font-size: 22px;
 }
 
 .error-msg-at-buying {

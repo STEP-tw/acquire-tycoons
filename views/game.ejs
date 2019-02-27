@@ -13,19 +13,6 @@
   </head>
 
   <body>
-    <section class="overlay" style="display: none" id="game-end-overlay">
-      <section id="game-results" class="game-results">
-        <h1>Game Results</h1>
-        <table>
-          <thead>
-            <th>Rank</th>
-            <th>Player Name</th>
-            <th>Money</th>
-          </thead>
-          <tbody id="game-results-body"></tbody>
-        </table>
-      </section>
-    </section>
     <section class="overlay" style="display:none" id="buy-stocks-overlay">
       <div class="overlay-content">
         <div class="align-content-center">
@@ -44,7 +31,9 @@
             <tbody id="buy-stocks-body"></tbody>
           </table>
 
-          <button class="btn-default buy-btn" id="done-button">Buy</button>
+          <button class="btn-default btn-medium buy-btn" id="done-button">
+            Buy
+          </button>
         </div>
       </div>
     </section>
@@ -64,6 +53,28 @@
         </div>
       </div>
     </section>
+
+    <section class="overlay" style="display:none" id="game-results-overlay">
+      <div class="overlay-content">
+        <div class="align-content-center">
+          <h2 class="heading-medium">Game Results</h2>
+          <table class="game-results-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Player name</th>
+                <th>Money</th>
+              </tr>
+            </thead>
+            <tbody id="game-results-body"></tbody>
+          </table>
+          <a href="/" class="btn-default btn-medium play-again-btn">
+            Play Again
+          </a>
+        </div>
+      </div>
+    </section>
+
     <header id="game-header" style="display: none">
       <h1 class="app-title">ACQUIRE</h1>
       <span class="player-name-header" id="player-name"></span>
