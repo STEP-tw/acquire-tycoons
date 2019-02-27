@@ -367,34 +367,6 @@ ul > li {
   height: 96px;
 }
 
-.found-corporation {
-  height: 40%;
-  width: 70%;
-  border: 1px solid black;
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: white;
-  box-shadow: 0px 0px 3px 1px gray;
-}
-
-.Quantum-btn,
-.Phoenix-btn,
-.America-btn,
-.Hydra-btn,
-.Fusion-btn,
-.Sackson-btn,
-.Zeta-btn {
-  height: 30%;
-  width: 25%;
-}
-
-.establish-corp-heading {
-  font-size: 30px;
-  color: black;
-}
-
 .game-results {
   height: 30%;
   width: 30%;
@@ -408,80 +380,6 @@ ul > li {
   box-shadow: 0px 0px 25px -3px rgba(0, 0, 0, 0.75);
   justify-content: flex-start;
   align-items: center;
-}
-
-#close-overlay-btn {
-  height: 25px;
-  width: 25px;
-  margin-right: 2%;
-}
-
-.log-container {
-  height: 50%;
-  width: 30%;
-  background-color: white;
-  border-radius: 3%;
-  box-shadow: 0px 0px 25px -3px rgba(0, 0, 0, 0.75);
-}
-
-.log-message {
-  margin: 2% 5%;
-  border-bottom: dotted lightgrey 1px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.overlay-buy-stock {
-  height: 100%;
-  width: 100%;
-  position: fixed;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(85, 90, 85, 0.3);
-}
-
-.overlay-buy-stock table {
-  margin-left: 5%;
-}
-
-.overlay-buy-stock td button {
-  height: 25px;
-  width: 25px;
-}
-
-.buy-stock-container {
-  height: 50%;
-  width: 30%;
-  background-color: bisque;
-  border-radius: 3%;
-  box-shadow: 0px 0px 25px -3px rgba(0, 0, 0, 0.75);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
-
-.buy-stocks-money {
-  height: 10%;
-  width: 100%;
-  text-align: center;
-}
-
-.done-button-div {
-  height: 10%;
-  background-color: blanchedalmond;
-  text-align: center;
-}
-
-.done-button-div button {
-  height: 35px;
-  width: 60px;
-  border-radius: 5px;
-}
-
-#error-msg-at-buying {
-  height: 10%;
-  text-align: center;
 }
 
 .overlay {
@@ -500,12 +398,12 @@ ul > li {
 }
 
 .overlay-content {
-  padding-top: 8px;
+  padding: 8px;
   width: 30%;
   background: white;
 }
 
-.establish-corporation-overlay-content {
+.align-content-center {
   height: 100%;
   width: 100%;
   display: flex;
@@ -549,4 +447,70 @@ ul > li {
   font-size: 14px;
   font-weight: bolder;
   color: #4f4f4f;
+}
+
+.buy-stocks-header {
+  font-size: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.buy-stocks-table {
+  width: 85%;
+
+  margin-top: 4%;
+  text-align: center;
+  border-collapse: collapse;
+}
+
+.buy-stocks-table td {
+  padding: 8px;
+}
+
+.buy-stocks-table th {
+  border-bottom: 1px solid gray;
+}
+
+.selected-stocks-count {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.btn-default {
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  background: #66c993;
+  color: whitesmoke;
+  border: none;
+}
+
+.btn-default:focus {
+  outline: none;
+}
+
+.btn-default:hover {
+  box-shadow: 0px 0px 2px black;
+}
+
+.buy-btn {
+  margin-top: 4%;
+  width: 100px;
+  padding: 4px;
+  font-size: 22px;
+  font-weight: lighter;
+}
+
+.error-msg-at-buying {
+  margin-top: 2%;
+  color: crimson;
+}
+
+.left-aligned-cell {
+  text-align: left;
+}
+
+.right-aligned-cell {
+  text-align: right;
 }

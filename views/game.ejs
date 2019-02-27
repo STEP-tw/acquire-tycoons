@@ -26,31 +26,27 @@
         </table>
       </section>
     </section>
+    <section class="overlay" style="display:none" id="buy-stocks-overlay">
+      <div class="overlay-content">
+        <div class="align-content-center">
+          <div class="buy-stocks-header" id="buy-stocks-money"></div>
+          <div id="error-msg-at-buying" class="error-msg-at-buying"></div>
 
-    <section id="overlay-buy-stock" class="overlay-buy-stock">
-      <section class="buy-stock-container">
-        <div class="buy-stocks-money" id="buy-stocks-money"></div>
-        <table class="table">
-          <thead>
-            <tr>
-              <td>
-                Corporations
-              </td>
-              <td>
-                Shares
-              </td>
-              <td>
-                Price
-              </td>
-            </tr>
-          </thead>
-          <tbody id="buy-stocks-body"></tbody>
-        </table>
-        <div id="error-msg-at-buying"></div>
-        <div class="done-button-div">
-          <button id="done-button">Done</button>
+          <table class="buy-stocks-table">
+            <thead>
+              <tr>
+                <th>Corporation</th>
+                <th>Shares</th>
+                <th>Price</th>
+                <th>Stocks Count</th>
+              </tr>
+            </thead>
+            <tbody id="buy-stocks-body"></tbody>
+          </table>
+
+          <button class="btn-default buy-btn" id="done-button">Buy</button>
         </div>
-      </section>
+      </div>
     </section>
 
     <section
@@ -59,7 +55,7 @@
       id="establish-corporation-overlay"
     >
       <div class="overlay-content">
-        <div class="establish-corporation-overlay-content">
+        <div class="align-content-center">
           <h2 class="heading-medium">Select corporation to establish</h2>
           <div
             class="inactive-corporations"

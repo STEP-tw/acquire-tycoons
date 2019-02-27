@@ -1,10 +1,12 @@
-const saveBuyingDetails = function(document, details) {
+const saveBuyingDetails = function(document, buyStocksData) {
   const doneButton = document.getElementById('done-button');
-  doneButton.onclick = buyStocks.bind(null, details);
+  doneButton.onclick = buyStocks.bind(null, buyStocksData);
 };
 
-const buyStocks = function(details) {
-  selectedCorps = details.corporations.filter(corp => corp.selectedStocks != 0);
+const buyStocks = function(buyStocksData) {
+  selectedCorps = buyStocksData.corporations.filter(
+    corp => corp.selectedStocks != 0
+  );
   const data = new Object();
   selectedCorps.forEach(corp => {
     data[corp.name] = corp.selectedStocks;
@@ -24,43 +26,50 @@ const buyStocks = function(details) {
         return;
       }
     });
-  document.getElementById('overlay-buy-stock').style.display = 'none';
+  document.getElementById('buy-stocks-overlay').style.display = 'none';
   fetchGameData(document);
 };
 
-const displayBuyStocksMoney = function(document, details) {
-  document.getElementById('buy-stocks-money').innerText = `$${details.money}`;
+const displayBuyStocksMoney = function(document, money) {
+  document.getElementById('buy-stocks-money').innerText = `You have $${money}`;
+};
+
+const displayErrorMessage = function(document, message) {
+  document.getElementById('error-msg-at-buying').innerText = message;
 };
 
 const createName = function(document, name) {
-  const nameTd = document.createElement('td');
-  nameTd.innerText = name;
+  const nameAttributes = { className: 'left-aligned-cell', innerText: name };
+  const nameTd = createElement(document, 'td', nameAttributes);
   return nameTd;
 };
 
 const createAvailableStocks = function(document, corporation) {
-  const availableStocksTd = document.createElement('td');
-  availableStocksTd.innerText = corporation.stocks;
-  availableStocksTd.id = `available-${corporation.name}-shares`;
+  const availableStocksAttrs = {
+    className: 'right-aligned-cell',
+    innerText: corporation.stocks,
+    id: `available-${corporation.name}-shares`
+  };
+  const availableStocksTd = createElement(document, 'td', availableStocksAttrs);
   return availableStocksTd;
 };
 
 const createPrice = function(document, price) {
-  const priceTd = document.createElement('td');
-  priceTd.innerText = price;
+  const priceAttrs = { className: 'right-aligned-cell', innerText: price };
+  const priceTd = createElement(document, 'td', priceAttrs);
   return priceTd;
 };
 
-const upperStockLimitExceeds = function(details) {
-  return details.totalSelectedStock == 3;
+const upperStockLimitExceeds = function(buyStocksData) {
+  return buyStocksData.totalSelectedStock == 3;
 };
 
 const lowerStockLimitExceeds = function(corporation) {
   return corporation.selectedStocks < 1;
 };
 
-const isMoneyLow = function(corporation, details) {
-  return details.money < corporation.currentPrice;
+const isMoneyLow = function(corporation, buyStocksData) {
+  return buyStocksData.money < corporation.currentPrice;
 };
 
 const sum = function(x, y) {
@@ -79,89 +88,98 @@ const updateInnerText = function(id, text) {
 const calculateStocksAndPrice = function(
   document,
   corporation,
-  details,
-  firstFunc,
-  secondFunc
+  buyStocksData,
+  firstCalculator,
+  secondCalculator
 ) {
-  const currentAvailableStocks = firstFunc(+corporation.stocks, 1);
-  const currentSelectedStocks = secondFunc(+corporation.selectedStocks, 1);
-  const remainingMoney = `$${firstFunc(
-    +details.money,
+  const currentAvailableStocks = firstCalculator(+corporation.stocks, 1);
+  const currentSelectedStocks = secondCalculator(
+    +corporation.selectedStocks,
+    1
+  );
+  const remainingMoney = firstCalculator(
+    +buyStocksData.money,
     +corporation.currentPrice
-  )}`;
+  );
 
   updateInnerText(
     `available-${corporation.name}-shares`,
     currentAvailableStocks
   );
   updateInnerText(`selected-${corporation.name}-shares`, currentSelectedStocks);
-  updateInnerText(`buy-stocks-money`, remainingMoney);
+  displayBuyStocksMoney(document, remainingMoney);
 
-  corporation.selectedStocks = secondFunc(+corporation.selectedStocks, 1);
-  corporation.stocks = firstFunc(+corporation.stocks, 1);
-  details.money = firstFunc(+details.money, +corporation.currentPrice);
-  details.totalSelectedStock = secondFunc(+details.totalSelectedStock, 1);
+  corporation.selectedStocks = secondCalculator(+corporation.selectedStocks, 1);
+  corporation.stocks = firstCalculator(+corporation.stocks, 1);
+  buyStocksData.money = firstCalculator(
+    +buyStocksData.money,
+    +corporation.currentPrice
+  );
+  buyStocksData.totalSelectedStock = secondCalculator(
+    +buyStocksData.totalSelectedStock,
+    1
+  );
 };
 
 const corporationStocksLacks = function(corporation) {
   return corporation.stocks <= 0;
 };
 
-const increaseSelectedStock = function(document, corporation, details) {
-  let errorMsg = '';
-  document.getElementById('error-msg-at-buying').innerText = errorMsg;
-
-  if (upperStockLimitExceeds(details)) {
-    errorMsg = 'You can only buy 3 at a time.';
-    document.getElementById('error-msg-at-buying').innerText = errorMsg;
+const increaseSelectedStock = function(document, corporation, buyStocksData) {
+  displayErrorMessage(document, '');
+  if (upperStockLimitExceeds(buyStocksData)) {
+    displayErrorMessage(document, 'You can only buy 3 at a time.');
     return;
   }
 
   if (corporationStocksLacks(corporation)) {
-    errorMsg = 'Sorry! No stocks available to buy';
-    document.getElementById('error-msg-at-buying').innerText = errorMsg;
+    displayErrorMessage(document, 'Sorry! No stocks available to buy');
     return;
   }
 
-  if (isMoneyLow(corporation, details)) {
-    errorMsg = 'Insufficient money';
-    document.getElementById('error-msg-at-buying').innerText = errorMsg;
+  if (isMoneyLow(corporation, buyStocksData)) {
+    displayErrorMessage(document, 'Insufficient money');
     return;
   }
 
-  calculateStocksAndPrice(document, corporation, details, sub, sum);
+  calculateStocksAndPrice(document, corporation, buyStocksData, sub, sum);
 };
 
-const decreaseSelectedStock = function(document, corporation, details) {
-  document.getElementById('error-msg-at-buying').innerText = '';
-
+const decreaseSelectedStock = function(document, corporation, buyStocksData) {
+  displayErrorMessage(document, '');
   if (lowerStockLimitExceeds(corporation)) {
-    const errorMsg = 'You are already at 0.';
-    document.getElementById('error-msg-at-buying').innerText = errorMsg;
+    displayErrorMessage(document, 'You are already at 0.');
     return;
   }
-
-  calculateStocksAndPrice(document, corporation, details, sum, sub);
+  calculateStocksAndPrice(document, corporation, buyStocksData, sum, sub);
 };
 
-const createShareDealings = function(document, corporation, details) {
+const createShareDealings = function(document, corporation, buyStocksData) {
   const shareDealings = document.createElement('td');
-  const subButton = document.createElement('button');
-  subButton.innerText = '-';
-  subButton.onclick = decreaseSelectedStock.bind(
-    null,
-    document,
-    corporation,
-    details
-  );
-  const addButton = document.createElement('button');
-  addButton.innerText = '+';
-  addButton.onclick = increaseSelectedStock.bind(
-    null,
-    document,
-    corporation,
-    details
-  );
+  shareDealings.className = 'selected-stocks-count';
+  const subButtonAttributes = {
+    className: 'btn-default',
+    innerText: '-',
+    onclick: decreaseSelectedStock.bind(
+      null,
+      document,
+      corporation,
+      buyStocksData
+    )
+  };
+  const subButton = createElement(document, 'button', subButtonAttributes);
+
+  const addButtonAttributes = {
+    className: 'btn-default',
+    innerText: '+',
+    onclick: increaseSelectedStock.bind(
+      null,
+      document,
+      corporation,
+      buyStocksData
+    )
+  };
+  const addButton = createElement(document, 'button', addButtonAttributes);
 
   const shares = document.createElement('span');
   shares.id = `selected-${corporation.name}-shares`;
@@ -172,12 +190,16 @@ const createShareDealings = function(document, corporation, details) {
   return shareDealings;
 };
 
-const createCorpRow = function(document, corporation, details) {
+const createCorpRow = function(document, corporation, buyStocksData) {
   const row = document.createElement('tr');
   const name = createName(document, corporation.name);
   const availableStocks = createAvailableStocks(document, corporation);
   const price = createPrice(document, corporation.currentPrice);
-  const shareDealings = createShareDealings(document, corporation, details);
+  const shareDealings = createShareDealings(
+    document,
+    corporation,
+    buyStocksData
+  );
   row.appendChild(name);
   row.appendChild(availableStocks);
   row.appendChild(price);
@@ -185,21 +207,21 @@ const createCorpRow = function(document, corporation, details) {
   return row;
 };
 
-const displayCorporation = function(document, details) {
+const displayCorporation = function(document, buyStocksData) {
   const body = document.getElementById('buy-stocks-body');
   body.innerHTML = '';
-  details.corporations.forEach(corporation => {
+  buyStocksData.corporations.forEach(corporation => {
     corporation['selectedStocks'] = 0;
-    details.totalSelectedStock = 0;
-    const row = createCorpRow(document, corporation, details);
+    buyStocksData.totalSelectedStock = 0;
+    const row = createCorpRow(document, corporation, buyStocksData);
     body.appendChild(row);
   });
 };
 
-const generateBuyStockContainer = function(document, details) {
-  document.getElementById('overlay-buy-stock').style.display = 'flex';
-
-  displayBuyStocksMoney(document, details);
-  displayCorporation(document, details);
-  saveBuyingDetails(document, details);
+const generateBuyStockContainer = function(document, buyStocksData) {
+  document.getElementById('buy-stocks-overlay').style.display = 'flex';
+  displayErrorMessage(document, '');
+  displayBuyStocksMoney(document, buyStocksData.money);
+  displayCorporation(document, buyStocksData);
+  saveBuyingDetails(document, buyStocksData);
 };

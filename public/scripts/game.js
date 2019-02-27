@@ -11,10 +11,10 @@ const placeTile = function(document) {
     };
     const response = await fetch('/place-tile', reqData);
     const { error, message } = await response.json();
-    // if (error) {
-    //   displayPlayerStatus(document, message);
-    //   return;
-    // }
+    if (error) {
+      displayPlayerStatus(document, message);
+      return;
+    }
     disablePlayerTiles(document);
     tile.style.opacity = 0;
     fetchGameData(document);
