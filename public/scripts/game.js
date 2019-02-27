@@ -29,11 +29,7 @@ const disablePlayerTiles = function(document) {
   }
 };
 
-const createElementWithAttributes = function(
-  document,
-  elementName,
-  attributes
-) {
+const createElement = function(document, elementName, attributes) {
   const element = document.createElement(elementName);
   Object.keys(attributes).forEach(attribute => {
     element[attribute] = attributes[attribute];
@@ -49,7 +45,7 @@ const generateGameBoard = function(document) {
   const gameBoardContainer = document.getElementById('game-board-container');
 
   const boardAttributes = { className: 'game-board' };
-  const board = createElementWithAttributes(document, 'table', boardAttributes);
+  const board = createElement(document, 'table', boardAttributes);
 
   const boardBody = document.createElement('tbody');
   board.appendChild(boardBody);
@@ -65,7 +61,7 @@ const generateGameBoard = function(document) {
         innerText: cellValue,
         id: `board-tile-${cellValue}`
       };
-      return createElementWithAttributes(document, 'td', cellAttributes);
+      return createElement(document, 'td', cellAttributes);
     });
 
     const row = document.createElement('tr');
@@ -126,11 +122,7 @@ const displayCorporationDetails = function(document, corporations) {
     const { name, size, marketPrice, availableStocks } = corporation;
 
     const rowAttributes = { className: getClassNameForCorporation(name) };
-    const corporationRow = createElementWithAttributes(
-      document,
-      'tr',
-      rowAttributes
-    );
+    const corporationRow = createElement(document, 'tr', rowAttributes);
 
     const nameCell = createTableCell(document, name);
     const sizeCell = createTableCell(document, size);
@@ -155,11 +147,7 @@ const displayPlayers = function(document, playersData) {
       innerText: playerName
     };
 
-    const playerNameHolder = createElementWithAttributes(
-      document,
-      'div',
-      holderAttributes
-    );
+    const playerNameHolder = createElement(document, 'div', holderAttributes);
 
     return playerNameHolder;
   });
@@ -183,7 +171,7 @@ const displayPlayerTiles = function(document, tileValues) {
       innerText: tileValue,
       id: tileValue
     };
-    const tile = createElementWithAttributes(document, 'div', tileAttributes);
+    const tile = createElement(document, 'div', tileAttributes);
     tilesContainer.appendChild(tile);
   });
 };
@@ -215,7 +203,7 @@ const displayPlayerStocks = function(document, stocks) {
     const { name, value } = stock;
 
     const stockContainerAttributes = { className: `player-stock` };
-    const stockContainer = createElementWithAttributes(
+    const stockContainer = createElement(
       document,
       'div',
       stockContainerAttributes
@@ -227,7 +215,7 @@ const displayPlayerStocks = function(document, stocks) {
     corporationNameHolder.innerText = name;
 
     const stockCountAttributes = { className: 'stock-count', innerText: value };
-    const stockCountHolder = createElementWithAttributes(
+    const stockCountHolder = createElement(
       document,
       'div',
       stockCountAttributes
@@ -278,11 +266,7 @@ const displayActivityLog = function(document, logs) {
   logs.map(({ log, timeStamp }) => {
     let logItem = document.createElement('li');
     const messageAttributes = { className: 'activity-log-msg', innerText: log };
-    const messageContainer = createElementWithAttributes(
-      document,
-      'span',
-      messageAttributes
-    );
+    const messageContainer = createElement(document, 'span', messageAttributes);
 
     const localeTime = new Date(timeStamp).toLocaleTimeString('en-IN');
     const timeAttributes = {
@@ -290,11 +274,7 @@ const displayActivityLog = function(document, logs) {
       innerText: localeTime
     };
 
-    const timeHolder = createElementWithAttributes(
-      document,
-      'span',
-      timeAttributes
-    );
+    const timeHolder = createElement(document, 'span', timeAttributes);
 
     logItem.appendChild(messageContainer);
     logItem.appendChild(timeHolder);
@@ -344,7 +324,7 @@ const performAction = function(id, document, action) {
   if (action.name != 'DO_NOTHING') clearInterval(id);
   const actions = {
     PLACE_A_TILE: setOnClickForTiles,
-    FOUND_CORPORATION: foundCorporation,
+    FOUND_CORPORATION: showEstablishCorporationPopup,
     DO_NOTHING: () => {},
     BUY_STOCKS: generateBuyStockContainer,
     END_GAME: showGameResults.bind(null, id)

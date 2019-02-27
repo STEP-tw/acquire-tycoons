@@ -1,21 +1,39 @@
-const createCorporationsHtml = function(corporations) {
+const createCorporationsViews = function(document, corporations) {
   const corporationNames = corporations.map(corporation => corporation.name);
-  return corporationNames
-    .map(
-      name =>
-        `<button id="${name}-btn" class="${getClassNameForCorporation(name)} ${name}-btn"  
-        onclick="foundSelectedCorporation('${name}')">${name}</button>`
-    )
-    .join('');
+  return corporationNames.map(name => {
+    const corporationView = document.createElement('div');
+    corporationView.classList.add('inactive-corporation');
+    corporationView.classList.add(getClassNameForCorporation(name));
+
+    const iconAttributes = {
+      className: 'corporation-icon',
+      innerText: name[0]
+    };
+
+    const corporationIcon = createElement(document, 'p', iconAttributes);
+
+    const nameAttributes = {
+      className: 'inactive-corporation-name',
+      innerText: name
+    };
+    const corporationName = createElement(document, 'p', nameAttributes);
+    corporationView.appendChild(corporationIcon);
+    corporationView.appendChild(corporationName);
+    corporationView.onclick = foundSelectedCorporation.bind(null, name);
+    return corporationView;
+  });
 };
 
-const closeOverlay = function(id) {
-  document.getElementById(id).style.display = 'none';
-  document.getElementById(id).style.zIndex = 1;
+const getEstablishCorporationOverlay = function(document) {
+  return document.getElementById('establish-corporation-overlay');
+};
+
+const closeOverlay = function(document) {
+  getEstablishCorporationOverlay(document).style.display = 'none';
 };
 
 const foundSelectedCorporation = function(corporationName) {
-  closeOverlay('found-corporation-overlay');
+  closeOverlay(document);
   fetch('/establish-corporation', {
     method: 'POST',
     headers: {
@@ -27,10 +45,14 @@ const foundSelectedCorporation = function(corporationName) {
   });
 };
 
-const foundCorporation = function(document, corporations) {
-  document.getElementById('found-corporation-overlay').style.display = 'flex';
-  document.getElementById('found-corporation-overlay').style.zIndex = 0;
-  document.getElementById('found-corporation').style.display = 'flex';
-  const corporationsHtml = createCorporationsHtml(corporations);
-  document.getElementById('corporation-btns').innerHTML = corporationsHtml;
+const showEstablishCorporationPopup = function(document, corporations) {
+  getEstablishCorporationOverlay(document).style.display = 'flex';
+
+  const corporationsContainer = document.getElementById(
+    'inactive-corporations-container'
+  );
+
+  const corporationsViews = createCorporationsViews(document, corporations);
+  corporationsContainer.innerHTML = '';
+  appendChildren(corporationsContainer, corporationsViews);
 };

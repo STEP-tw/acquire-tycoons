@@ -13,7 +13,7 @@
   </head>
 
   <body>
-    <section class="overlay" id="game-end-overlay">
+    <section class="overlay" style="display: none" id="game-end-overlay">
       <section id="game-results" class="game-results">
         <h1>Game Results</h1>
         <table>
@@ -53,19 +53,21 @@
       </section>
     </section>
 
-    <section id="found-corporation-overlay">
-      <section
-        id="found-corporation"
-        class="found-corporation"
-        style="display:none;border:1px solid black;"
-      >
-        <div class="establish-corp-heading">
-          Select a corporation to establish
+    <section
+      class="overlay"
+      style="display:none"
+      id="establish-corporation-overlay"
+    >
+      <div class="overlay-content">
+        <div class="establish-corporation-overlay-content">
+          <h2 class="heading-medium">Select corporation to establish</h2>
+          <div
+            class="inactive-corporations"
+            id="inactive-corporations-container"
+          ></div>
         </div>
-        <div id="corporation-btns"></div>
-      </section>
+      </div>
     </section>
-
     <header id="game-header" style="display: none">
       <h1 class="app-title">ACQUIRE</h1>
       <span class="player-name-header" id="player-name"></span>

@@ -410,16 +410,6 @@ ul > li {
   align-items: center;
 }
 
-.overlay {
-  height: 100%;
-  width: 100%;
-  position: fixed;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(85, 90, 85, 0.3);
-}
-
 #close-overlay-btn {
   height: 25px;
   width: 25px;
@@ -492,4 +482,71 @@ ul > li {
 #error-msg-at-buying {
   height: 10%;
   text-align: center;
+}
+
+.overlay {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(62, 62, 62, 0.3);
+}
+
+.overlay-content {
+  padding-top: 8px;
+  width: 30%;
+  background: white;
+}
+
+.establish-corporation-overlay-content {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.inactive-corporations {
+  width: 90%;
+  margin-top: 3%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.inactive-corporation {
+  height: 90px;
+  width: 80px;
+  margin: 2% 2%;
+  color: #454545;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.inactive-corporation:hover {
+  box-shadow: 0px 0px 4px black;
+}
+
+.corporation-icon {
+  height: 78%;
+  border-bottom: 1px solid #2d2d2d;
+  font-weight: bolder;
+  font-size: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inactive-corporation-name {
+  text-align: center;
+  font-size: 14px;
+  font-weight: bolder;
+  color: #4f4f4f;
 }
