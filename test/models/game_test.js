@@ -13,7 +13,7 @@ const Tile = require('../../src/models/tile.js');
 const { getCorporations, getFaceDownCluster } = require('../../src/util.js');
 
 
-const { merger, merger_small_big } = require('../../helpers/main.js');
+const { initialMerger, merger_small_big_test } = require('../../helpers/main.js');
 
 const generateTiles = function (row, noOfTiles) {
   return new Array(noOfTiles).fill(row).map((elem, index) => {
@@ -690,14 +690,14 @@ describe('Game', function () {
 
 describe('merger of two different size corporations', function () {
   it('should merge defunct corporation to surviving corporation', function () {
-    const game = merger();
+    const game = initialMerger();
     game.placeTile('3A');
     expect(game.getCorporation('Quantum').isActive()).true;
     expect(game.getCorporation('Phoenix').isActive()).false;
   });
 
   it('should return ', function () {
-    const game = merger_small_big();
+    const game = merger_small_big_test();
     game.placeTile('3A');
     expect(game.getCorporation('Quantum').isActive()).false;
     expect(game.getCorporation('Phoenix').isActive()).true;

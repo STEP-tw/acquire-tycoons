@@ -1,5 +1,6 @@
-const merge = require('./merger.js');
-const merge_small_big = require('./merge_small_big.js');
+const initialMerge = require('./initialMerger.js');
+const merge_small_big_test = require('./merge_small_big_test.js');
+const merge_same_size_corp = require('./merge_same_size_corp.js');
 
 const Game = require('../src/models/game.js');
 const ActivityLog = require('../src/models/activity_log.js');
@@ -23,10 +24,20 @@ const runGame = function (random, processes) {
   return game;
 };
 
-const merger = () => runGame(merge.random(), merge.processes);
-const merger_small_big = () => runGame(merge_small_big.random(), merge_small_big.processes);
+const randomGenerator = function(array){
+  let index = -1;
+  return function(length){
+    index++;
+    if (array[index] != undefined) { return array[index]; }
+    return Math.floor(Math.random() * length);
+  };
+};
+const initialMerger = () => runGame(randomGenerator(initialMerge.array), initialMerge.processes);
+const merger_small_big_test = () => runGame(randomGenerator(merge_small_big_test.array), merge_small_big_test.processes);
+const merger_same_size_corp = () => runGame(randomGenerator(merge_same_size_corp.array),merge_same_size_corp.processes);
 
 module.exports = {
-  merger,
-  merger_small_big
+  initialMerger,
+  merger_small_big_test,
+  merger_same_size_corp
 };

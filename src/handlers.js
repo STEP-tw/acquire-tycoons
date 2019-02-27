@@ -3,7 +3,8 @@ const Player = require('./models/player.js');
 const { initializeGame } = require('./util.js');
 const ActivityLog = require('./models/activity_log');
 const { validateGameSession, validateTurn } = require('./validators');
-// const { merger } = require('../helpers/main.js')
+// const requiredFunctionality = require('../helpers/main.js').initialMerger;
+
 const hostGame = function (req, res) {
   let { host, totalPlayers } = req.body;
   let game = new Game(totalPlayers, res.app.random, new ActivityLog(Date));
@@ -40,7 +41,7 @@ const joinGame = function (req, res) {
   res.cookie('playerId', `${playerId}`);
   res.send({ error: false, message: '' });
   if (game.isFull()) {
-    // gameManager.games[gameID] = merger();
+    // gameManager.games[gameID] = requiredFunctionality();
     initializeGame(game);
   }
 };
