@@ -3,13 +3,13 @@ const placeTile = function(document) {
   const tileValue = tile.id;
   (async function() {
     const reqData = {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'content-type': 'application/json'
+        "content-type": "application/json"
       },
       body: JSON.stringify({ tileValue })
     };
-    const response = await fetch('/place-tile', reqData);
+    const response = await fetch("/place-tile", reqData);
     const { error, message } = await response.json();
     if (error) {
       displayPlayerStatus(document, message);
@@ -22,14 +22,14 @@ const placeTile = function(document) {
 };
 
 const disablePlayerTiles = function(document) {
-  const tiles = document.getElementById('player-tiles-container').children;
+  const tiles = document.getElementById("player-tiles-container").children;
   for (const tile of tiles) {
-    tile.classList.add('disabled');
-    tile.onclick = '';
+    tile.classList.add("disabled");
+    tile.onclick = "";
   }
 };
 
-const createElement = function(document, elementName, attributes) {
+const createElement = function(document, elementName, attributes = {}) {
   const element = document.createElement(elementName);
   Object.keys(attributes).forEach(attribute => {
     element[attribute] = attributes[attribute];
@@ -42,29 +42,29 @@ const appendChildren = function(container, children) {
 };
 
 const generateGameBoard = function(document) {
-  const gameBoardContainer = document.getElementById('game-board-container');
+  const gameBoardContainer = document.getElementById("game-board-container");
 
-  const boardAttributes = { className: 'game-board' };
-  const board = createElement(document, 'table', boardAttributes);
+  const boardAttributes = { className: "game-board" };
+  const board = createElement(document, "table", boardAttributes);
 
-  const boardBody = document.createElement('tbody');
+  const boardBody = document.createElement("tbody");
   board.appendChild(boardBody);
 
-  const rowAlphabets = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
+  const rowAlphabets = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
   const columnNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
   const boardRows = rowAlphabets.map(rowAlphabet => {
     const cells = columnNumbers.map(columnNumber => {
       const cellValue = columnNumber + rowAlphabet;
       const cellAttributes = {
-        className: 'board-tile',
+        className: "board-tile",
         innerText: cellValue,
         id: `board-tile-${cellValue}`
       };
-      return createElement(document, 'td', cellAttributes);
+      return createElement(document, "td", cellAttributes);
     });
 
-    const row = document.createElement('tr');
+    const row = document.createElement("tr");
     appendChildren(row, cells);
     return row;
   });
@@ -75,14 +75,14 @@ const generateGameBoard = function(document) {
 
 const getClassNameForCorporation = function(corporation) {
   const tileClasses = {
-    unIncorporated: 'unincorporated-tile',
-    Hydra: 'hydra-color',
-    Zeta: 'zeta-color',
-    Sackson: 'sackson-color',
-    America: 'america-color',
-    Fusion: 'fusion-color',
-    Phoenix: 'phoenix-color',
-    Quantum: 'quantum-color'
+    unIncorporated: "unincorporated-tile",
+    Hydra: "hydra-color",
+    Zeta: "zeta-color",
+    Sackson: "sackson-color",
+    America: "america-color",
+    Fusion: "fusion-color",
+    Phoenix: "phoenix-color",
+    Quantum: "quantum-color"
   };
 
   return tileClasses[corporation];
@@ -92,7 +92,7 @@ const displayBoard = function(document, boardTiles, lastPlacedTileId) {
   boardTiles.forEach(tileData => {
     const { id, corporation } = tileData;
     const tile = document.getElementById(`board-tile-${id}`);
-    tile.className = 'board-tile';
+    tile.className = "board-tile";
     tile.classList.add(getClassNameForCorporation(corporation));
   });
 
@@ -104,25 +104,25 @@ const displayBoard = function(document, boardTiles, lastPlacedTileId) {
     `board-tile-${lastPlacedTileId}`
   );
 
-  lastPlacedTile.classList.add('last-placed-tile');
+  lastPlacedTile.classList.add("last-placed-tile");
 };
 
 const createTableCell = function(document, cellValue) {
-  const cell = document.createElement('td');
+  const cell = document.createElement("td");
   cell.innerText = cellValue;
   return cell;
 };
 
 const displayCorporationDetails = function(document, corporations) {
   const corporationDetailsBody = document.getElementById(
-    'corporation-details-body'
+    "corporation-details-body"
   );
 
   corporations.forEach(corporation => {
     const { name, size, marketPrice, availableStocks } = corporation;
 
     const rowAttributes = { className: getClassNameForCorporation(name) };
-    const corporationRow = createElement(document, 'tr', rowAttributes);
+    const corporationRow = createElement(document, "tr", rowAttributes);
 
     const nameCell = createTableCell(document, name);
     const sizeCell = createTableCell(document, size);
@@ -137,41 +137,41 @@ const displayCorporationDetails = function(document, corporations) {
 
 const displayPlayers = function(document, playersData) {
   const playerNamesContainer = document.getElementById(
-    'player-names-container'
+    "player-names-container"
   );
 
   const { playerNames, currentPlayerIndex } = playersData;
   const playerNameHolders = playerNames.map(playerName => {
     const holderAttributes = {
-      className: 'player-name',
+      className: "player-name",
       innerText: playerName
     };
 
-    const playerNameHolder = createElement(document, 'div', holderAttributes);
+    const playerNameHolder = createElement(document, "div", holderAttributes);
 
     return playerNameHolder;
   });
 
   const currentPlayerHolder = playerNameHolders[currentPlayerIndex];
-  currentPlayerHolder.classList.add('current-player');
+  currentPlayerHolder.classList.add("current-player");
 
   appendChildren(playerNamesContainer, playerNameHolders);
 };
 
 const greetPlayer = function(document, name) {
-  const playerNameHeader = document.getElementById('player-name');
+  const playerNameHeader = document.getElementById("player-name");
   playerNameHeader.innerText = `Hi ${name}!`;
 };
 
 const displayPlayerTiles = function(document, tileValues) {
-  const tilesContainer = document.getElementById('player-tiles-container');
+  const tilesContainer = document.getElementById("player-tiles-container");
   tileValues.forEach(tileValue => {
     const tileAttributes = {
-      className: 'player-tile disabled',
+      className: "player-tile disabled",
       innerText: tileValue,
       id: tileValue
     };
-    const tile = createElement(document, 'div', tileAttributes);
+    const tile = createElement(document, "div", tileAttributes);
     tilesContainer.appendChild(tile);
   });
 };
@@ -193,13 +193,13 @@ const showGameResults = function(id, document, gameResults) {
 };
 
 const displayPlayerMoney = function(document, money) {
-  const playerMoneyHolder = document.getElementById('player-money');
+  const playerMoneyHolder = document.getElementById("player-money");
   playerMoneyHolder.innerText = `$${money}`;
 };
 
 const displayPlayerStocks = function(document, stocks) {
   const playerStocksContainer = document.getElementById(
-    'player-stocks-container'
+    "player-stocks-container"
   );
 
   stocks.forEach(stock => {
@@ -208,19 +208,19 @@ const displayPlayerStocks = function(document, stocks) {
     const stockContainerAttributes = { className: `player-stock` };
     const stockContainer = createElement(
       document,
-      'div',
+      "div",
       stockContainerAttributes
     );
 
     stockContainer.classList.add(getClassNameForCorporation(name));
 
-    const corporationNameHolder = document.createElement('p');
+    const corporationNameHolder = document.createElement("p");
     corporationNameHolder.innerText = name;
 
-    const stockCountAttributes = { className: 'stock-count', innerText: value };
+    const stockCountAttributes = { className: "stock-count", innerText: value };
     const stockCountHolder = createElement(
       document,
-      'div',
+      "div",
       stockCountAttributes
     );
 
@@ -232,24 +232,24 @@ const displayPlayerStocks = function(document, stocks) {
 };
 
 const displayPlayerStatus = function(document, status) {
-  const playerLogContainer = document.getElementById('player-log');
+  const playerLogContainer = document.getElementById("player-log");
   playerLogContainer.innerText = status;
 };
 
 const clearGameScreen = function(document) {
-  const playerLogContainer = document.getElementById('player-log');
+  const playerLogContainer = document.getElementById("player-log");
   const playerStocksContainer = document.getElementById(
-    'player-stocks-container'
+    "player-stocks-container"
   );
-  const playerMoneyHolder = document.getElementById('player-money');
-  const tilesContainer = document.getElementById('player-tiles-container');
+  const playerMoneyHolder = document.getElementById("player-money");
+  const tilesContainer = document.getElementById("player-tiles-container");
   const playerNamesContainer = document.getElementById(
-    'player-names-container'
+    "player-names-container"
   );
   const corporationDetailsBody = document.getElementById(
-    'corporation-details-body'
+    "corporation-details-body"
   );
-  const activityLog = document.getElementById('activity-log');
+  const activityLog = document.getElementById("activity-log");
 
   const gameElements = [
     activityLog,
@@ -261,23 +261,23 @@ const clearGameScreen = function(document) {
     corporationDetailsBody
   ];
 
-  gameElements.forEach(gameElement => (gameElement.innerHTML = ''));
+  gameElements.forEach(gameElement => (gameElement.innerHTML = ""));
 };
 
 const displayActivityLog = function(document, logs) {
-  let activityLog = document.getElementById('activity-log');
+  let activityLog = document.getElementById("activity-log");
   logs.map(({ log, timeStamp }) => {
-    let logItem = document.createElement('li');
-    const messageAttributes = { className: 'activity-log-msg', innerText: log };
-    const messageContainer = createElement(document, 'span', messageAttributes);
+    let logItem = document.createElement("li");
+    const messageAttributes = { className: "activity-log-msg", innerText: log };
+    const messageContainer = createElement(document, "span", messageAttributes);
 
-    const localeTime = new Date(timeStamp).toLocaleTimeString('en-IN');
+    const localeTime = new Date(timeStamp).toLocaleTimeString("en-IN");
     const timeAttributes = {
-      className: 'activity-log-time',
+      className: "activity-log-time",
       innerText: localeTime
     };
 
-    const timeHolder = createElement(document, 'span', timeAttributes);
+    const timeHolder = createElement(document, "span", timeAttributes);
 
     logItem.appendChild(messageContainer);
     logItem.appendChild(timeHolder);
@@ -304,27 +304,27 @@ const displayGame = function(document, gameData) {
 };
 
 const removeWaitingArea = function(document) {
-  const waitingArea = document.getElementById('waiting-area');
+  const waitingArea = document.getElementById("waiting-area");
   setTimeout(() => waitingArea.remove(), 500);
 };
 
 const showGameContainer = function(document) {
-  const gameContainer = document.getElementById('game-container');
-  gameContainer.style.display = 'block';
-  const header = document.getElementById('game-header');
-  header.style.display = 'flex';
+  const gameContainer = document.getElementById("game-container");
+  gameContainer.style.display = "block";
+  const header = document.getElementById("game-header");
+  header.style.display = "flex";
 };
 
 const setOnClickForTiles = function(document) {
-  const tiles = document.getElementById('player-tiles-container').children;
+  const tiles = document.getElementById("player-tiles-container").children;
   for (const tile of tiles) {
-    tile.classList.remove('disabled');
+    tile.classList.remove("disabled");
     tile.onclick = placeTile.bind(null, document);
   }
 };
 
 const performAction = function(id, document, action) {
-  if (action.name != 'DO_NOTHING') clearInterval(id);
+  if (action.name != "DO_NOTHING") clearInterval(id);
   const actions = {
     PLACE_A_TILE: setOnClickForTiles,
     FOUND_CORPORATION: showEstablishCorporationPopup,
@@ -337,7 +337,7 @@ const performAction = function(id, document, action) {
 
 const fetchGameData = function(document) {
   const gameDataIntervalId = setInterval(() => {
-    fetch('/game-data', { method: 'GET', credentials: 'same-origin' })
+    fetch("/game-data", { method: "GET", credentials: "same-origin" })
       .then(response => response.json())
       .then(gameData => {
         showGameContainer(document);
@@ -350,11 +350,11 @@ const fetchGameData = function(document) {
 
 const showJoinedPlayerNames = function(document, playerNames) {
   const joinedPlayerNamesContainer = document.getElementById(
-    'joined-player-names'
+    "joined-player-names"
   );
-  joinedPlayerNamesContainer.innerHTML = '';
+  joinedPlayerNamesContainer.innerHTML = "";
   playerNames.forEach(playerName => {
-    const playerNameHolder = document.createElement('p');
+    const playerNameHolder = document.createElement("p");
     playerNameHolder.innerText = `${playerName} joined the game.`;
     joinedPlayerNamesContainer.appendChild(playerNameHolder);
   });
@@ -362,9 +362,9 @@ const showJoinedPlayerNames = function(document, playerNames) {
 
 const checkGameStatus = function(document) {
   const gameStatusIntervalId = setInterval(() => {
-    fetch('/game-status', {
-      method: 'GET',
-      credentials: 'same-origin'
+    fetch("/game-status", {
+      method: "GET",
+      credentials: "same-origin"
     })
       .then(response => response.json())
       .then(data => {
@@ -376,15 +376,15 @@ const checkGameStatus = function(document) {
           clearInterval(gameStatusIntervalId);
           return;
         }
-        document.getElementById('joined-player-names').style.display = 'block';
+        document.getElementById("joined-player-names").style.display = "block";
       });
   }, 2000);
 };
 
 const initialize = function(document) {
   generateGameBoard(document);
-  const header = document.getElementById('game-header');
-  header.style.display = 'none';
+  const header = document.getElementById("game-header");
+  header.style.display = "none";
   checkGameStatus(document);
 };
 

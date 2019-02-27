@@ -1,9 +1,10 @@
-const Game = require('./models/game.js');
-const Player = require('./models/player.js');
-const { initializeGame } = require('./util.js');
-const ActivityLog = require('./models/activity_log');
-const { validateGameSession, validateTurn } = require('./validators');
-// const requiredFunctionality = require('../helpers/main.js').initialMerger;
+const Game = require("./models/game.js");
+const Player = require("./models/player.js");
+const { initializeGame } = require("./util.js");
+const ActivityLog = require("./models/activity_log");
+const { validateGameSession, validateTurn } = require("./validators");
+// const requiredFunctionality = require("../helpers/main.js")
+// .merger_big_small_test;
 
 const hostGame = function(req, res) {
   let { host, totalPlayers } = req.body;
@@ -13,8 +14,8 @@ const hostGame = function(req, res) {
   game.addPlayer(hostPlayer);
   res.app.gameManager.addGame(game);
   let gameId = res.app.gameManager.getLatestId();
-  res.cookie('gameId', `${gameId}`);
-  res.cookie('playerId', `${playerId}`);
+  res.cookie("gameId", `${gameId}`);
+  res.cookie("playerId", `${playerId}`);
   res.send({ gameId });
 };
 
@@ -30,16 +31,16 @@ const joinGame = function(req, res) {
   const game = gameManager.getGameById(gameID);
 
   if (game.isFull()) {
-    res.send({ error: true, message: 'Sorry! Game has already started.' });
+    res.send({ error: true, message: "Sorry! Game has already started." });
     return;
   }
 
   let playerId = game.getNextPlayerId();
   let player = new Player(playerName, playerId);
   game.addPlayer(player);
-  res.cookie('gameId', `${gameID}`);
-  res.cookie('playerId', `${playerId}`);
-  res.send({ error: false, message: '' });
+  res.cookie("gameId", `${gameID}`);
+  res.cookie("playerId", `${playerId}`);
+  res.send({ error: false, message: "" });
   if (game.isFull()) {
     // gameManager.games[gameID] = requiredFunctionality();
     initializeGame(game);
@@ -57,16 +58,16 @@ const getGameStatus = function(req, res) {
 const renderGamePage = function(req, res) {
   const { gameId } = req.cookies;
   if (!res.app.gameManager.doesGameExist(gameId)) {
-    res.redirect('/');
+    res.redirect("/");
     return;
   }
   const game = res.app.gameManager.getGameById(gameId);
-  let message = 'Waiting for other players to join';
+  let message = "Waiting for other players to join";
   if (game.isStarted) {
-    message = 'Loading game...';
+    message = "Loading game...";
   }
 
-  res.render('game', { gameId, message });
+  res.render("game", { gameId, message });
 };
 
 const serveGameData = function(req, res) {
@@ -96,7 +97,7 @@ const buyStocks = function(req, res) {
   const { gameId } = req.cookies;
   const game = res.app.gameManager.getGameById(gameId);
   game.buyStocks(details);
-  res.send({ error: false, message: '' });
+  res.send({ error: false, message: "" });
 };
 
 module.exports = {

@@ -2,8 +2,8 @@ class TurnManager {
   constructor(orderedPlayerIds, currentPlayerIndex = 0) {
     this.orderedPlayerIds = orderedPlayerIds;
     this.currentPlayerIndex = currentPlayerIndex;
-    this.currentPlayerAction = {};
-    this.stack = {};
+    this.currentPlayerAction = new Object();
+    this.stack = new Object();
     this.isActionGlobal = false;
   }
 
@@ -21,6 +21,7 @@ class TurnManager {
   changeTurn() {
     this.currentPlayerIndex =
       (this.currentPlayerIndex + 1) % this.orderedPlayerIds.length;
+    this.resetStack();
   }
 
   changeAction(action) {
@@ -44,6 +45,10 @@ class TurnManager {
 
   getStack() {
     return this.stack;
+  }
+
+  resetStack() {
+    this.stack = new Object();
   }
 }
 
