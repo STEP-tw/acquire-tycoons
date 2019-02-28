@@ -1,4 +1,6 @@
 #!/bin/bash
+npm run fix
+git add .
 
 function exit_with_1 () {
   echo $1 
