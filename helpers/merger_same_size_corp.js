@@ -1,16 +1,12 @@
+const initialTiles = ['2A', '5A', '1B', '5B'];
+const p1Tiles = ['1A', '3A', '6A', '7A', '8A', '9A'];
+const p2Tiles = ['4A', '10A', '11A', '12A', '3B', '6B'];
+const p3Tiles = ['2B', '7B', '8B', '9B', '10B', '11B'];
+const p4Tiles = ['4B', '12B', '1C', '2C', '3C', '4C'];
+
 module.exports = {
-  array:[
-    //initial tiles are 2A,5A,1B,5B
-    1,3,10,13,
-    // player1 tiles are 1A,3A,6A,7A,8A,9A
-    0,0,1,1,1,1,
-    // player2 tiles are 4A,10A,11A,12A,3B,6B
-    0,0,0,0,1,2,
-    //player3 tiles are 2B,7B,8B,9B,10B,11B
-    0,1,1,1,1,1,
-    // player4 tiles are 4B,12B,1C,2C,3C,4C
-    0,0,0,0,0,0
-  ],
+  array: initialTiles.concat(p1Tiles, p2Tiles, p3Tiles, p4Tiles),
+
   processes : [
     {
       id: 'placeTile',

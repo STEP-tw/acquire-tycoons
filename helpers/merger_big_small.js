@@ -1,20 +1,12 @@
-/*
-  after finishing the array elements(tiles) in random
-  it will give the number by Math.random
-*/
+const initialTiles = ['2A', '5A', '1B', '3B'];
+const p1Tiles = ['1A', '6A', '8A', '10A','11A','12A'];
+const p2Tiles = ['4A', '2B', '4B', '5B', '6B', '7B'];
+const p3Tiles = ['7A', '8B', '9B', '10B', '11B', '12B'];
+const p4Tiles = ['3A'];
+
 module.exports = {
-  array :[
-    // initial tiles are 2A,5A,1B,3B
-    1,3,10,11,
-    //player1 tiles are 1A,6A,8A,10A,11A,12A
-    0,2,3,3,3,3,
-    //player2 tiles are 4A,2B,4B,5B,6B,7B
-    1,2,2,2,2,2,
-    //player3 tiles are 7A,8B,9B,10B,11B,12B
-    1,1,1,1,1,1,
-    // player4 tiles are 3A
-    0
-  ],
+  array: initialTiles.concat(p1Tiles, p2Tiles, p3Tiles, p4Tiles),
+
   processes : [
     {
       id:'placeTile',
