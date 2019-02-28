@@ -14,6 +14,7 @@ const {
 } = require('./handlers');
 const GameManager = require('./models/game_manager');
 const { random } = require('./util.js');
+const morgan = require('morgan');
 
 const app = express();
 app.gameManager = new GameManager();
@@ -32,21 +33,17 @@ app.urlsToValidateTurn = [
   '/confirm-buy'
 ];
 app.set('view engine', 'ejs');
-
+morgan.token('cookies', function (req) { return req.headers['cookie']; });
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
-app.use((req, res, next) => {
-  // eslint-disable-next-line no-console
-  console.log('URL:', req.url);
-  // eslint-disable-next-line no-console
-  console.log('METHOD:', req.method);
-  // eslint-disable-next-line no-console
-  console.log('COOKIES:', req.cookies);
-  // eslint-disable-next-line no-console
-  console.log('--------------------------');
-
-  next();
-});
+app.use(morgan(function (tokens, req, res) {
+  return [
+    tokens.method(req, res),
+    tokens.url(req, res),
+    tokens.status(req, res),
+    tokens.cookies(req,res)
+  ].join(' ');
+}));
 app.use(express.json());
 app.use(validateGameSession);
 app.use(validateTurn);
