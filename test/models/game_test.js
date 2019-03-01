@@ -14,7 +14,9 @@ const { getCorporations, getFaceDownCluster } = require('../../src/util.js');
 
 const {
   merger_big_small_test,
-  merger_small_big_test
+  merger_small_big_test,
+  merger_2_same_size_corp_test,
+  merger_4_same_size_test
 } = require('../../helpers/main.js');
 
 const generateTiles = function(row, noOfTiles) {
@@ -682,5 +684,41 @@ describe('merger of two different size corporations', function() {
     expect(game.getCorporation('Phoenix').getTiles()).to.deep.equal(
       survivingCorpTiles
     );
+  });
+});
+
+describe('Two same size copopration merger', function() {
+  it('should ask to select surviving corporation', function() {
+    const game = merger_2_same_size_corp_test();
+    game.placeTile('3A');
+    expect(game.turnManager.getAction(0).name).to.equal(
+      'SELECT_SURVIVING_CORPORATION'
+    );
+  });
+});
+
+describe('Four same size copopration merger', function() {
+  const game = merger_4_same_size_test();
+  it('should ask to select surviving corporation', function() {
+    game.placeTile('4D');
+    expect(game.turnManager.getAction(0).name).to.equal(
+      'SELECT_SURVIVING_CORPORATION'
+    );
+  });
+
+  it('should ask to select defunct corporation', function() {
+    const survivingCorporation = game.getCorporation('Phoenix');
+    game.continueMerging(survivingCorporation);
+    expect(game.turnManager.getAction(0).name).to.equal(
+      'SELECT_DEFUNCT_CORPORATION'
+    );
+  });
+
+  it('should merge selected surviving and defunct corporation', function() {
+    const { survivingCorporation } = game.turnManager.getStack();
+    const defunctCorporation = game.getCorporation('Hydra');
+    game.mergeCorporations(survivingCorporation, defunctCorporation);
+
+    expect(defunctCorporation.getSize()).to.equal(0);
   });
 });

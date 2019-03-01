@@ -10,7 +10,9 @@ const {
   validateGameSession,
   validateTurn,
   establishCorporation,
-  buyStocks
+  buyStocks,
+  selectDefunctCorporation,
+  selectSurvivingCorporation
 } = require('./handlers');
 const GameManager = require('./models/game_manager');
 const { random } = require('./util.js');
@@ -23,6 +25,8 @@ app.urlsToValidateGame = [
   '/game-status',
   '/place-tile',
   '/game-data',
+  '/select-surviving-corporation',
+  '/select-defunct-corporation',
   '/log',
   '/establish-corporation',
   '/confirm-buy'
@@ -30,20 +34,26 @@ app.urlsToValidateGame = [
 app.urlsToValidateTurn = [
   '/place-tile',
   '/establish-corporation',
+  '/select-surviving-corporation',
+  '/select-defunct-corporation',
   '/confirm-buy'
 ];
 app.set('view engine', 'ejs');
-morgan.token('cookies', function (req) { return req.headers['cookie']; });
+morgan.token('cookies', function(req) {
+  return req.headers['cookie'];
+});
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
-app.use(morgan(function (tokens, req, res) {
-  return [
-    tokens.method(req, res),
-    tokens.url(req, res),
-    tokens.status(req, res),
-    tokens.cookies(req,res)
-  ].join(' ');
-}));
+app.use(
+  morgan(function(tokens, req, res) {
+    return [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens.cookies(req, res)
+    ].join(' ');
+  })
+);
 app.use(express.json());
 app.use(validateGameSession);
 app.use(validateTurn);
@@ -54,6 +64,8 @@ app.post('/place-tile', placeTile);
 app.get('/game-status', getGameStatus);
 app.get('/game-data', serveGameData);
 app.post('/establish-corporation', establishCorporation);
+app.post('/select-surviving-corporation', selectSurvivingCorporation);
+app.post('/select-defunct-corporation', selectDefunctCorporation);
 app.post('/confirm-buy', buyStocks);
 app.use(express.static('public'));
 

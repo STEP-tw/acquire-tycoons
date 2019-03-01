@@ -8,7 +8,7 @@
     />
     <link rel="stylesheet" type="text/css" href="/styles/main.css" />
     <script src="/scripts/buy_stocks.js"></script>
-    <script src="/scripts/establish_corporation.js"></script>
+    <script src="/scripts/select_corporation.js"></script>
     <script src="/scripts/game.js"></script>
   </head>
 
@@ -41,15 +41,12 @@
     <section
       class="overlay"
       style="display:none"
-      id="establish-corporation-overlay"
+      id="select-corporation-overlay"
     >
       <div class="overlay-content">
         <div class="align-content-center">
-          <h2 class="heading-medium">Select corporation to establish</h2>
-          <div
-            class="inactive-corporations"
-            id="inactive-corporations-container"
-          ></div>
+          <h2 class="heading-medium" id="popup-heading"></h2>
+          <div class="inactive-corporations" id="corporations-container"></div>
         </div>
       </div>
     </section>

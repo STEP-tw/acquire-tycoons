@@ -177,7 +177,7 @@ const displayPlayerTiles = function(document, tileValues) {
 };
 
 const redirectToHomepage = function(document) {
-  document.location.href = '/';
+  document.location.href = "/";
 };
 
 const showGameResults = function(id, document, gameResults) {
@@ -187,9 +187,9 @@ const showGameResults = function(id, document, gameResults) {
       const { playerName, rank, money } = gameResult;
       return `<tr><td>${rank}</td><td>${playerName}</td><td>${money}</td></tr>`;
     })
-    .join('');
-  document.getElementById('game-results-overlay').style.display = 'flex';
-  document.getElementById('game-results-body').innerHTML = gameResultsHtml;
+    .join("");
+  document.getElementById("game-results-overlay").style.display = "flex";
+  document.getElementById("game-results-body").innerHTML = gameResultsHtml;
 };
 
 const displayPlayerMoney = function(document, money) {
@@ -323,6 +323,24 @@ const setOnClickForTiles = function(document) {
   }
 };
 
+const showEstablishCorporationPopup = showSelectCorporationPopup.bind(
+  null,
+  handleSelectedCorporation.bind(null, "/establish-corporation"),
+  "Select corporation to establish"
+);
+
+const showSurvivingCorporationPopup = showSelectCorporationPopup.bind(
+  null,
+  handleSelectedCorporation.bind(null, "/select-surviving-corporation"),
+  "Select surviving corporation"
+);
+
+const showDefunctCorporationPopup = showSelectCorporationPopup.bind(
+  null,
+  handleSelectedCorporation.bind(null, "/select-defunct-corporation"),
+  "Select defunct corporation"
+);
+
 const performAction = function(id, document, action) {
   if (action.name != "DO_NOTHING") clearInterval(id);
   const actions = {
@@ -330,7 +348,9 @@ const performAction = function(id, document, action) {
     FOUND_CORPORATION: showEstablishCorporationPopup,
     DO_NOTHING: () => {},
     BUY_STOCKS: generateBuyStockContainer,
-    END_GAME: showGameResults.bind(null, id)
+    END_GAME: showGameResults.bind(null, id),
+    SELECT_SURVIVING_CORPORATION: showSurvivingCorporationPopup,
+    SELECT_DEFUNCT_CORPORATION: showDefunctCorporationPopup
   };
   actions[action.name](document, action.data);
 };

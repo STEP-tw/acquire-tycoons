@@ -3,8 +3,8 @@ const Player = require('./models/player.js');
 const { initializeGame } = require('./util.js');
 const ActivityLog = require('./models/activity_log');
 const { validateGameSession, validateTurn } = require('./validators');
-// const requiredFunctionality = require("../helpers/main.js")
-// .merger_big_small_test;
+// const requiredFunctionality = require('../helpers/main.js')
+//   .merger_4_same_size_test;
 
 const hostGame = function(req, res) {
   let { host, totalPlayers } = req.body;
@@ -94,9 +94,25 @@ const establishCorporation = function(req, res) {
 
 const buyStocks = function(req, res) {
   const details = req.body;
-  const { gameId } = req.cookies;
-  const game = res.app.gameManager.getGameById(gameId);
+  const game = req.game;
   game.buyStocks(details);
+  res.send({ error: false, message: '' });
+};
+
+const selectSurvivingCorporation = function(req, res) {
+  const { corporationName } = req.body;
+  const game = req.game;
+  const survivingCorporation = game.getCorporation(corporationName);
+  game.continueMerging(survivingCorporation);
+  res.send({ error: false, message: '' });
+};
+
+const selectDefunctCorporation = function(req, res) {
+  const { corporationName } = req.body;
+  const game = req.game;
+  const defunctCorporation = game.getCorporation(corporationName);
+  const { survivingCorporation } = game.turnManager.getStack();
+  game.mergeCorporations(survivingCorporation, defunctCorporation);
   res.send({ error: false, message: '' });
 };
 
@@ -110,5 +126,7 @@ module.exports = {
   validateGameSession,
   validateTurn,
   establishCorporation,
-  buyStocks
+  buyStocks,
+  selectSurvivingCorporation,
+  selectDefunctCorporation
 };

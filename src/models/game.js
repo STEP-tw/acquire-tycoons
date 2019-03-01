@@ -289,7 +289,7 @@ class Game {
     }
 
     if (this.isMerger(tile)) {
-      this.merger();
+      this.initiateMerger();
       placedUnincorporatedTile = false;
     }
 
@@ -304,6 +304,74 @@ class Game {
     }
 
     return status;
+  }
+
+  initiateMerger() {
+    const { placedTile } = this.turnManager.getStack();
+    const mergingCorporations = this.getCorporationsAdjacentTo(placedTile);
+    this.turnManager.addStack('mergingCorporations', mergingCorporations);
+    const largestCorporations = this.getLargestCorporationsBySize(
+      mergingCorporations
+    );
+    if (largestCorporations.length > 1) {
+      this.actionSelectSurviving(largestCorporations);
+      return;
+    }
+    const survivingCorporation = largestCorporations[0];
+    this.continueMerging(survivingCorporation);
+  }
+
+  getLargestCorporationsBySize(corporations) {
+    const corporationSizes = corporations.map(corporation =>
+      corporation.getSize()
+    );
+    const sortedCorporationSizes = _.sortBy(corporationSizes);
+    const uniqCorporationSizes = _.uniq(sortedCorporationSizes);
+    const largestSize = _.last(uniqCorporationSizes);
+    const largestCorporations = this.filterCorporationsBySize(
+      corporations,
+      largestSize
+    );
+    return largestCorporations;
+  }
+
+  continueMerging(survivingCorporation) {
+    this.turnManager.addStack('survivingCorporation', survivingCorporation);
+    const { mergingCorporations } = this.turnManager.getStack();
+    const defunctCorporations = this.getDefunctCorporations(
+      mergingCorporations,
+      survivingCorporation
+    );
+    const largestCorporations = this.getLargestCorporationsBySize(
+      defunctCorporations
+    );
+    if (largestCorporations.length > 1) {
+      this.actionSelectDefunct(largestCorporations);
+      return;
+    }
+    const defunctCorporation = largestCorporations[0];
+
+    this.mergeCorporations(survivingCorporation, defunctCorporation);
+  }
+
+  actionSelectDefunct(corporations) {
+    const action = { name: 'SELECT_DEFUNCT_CORPORATION', data: corporations };
+    this.turnManager.changeAction(action);
+  }
+
+  getDefunctCorporations(mergingCorporations, survivingCorporation) {
+    return mergingCorporations.filter(
+      corporation => corporation.getName() != survivingCorporation.getName()
+    );
+  }
+
+  actionSelectSurviving(corporations) {
+    const action = { name: 'SELECT_SURVIVING_CORPORATION', data: corporations };
+    this.turnManager.changeAction(action);
+  }
+
+  filterCorporationsBySize(corporations, size) {
+    return corporations.filter(corporation => corporation.getSize() == size);
   }
 
   updatePlayer(tile) {
@@ -526,6 +594,7 @@ class Game {
   }
 
   mergeCorporations(surviving, defunct) {
+    const { mergingCorporations } = this.turnManager.getStack();
     const defunctCorporationName = defunct.getName();
     const survivingCorporationName = surviving.getName();
     const { placedTile, adjacentTile } = this.turnManager.getStack();
@@ -535,29 +604,20 @@ class Game {
     this.activityLog.addLog(
       `${defunctCorporationName} merged with ${survivingCorporationName}`
     );
-
     this.distributeMajorityMinority(defunctCorporationName);
-    this.players.forEach(player => player.sellAllStocks(defunct));
-
     defunct.resetTiles();
-    surviving.concatTiles(defunctTiles.concat(adjacentTile, placedTile));
-    this.changeActionToBuyStocks();
-  }
-
-  merger() {
-    const { placedTile } = this.turnManager.getStack();
-    const [corporation1, corporation2] = this.getCorporationsAdjacentTo(
-      placedTile
+    surviving.concatTiles(defunctTiles);
+    this.players.forEach(player => player.sellAllStocks(defunct));
+    _.remove(
+      mergingCorporations,
+      corporation => defunct.getName() == corporation.getName()
     );
-
-    let survivingCorporation = corporation1;
-    let defunctCorporation = corporation2;
-
-    if (defunctCorporation.getSize() > survivingCorporation.getSize()) {
-      survivingCorporation = corporation2;
-      defunctCorporation = corporation1;
+    if (mergingCorporations.length > 1) {
+      this.continueMerging(surviving);
+      return;
     }
-    this.mergeCorporations(survivingCorporation, defunctCorporation);
+    surviving.concatTiles(adjacentTile.concat(placedTile));
+    this.checkGameEnd();
   }
 }
 
