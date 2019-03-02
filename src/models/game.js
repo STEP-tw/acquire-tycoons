@@ -616,9 +616,9 @@ class Game {
       `${defunctCorporationName} merged with ${survivingCorporationName}`
     );
     this.distributeMajorityMinority(defunctCorporationName);
+    this.players.forEach(player => player.sellAllStocks(defunct));
     defunct.resetTiles();
     surviving.concatTiles(defunctTiles);
-    this.players.forEach(player => player.sellAllStocks(defunct));
     _.remove(
       mergingCorporations,
       corporation => defunct.getName() == corporation.getName()
