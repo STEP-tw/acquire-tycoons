@@ -7,6 +7,10 @@ const ActivityLog = require('../src/models/activity_log.js');
 const sinon = require('sinon');
 const { expect } = require('chai');
 const { initializeGame } = require('../src/util.js');
+const {
+  merger2SameSizeCorpTest,
+  merger4SameSizeCorpTest
+} = require('../helpers/main');
 
 const app = require('../src/app.js');
 
@@ -349,6 +353,62 @@ describe('/buy-stocks', function() {
       .post('/confirm-buy')
       .set('Cookie', [`gameId=${gameID}`, 'playerId=0'])
       .send({ Sackson: 2 })
+      .expect(200, done);
+  });
+});
+
+describe('/select-surviving-corporation', function() {
+  beforeEach(function() {
+    app.gameManager = new GameManager();
+  });
+
+  it('should continue merging with selected surviving corporation in merger of 2 same size corporations', function(done) {
+    const game = merger2SameSizeCorpTest();
+    app.gameManager.addGame(game);
+    const gameID = app.gameManager.getLatestId();
+    game.placeTile('3A');
+    request(app)
+      .post('/select-surviving-corporation')
+      .set('Cookie', [`gameId=${gameID}`, 'playerId=0'])
+      .set('content-type', 'application/json')
+      .send({ corporationName: 'Hydra' })
+      .expect({ error: false, message: '' })
+      .expect(200, done);
+  });
+
+  it('should continue merging with selected surviving corporation in merger of 4 same size corporations', function(done) {
+    const game = merger4SameSizeCorpTest();
+    app.gameManager.addGame(game);
+    const gameID = app.gameManager.getLatestId();
+    game.placeTile('4D');
+    request(app)
+      .post('/select-surviving-corporation')
+      .set('Cookie', [`gameId=${gameID}`, 'playerId=0'])
+      .set('content-type', 'application/json')
+      .send({ corporationName: 'Hydra' })
+      .expect({ error: false, message: '' })
+      .expect(200, done);
+  });
+});
+
+describe('/select-defunct-corporation', function() {
+  beforeEach(function() {
+    app.gameManager = new GameManager();
+  });
+
+  it('should continue merging with selected defunct corporation in merger of 4 same size corporation ', function(done) {
+    const game = merger4SameSizeCorpTest();
+    app.gameManager.addGame(game);
+    const gameID = app.gameManager.getLatestId();
+    game.placeTile('4D');
+    const survivingCorporation = game.getCorporation('Hydra');
+    game.continueMerging(survivingCorporation);
+    request(app)
+      .post('/select-defunct-corporation')
+      .set('Cookie', [`gameId=${gameID}`, 'playerId=0'])
+      .set('content-type', 'application/json')
+      .send({ corporationName: 'Phoenix' })
+      .expect({ error: false, message: '' })
       .expect(200, done);
   });
 });
