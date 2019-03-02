@@ -4,7 +4,7 @@ const { initializeGame } = require('./util.js');
 const ActivityLog = require('./models/activity_log');
 const { validateGameSession, validateTurn } = require('./validators');
 // const requiredFunctionality = require('../helpers/main.js')
-//   .merger_4_same_size_test;
+// .replaceUnplayableTilesTest;
 
 const hostGame = function(req, res) {
   let { host, totalPlayers } = req.body;

@@ -13,10 +13,10 @@ const Tile = require('../../src/models/tile.js');
 const { getCorporations, getFaceDownCluster } = require('../../src/util.js');
 
 const {
-  merger_big_small_test,
-  merger_small_big_test,
-  merger_2_same_size_corp_test,
-  merger_4_same_size_test
+  mergerBigSmallTest,
+  mergerSmallBigTest,
+  merger2SameSizeCorpTest,
+  merger4SameSizeCorpTest
 } = require('../../helpers/main.js');
 
 const generateTiles = function(row, noOfTiles) {
@@ -648,7 +648,7 @@ describe('Game', function() {
 
 describe('merger of two different size corporations', function() {
   it('should merge defunct corporation to surviving corporation', function() {
-    const game = merger_big_small_test();
+    const game = mergerBigSmallTest();
     const survivingCorpTiles = [
       { position: { row: 0, column: 0 }, value: '1A' },
       { position: { row: 0, column: 1 }, value: '2A' },
@@ -667,7 +667,7 @@ describe('merger of two different size corporations', function() {
   });
 
   it('should merge defunct corporation to surviving corporation ', function() {
-    const game = merger_small_big_test();
+    const game = mergerSmallBigTest();
     game.placeTile('3A');
     const survivingCorpTiles = [
       { position: { row: 0, column: 0 }, value: '1A' },
@@ -689,7 +689,7 @@ describe('merger of two different size corporations', function() {
 
 describe('Two same size copopration merger', function() {
   it('should ask to select surviving corporation', function() {
-    const game = merger_2_same_size_corp_test();
+    const game = merger2SameSizeCorpTest();
     game.placeTile('3A');
     expect(game.turnManager.getAction(0).name).to.equal(
       'SELECT_SURVIVING_CORPORATION'
@@ -698,7 +698,7 @@ describe('Two same size copopration merger', function() {
 });
 
 describe('Four same size copopration merger', function() {
-  const game = merger_4_same_size_test();
+  const game = merger4SameSizeCorpTest();
   it('should ask to select surviving corporation', function() {
     game.placeTile('4D');
     expect(game.turnManager.getAction(0).name).to.equal(
