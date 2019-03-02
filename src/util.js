@@ -89,6 +89,22 @@ const getStocksCount = function(corporationName, stockHolder) {
   return stockHolder.getStocksOf(corporationName);
 };
 
+const createError = function(error,message) {
+  return { error, message };
+};
+
+const createTrueError = createError.bind(null,true);
+const createFalseError = createError.bind(null,false,'');
+
+const createReplaceLog = function(unPlayableTiles, newTiles) {
+  const unPlayableTileValues = unPlayableTiles
+    .map(tile => tile.getValue())
+    .join(',');
+  const newTileValues = newTiles.map(tile => tile.getValue()).join(',');
+  const log = `Your unplayable tiles ${unPlayableTileValues} are replaced with ${newTileValues}`;
+  return log;
+};
+
 module.exports = {
   random,
   initializeGame,
@@ -100,5 +116,8 @@ module.exports = {
   getCorporationData,
   getTileWithCorporationName,
   getStockHoldersByCount,
-  getStocksCount
+  getStocksCount,
+  createTrueError,
+  createFalseError,
+  createReplaceLog
 };

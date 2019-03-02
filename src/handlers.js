@@ -1,6 +1,10 @@
 const Game = require('./models/game.js');
 const Player = require('./models/player.js');
-const { initializeGame } = require('./util.js');
+const {
+  initializeGame,
+  createTrueError,
+  createFalseError
+} = require('./util.js');
 const ActivityLog = require('./models/activity_log');
 const { validateGameSession, validateTurn } = require('./validators');
 // const requiredFunctionality = require('../helpers/main.js')
@@ -24,14 +28,14 @@ const joinGame = function(req, res) {
   const { gameManager } = res.app;
 
   if (!gameManager.doesGameExist(gameID)) {
-    res.send({ error: true, message: `No Such Game with ID ${gameID}` });
+    res.send(createTrueError(`No Such Game with ID ${gameID}`));
     return;
   }
 
   const game = gameManager.getGameById(gameID);
 
   if (game.isFull()) {
-    res.send({ error: true, message: 'Sorry! Game has already started.' });
+    res.send(createTrueError('Sorry! Game has already started.'));
     return;
   }
 
@@ -40,7 +44,7 @@ const joinGame = function(req, res) {
   game.addPlayer(player);
   res.cookie('gameId', `${gameID}`);
   res.cookie('playerId', `${playerId}`);
-  res.send({ error: false, message: '' });
+  res.send(createFalseError());
   if (game.isFull()) {
     // gameManager.games[gameID] = requiredFunctionality();
     initializeGame(game);
@@ -96,7 +100,7 @@ const buyStocks = function(req, res) {
   const details = req.body;
   const game = req.game;
   game.buyStocks(details);
-  res.send({ error: false, message: '' });
+  res.send(createFalseError());
 };
 
 const selectSurvivingCorporation = function(req, res) {
@@ -104,7 +108,7 @@ const selectSurvivingCorporation = function(req, res) {
   const game = req.game;
   const survivingCorporation = game.getCorporation(corporationName);
   game.continueMerging(survivingCorporation);
-  res.send({ error: false, message: '' });
+  res.send(createFalseError());
 };
 
 const selectDefunctCorporation = function(req, res) {
@@ -113,7 +117,7 @@ const selectDefunctCorporation = function(req, res) {
   const defunctCorporation = game.getCorporation(corporationName);
   const { survivingCorporation } = game.turnManager.getStack();
   game.mergeCorporations(survivingCorporation, defunctCorporation);
-  res.send({ error: false, message: '' });
+  res.send(createFalseError());
 };
 
 module.exports = {

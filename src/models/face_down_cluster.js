@@ -10,6 +10,10 @@ class FaceDownCluster {
   getStrength() {
     return this.tiles.length;
   }
+
+  removeTiles(predicate){
+    this.tiles = this.tiles.filter(predicate);
+  }
 }
 
 module.exports = FaceDownCluster;

@@ -6,7 +6,10 @@ const {
   getCorporationData,
   buyStocks,
   getStockHoldersByCount,
-  getStocksCount
+  getStocksCount,
+  createTrueError,
+  createFalseError,
+  createReplaceLog
 } = require('../util.js');
 class Game {
   constructor(maxPlayers, random, activityLog) {
@@ -247,7 +250,7 @@ class Game {
     );
   }
 
-  isUnplayableTile(tile) {
+  isFounding8thCorporation(tile) { //for 8th corporation validation   isTemporaryUnplayable(tile)
     return (
       !this.isMerger(tile) &&
       this.isFoundingCorporation(tile) &&
@@ -258,24 +261,30 @@ class Game {
   validatePlacedTile(tile) {
     const log = `You can't place ${tile.getValue()} place any other tile`;
     this.getCurrentPlayer().updateLog(log);
-    return { error: true, message: log };
+    return createTrueError(log);
+  }
+
+  isUnplayableTile(tile) {
+    const adjacentCorporations = this.getCorporationsAdjacentTo(tile);
+    const safeCorporations = adjacentCorporations.filter(corporation =>
+      corporation.isSafe()
+    );
+    return safeCorporations.length > 1;
   }
 
   placeTile(tileValue) {
     const player = this.getCurrentPlayer();
     const tile = player.findTileByValue(tileValue);
+
     if (!tile) {
-      return {
-        error: true,
-        message: `You don't have ${tileValue} tile`
-      };
+      const message = `You don't have ${tileValue} tile`;
+      return createTrueError(message);
     }
 
     let placedUnincorporatedTile = true;
     let log = `${player.getName()} placed tile ${tileValue} on board`;
-    const status = { error: false, message: '' };
 
-    if (this.isUnplayableTile(tile)) {
+    if (this.isFounding8thCorporation(tile)) {
       return this.validatePlacedTile(tile);
     }
 
@@ -303,7 +312,7 @@ class Game {
       this.changeActionToBuyStocks();
     }
 
-    return status;
+    return createFalseError();
   }
 
   initiateMerger() {
@@ -537,7 +546,9 @@ class Game {
     this.provideNewTile();
     this.turnManager.changeTurn();
     this.turnManager.changeAction({ name: 'PLACE_A_TILE', data: {} });
+    this.faceDownCluster.removeTiles((tile) => !this.isUnplayableTile(tile));
     this.updateTurnLog();
+    this.replaceUnplayableTiles();
   }
 
   buyStocks(stockDetails) {
@@ -618,6 +629,18 @@ class Game {
     }
     surviving.concatTiles(adjacentTile.concat(placedTile));
     this.checkGameEnd();
+  }
+
+  replaceUnplayableTiles() {
+    const player = this.getCurrentPlayer();
+    const playerTiles = player.getTiles();
+    const unPlayableTiles = playerTiles.filter(tile=>this.isUnplayableTile(tile));
+    if (unPlayableTiles.length == 0) {return;}
+    const newTiles = this.getNRandomTiles(unPlayableTiles.length);
+    const log = createReplaceLog(unPlayableTiles, newTiles);
+    player.updateLog(log);
+    unPlayableTiles.forEach(tile => player.removeTile(tile.getPosition()));
+    newTiles.forEach(tile => player.addTile(tile));
   }
 }
 

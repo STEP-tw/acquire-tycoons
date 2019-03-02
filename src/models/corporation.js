@@ -68,6 +68,10 @@ class Corporation {
   resetTiles(){
     this.tiles = [];
   }
+
+  isSafe(){
+    return this.getSize() >= 11;
+  }
 }
 
 module.exports = Corporation;

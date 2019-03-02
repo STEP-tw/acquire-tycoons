@@ -16,7 +16,8 @@ const {
   mergerBigSmallTest,
   mergerSmallBigTest,
   merger2SameSizeCorpTest,
-  merger4SameSizeCorpTest
+  merger4SameSizeCorpTest,
+  replaceUnplayableTilesTest
 } = require('../../helpers/main.js');
 
 const generateTiles = function(row, noOfTiles) {
@@ -727,5 +728,26 @@ describe('Four same size copopration merger', function() {
 
     expect(defunctCorporation.getSize()).to.equal(0);
     expect(survivingCorporation.getSize()).to.equal(6);
+  });
+});
+
+describe('replaceUnplayableTiles', function() {
+  let game;
+  beforeEach(() => {
+    game = replaceUnplayableTilesTest();
+  });
+  it('should remove all the unplayable tiles from the player when it is changing the turn', function() {
+    expect(game.players[0].tiles.some(tile => tile.isSameValue('4A'))).true;
+    game.placeTile('3D');
+    game.buyStocks({});
+    expect(game.players[0].tiles.some(tile => tile.isSameValue('4A'))).false;
+  });
+
+  it('should change the live status bar of player after replacing tiles', function () {
+    game.placeTile('3D');
+    game.buyStocks({});
+    const replacedTile = game.getCurrentPlayer().getTiles()[5].getValue();
+    const expectedLog = `Your unplayable tiles 4A are replaced with ` + replacedTile;
+    expect(game.getCurrentPlayer().getLog()).to.equal(expectedLog);
   });
 });
