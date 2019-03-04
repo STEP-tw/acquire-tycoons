@@ -180,16 +180,28 @@ const redirectToHomepage = function(document) {
   document.location.href = '/';
 };
 
+const createRankRow = function(document, playerStatus) {
+  const { name, rank, money } = playerStatus;
+  const row = createElement(document, 'tr');
+  const rankCell = createElement(document, 'td');
+  rankCell.innerText = rank;
+  const nameCell = createElement(document, 'td');
+  nameCell.innerText = name;
+  const moneyCell = createElement(document, 'td');
+  moneyCell.innerText = money;
+  appendChildren(row, [rankCell, nameCell, moneyCell]);
+  return row;
+};
+
 const showGameResults = function(id, document, gameResults) {
   clearInterval(id);
-  const gameResultsHtml = gameResults
-    .map(gameResult => {
-      const { playerName, rank, money } = gameResult;
-      return `<tr><td>${rank}</td><td>${playerName}</td><td>${money}</td></tr>`;
-    })
-    .join('');
+  const { playersEndStatus, cause } = gameResults;
+  const gameResultsHtml = playersEndStatus.map(
+    createRankRow.bind(null, document)
+  );
   document.getElementById('game-results-overlay').style.display = 'flex';
-  document.getElementById('game-results-body').innerHTML = gameResultsHtml;
+  document.getElementById('game-end-cause').innerText = cause;
+  appendChildren(document.getElementById('game-results-body'), gameResultsHtml);
 };
 
 const displayPlayerMoney = function(document, money) {

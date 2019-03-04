@@ -475,7 +475,7 @@ class Game {
     });
     const sortedPlayers = _.sortBy(this.players, 'money').reverse();
     const results = sortedPlayers.map((player, index) => ({
-      playerName: player.getName(),
+      name: player.getName(),
       money: player.getMoney(),
       rank: index + 1
     }));
@@ -515,9 +515,10 @@ class Game {
     }
 
     const gameResults = {
-      ranks: this.getResults(),
+      playersEndStatus: this.getResults(),
       cause
     };
+    this.players.forEach(player => player.updateLog(`Game ends. ${cause}`));
     this.turnManager.changeAction({ name: 'END_GAME', data: gameResults });
     this.turnManager.setActionGlobal();
   }
@@ -658,6 +659,7 @@ class Game {
       currentPriceOfDefunctStock
     };
     this.changeActionToSellAndTrade(sellTradeData);
+    //this.checkGameEnd()
   }
 
   changeActionToSellAndTrade(sellTradeData) {

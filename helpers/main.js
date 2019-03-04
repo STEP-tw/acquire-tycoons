@@ -2,7 +2,7 @@ const mergerBigSmall = require('./merger_big_small.js');
 const mergerSmallBig = require('./merger_small_big.js');
 const merger2SameSizeCorp = require('./merger_2_same_size_corp.js');
 const generateIndexes = require('./util.js');
-const merger_of_3corps = require('./merger_of_3corps.js');
+// const merger_of_3corps = require('./merger_of_3corps.js');
 const merger4SameSize = require('./merger_4_same_size.js');
 
 const replaceUnplayableTiles = require('./replace_unplayable_tiles');
@@ -50,8 +50,8 @@ const merger2SameSizeCorpTest = () =>
     randomGenerator(merger2SameSizeCorp.array),
     merger2SameSizeCorp.processes
   );
-const merger3CorpTest = () =>
-  runGame(randomGenerator(merger_of_3corps.array), merger_of_3corps.processes);
+// const merger3CorpTest = () =>
+//   runGame(randomGenerator(merger_of_3corps.array), merger_of_3corps.processes);
 const merger4SameSizeCorpTest = () =>
   runGame(randomGenerator(merger4SameSize.array), merger4SameSize.processes);
 const replaceUnplayableTilesTest = () =>
@@ -65,6 +65,6 @@ module.exports = {
   mergerSmallBigTest,
   merger2SameSizeCorpTest,
   merger4SameSizeCorpTest,
-  merger3CorpTest,
+  // merger3CorpTest,
   replaceUnplayableTilesTest
 };

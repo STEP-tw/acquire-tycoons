@@ -9,7 +9,7 @@ const ActivityLog = require('./models/activity_log');
 const { validateGameSession, validateTurn } = require('./validators');
 // const requiredFunctionality = require('../helpers/main.js').mergerBigSmallTest;
 // const requiredFunctionality = require('../helpers/main.js')
-//   .merger_4_same_size_test;
+//   .merger4SameSizeCorpTest;
 // const requiredFunctionality = require('../helpers/main.js')
 // .merger_big_small_test;
 

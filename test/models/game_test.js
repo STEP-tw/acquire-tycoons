@@ -78,6 +78,7 @@ describe('Game', function() {
       game.initialize(corporations, faceDownCluster);
       expect(game.players[1].getTiles()).to.have.length(6);
     });
+
     describe('isFull', function() {
       it('should return true when current player number is equal to maximum player number', function() {
         const player1 = new Player('Swagata', 1);
@@ -104,6 +105,7 @@ describe('Game', function() {
       game.addPlayer(player2);
       game.addPlayer(player3);
     });
+
     it('should return false when game is not initialized', function() {
       expect(game.getGameStatus()).false;
     });
@@ -139,6 +141,7 @@ describe('Game', function() {
       const faceDownCluster = getFaceDownCluster(tilesData);
       game.initialize(corporations, faceDownCluster);
     });
+
     describe('initialize', function() {
       it('getUnincorpratedTiles', function() {
         expect(game.getUnincorporatedTiles()).to.have.length(4);
@@ -295,6 +298,7 @@ describe('Game', function() {
         ];
         expect(actualOutput).to.deep.equal(expectedOutput);
       });
+
       it('should not allow to place a tile when player try to establish 8th corporation', function() {
         const corp1Tile = new Tile({ row: 2, column: 3 }, '4C');
         const corp4Tile = new Tile({ row: 2, column: 5 }, '6C');
@@ -535,6 +539,7 @@ describe('Game', function() {
       it("shouldn't provide any stock holders of given corporation at beginning", function() {
         expect(game.getStockHolders('Sackson')).to.length(0);
       });
+
       it('should provide (all the stock holders of given corporation', function() {
         player1.addStocks({ name: 'Sackson', numberOfStock: 2 });
         player2.addStocks({ name: 'Sackson', numberOfStock: 2 });
@@ -653,31 +658,38 @@ describe('Game', function() {
       });
 
       it('should change the action to END_GAME if all active corps are safe', function() {
+        const cause = 'All active corporations are safe !';
         const expectedOutput = {
-          ranks: [
-            { playerName: 'Arnab', money: 6000, rank: 1 },
-            { playerName: 'Gayatri', money: 6000, rank: 2 },
-            { playerName: 'Swagata', money: 6000, rank: 3 },
-            { playerName: 'Dhiru', money: 6000, rank: 4 }
+          playersEndStatus: [
+            { name: 'Arnab', money: 6000, rank: 1 },
+            { name: 'Gayatri', money: 6000, rank: 2 },
+            { name: 'Swagata', money: 6000, rank: 3 },
+            { name: 'Dhiru', money: 6000, rank: 4 }
           ],
-          cause: 'All active corporations are safe !'
+          cause
         };
         game.corporations[0].tiles = generateTiles('A', 11);
         game.checkGameEnd();
+        expect(player1.getLog()).to.equal(`Game ends. ${cause}`);
+        expect(player2.getLog()).to.equal(`Game ends. ${cause}`);
+        expect(player3.getLog()).to.equal(`Game ends. ${cause}`);
+        expect(player4.getLog()).to.equal(`Game ends. ${cause}`);
         expect(game.turnManager.getAction(0).name).to.equal('END_GAME');
         expect(game.turnManager.getAction(0).data).to.deep.equal(
           expectedOutput
         );
       });
+
       it('should change the action to END_GAME if size of any corp is more than 40', function() {
+        const cause = `Size of ${game.corporations[0].getName()} exceeds 40 !`;
         const expectedOutput = {
-          ranks: [
-            { playerName: 'Arnab', money: 6000, rank: 1 },
-            { playerName: 'Gayatri', money: 6000, rank: 2 },
-            { playerName: 'Swagata', money: 6000, rank: 3 },
-            { playerName: 'Dhiru', money: 6000, rank: 4 }
+          playersEndStatus: [
+            { name: 'Arnab', money: 6000, rank: 1 },
+            { name: 'Gayatri', money: 6000, rank: 2 },
+            { name: 'Swagata', money: 6000, rank: 3 },
+            { name: 'Dhiru', money: 6000, rank: 4 }
           ],
-          cause: `Size of ${game.corporations[0].getName()} exceeds 40 !`
+          cause
         };
 
         game.corporations[0].concatTiles(generateTiles('A', 11));
@@ -685,6 +697,12 @@ describe('Game', function() {
         game.corporations[0].concatTiles(generateTiles('C', 11));
         game.corporations[0].concatTiles(generateTiles('D', 11));
         game.checkGameEnd();
+
+        expect(player1.getLog()).to.equal(`Game ends. ${cause}`);
+        expect(player2.getLog()).to.equal(`Game ends. ${cause}`);
+        expect(player3.getLog()).to.equal(`Game ends. ${cause}`);
+        expect(player4.getLog()).to.equal(`Game ends. ${cause}`);
+
         expect(game.turnManager.getAction(0).name).to.equal('END_GAME');
         expect(game.turnManager.getAction(0).data).to.deep.equal(
           expectedOutput
@@ -795,6 +813,7 @@ describe('Four same size copopration merger', function() {
   beforeEach(function() {
     game = merger4SameSizeCorpTest();
   });
+
   it('should ask to select surviving corporation', function() {
     game.placeTile('4D');
     expect(game.turnManager.getAction(0).name).to.equal(
@@ -828,6 +847,7 @@ describe('replaceUnplayableTiles', function() {
   beforeEach(() => {
     game = replaceUnplayableTilesTest();
   });
+
   it('should remove all the unplayable tiles from the player when it is changing the turn', function() {
     expect(game.players[0].tiles.some(tile => tile.isSameValue('4A'))).true;
     game.placeTile('3D');
