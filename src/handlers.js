@@ -77,7 +77,6 @@ const serveGameData = function(req, res) {
   const { playerId } = req.cookies;
   const { game } = req;
   const gameData = game.getDetails(playerId);
-  gameData.logs = game.getLogs();
   res.send(gameData);
 };
 

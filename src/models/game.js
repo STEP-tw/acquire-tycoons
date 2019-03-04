@@ -250,7 +250,8 @@ class Game {
     );
   }
 
-  isFounding8thCorporation(tile) { //for 8th corporation validation   isTemporaryUnplayable(tile)
+  isFounding8thCorporation(tile) {
+    //for 8th corporation validation   isTemporaryUnplayable(tile)
     return (
       !this.isMerger(tile) &&
       this.isFoundingCorporation(tile) &&
@@ -546,7 +547,7 @@ class Game {
     this.provideNewTile();
     this.turnManager.changeTurn();
     this.turnManager.changeAction({ name: 'PLACE_A_TILE', data: {} });
-    this.faceDownCluster.removeTiles((tile) => !this.isUnplayableTile(tile));
+    this.faceDownCluster.removeTiles(tile => !this.isUnplayableTile(tile));
     this.updateTurnLog();
     this.replaceUnplayableTiles();
   }
@@ -593,15 +594,20 @@ class Game {
     const player = this.getPlayerDetails(playerId);
     const action = this.turnManager.getAction(playerId);
     const lastPlacedTileId = this.lastPlacedTile.getValue();
-    return { board, corporations, players, player, action, lastPlacedTileId };
+    const logs = this.activityLog.getLogs();
+    return {
+      board,
+      corporations,
+      players,
+      player,
+      action,
+      lastPlacedTileId,
+      logs
+    };
   }
 
   getPlayers() {
     return this.players;
-  }
-
-  getLogs() {
-    return this.activityLog.getLogs();
   }
 
   mergeCorporations(surviving, defunct) {
@@ -634,8 +640,12 @@ class Game {
   replaceUnplayableTiles() {
     const player = this.getCurrentPlayer();
     const playerTiles = player.getTiles();
-    const unPlayableTiles = playerTiles.filter(tile=>this.isUnplayableTile(tile));
-    if (unPlayableTiles.length == 0) {return;}
+    const unPlayableTiles = playerTiles.filter(tile =>
+      this.isUnplayableTile(tile)
+    );
+    if (unPlayableTiles.length == 0) {
+      return;
+    }
     const newTiles = this.getNRandomTiles(unPlayableTiles.length);
     const log = createReplaceLog(unPlayableTiles, newTiles);
     player.updateLog(log);
