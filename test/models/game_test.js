@@ -191,7 +191,7 @@ describe('Game', function() {
         expect(game.getCurrentPlayer()).to.deep.equal(player1);
       });
 
-      it('should return error when player doesn\'t contains a tile', function() {
+      it("should return error when player doesn't contains a tile", function() {
         const placedTile = '2A';
         const expectedOutput = {
           error: true,
@@ -200,7 +200,7 @@ describe('Game', function() {
 
         expect(game.placeTile(placedTile)).to.deep.equal(expectedOutput);
         expect(player1.tiles.length).to.equal(6);
-        expect(game.getCurrentPlayer().getLog()).to.equal('It\'s your turn');
+        expect(game.getCurrentPlayer().getLog()).to.equal("It's your turn");
         expect(game.turnManager.getAction(0).name).to.equal('PLACE_A_TILE');
         expect(game.turnManager.isCurrentPlayer(0)).true;
       });
@@ -214,7 +214,7 @@ describe('Game', function() {
 
         expect(game.placeTile(placedTile)).to.deep.equal(expectedOutput);
         expect(player1.tiles.length).to.equal(6);
-        expect(game.getCurrentPlayer().getLog()).to.equal('It\'s your turn');
+        expect(game.getCurrentPlayer().getLog()).to.equal("It's your turn");
         expect(game.turnManager.getAction(0).name).to.equal('DO_NOTHING');
         expect(game.getCurrentPlayer()).to.deep.equal(player2);
       });
@@ -250,7 +250,7 @@ describe('Game', function() {
         expect(game.turnManager.getAction(0).name).to.equal('BUY_STOCKS');
       });
 
-      it('should add all connected tiles to the corporation\'s tile when tile is adjacent to corporation\'s tile', function() {
+      it("should add all connected tiles to the corporation's tile when tile is adjacent to corporation's tile", function() {
         game.corporations[0].tiles = [];
 
         const unincorporatedTile1 = new Tile({ row: 0, column: 8 }, '9A');
@@ -320,7 +320,7 @@ describe('Game', function() {
         expect(game.getCurrentPlayer().getTiles().length).to.equal(6);
         expect(game.getCurrentPlayer()).to.deep.equal(player1);
         expect(game.getCurrentPlayer().getLog()).to.equal(
-          'You can\'t place 5A place any other tile'
+          "You can't place 5A place any other tile"
         );
         expect(game.turnManager.getAction(0).name).to.equal('PLACE_A_TILE');
       });
@@ -438,7 +438,7 @@ describe('Game', function() {
     });
 
     describe('changeActionToBuyStocks', function() {
-      it('shouldn\'t change the action to buy stocks when there are no active corporation and change the turn', function() {
+      it("shouldn't change the action to buy stocks when there are no active corporation and change the turn", function() {
         game.changeActionToBuyStocks();
         const action = game.turnManager.getAction(0);
         expect(action.name).to.equal('DO_NOTHING');
@@ -532,7 +532,7 @@ describe('Game', function() {
     });
 
     describe('getStockHolders', function() {
-      it('shouldn\'t provide any stock holders of given corporation at beginning', function() {
+      it("shouldn't provide any stock holders of given corporation at beginning", function() {
         expect(game.getStockHolders('Sackson')).to.length(0);
       });
       it('should provide (all the stock holders of given corporation', function() {
@@ -585,27 +585,50 @@ describe('Game', function() {
     });
 
     describe('hasEnded', function() {
+      let cause = 'All active corporations are safe !';
+
       it('should return false when initialized', function() {
-        expect(game.hasEnded()).false;
+        expectedOutput = {
+          gameEnded: false
+        };
+        expect(game.hasEnded()).to.deep.equal(expectedOutput);
       });
-      it('should return true if the game end condition satisfied', function() {
+
+      it('should return true if the active corporation is safe', function() {
         game.corporations[0].tiles = generateTiles('A', 11);
-        expect(game.hasEnded()).true;
+        expectedOutput = {
+          gameEnded: true,
+          cause
+        };
+        expect(game.hasEnded()).to.deep.equal(expectedOutput);
       });
-      it('should return true if the game end condition satisfied', function() {
+
+      it('should return true if all the active corporations are safe', function() {
+        expectedOutput = {
+          gameEnded: true,
+          cause
+        };
         game.corporations[0].tiles = generateTiles('A', 11);
         game.corporations[3].tiles = generateTiles('D', 11);
-        expect(game.hasEnded()).true;
+        expect(game.hasEnded()).to.deep.equal(expectedOutput);
       });
 
       it('should return false if there is any active corporation size less than 11', function() {
+        expectedOutput = {
+          gameEnded: false,
+          cause
+        };
         game.corporations[0].tiles = generateTiles('A', 10);
         game.corporations[2].tiles = generateTiles('C', 11);
-
-        expect(game.hasEnded()).false;
+        expect(game.hasEnded()).to.deep.equal(expectedOutput);
       });
 
-      it('should return true if there is any active corporation size more than 41', function() {
+      it('should return true if there is any active corporation size more than 40', function() {
+        expectedOutput = {
+          gameEnded: true,
+          cause: `Size of ${game.corporations[0].getName()} exceeds 40 !`
+        };
+
         game.corporations[0].tiles = generateTiles('A', 11);
         game.corporations[0].tiles = game.corporations[0].tiles.concat(
           generateTiles('B', 11)
@@ -618,7 +641,7 @@ describe('Game', function() {
         );
 
         game.corporations[1].tiles = generateTiles('E', 9);
-        expect(game.hasEnded()).true;
+        expect(game.hasEnded()).to.deep.equal(expectedOutput);
       });
     });
 
@@ -629,14 +652,38 @@ describe('Game', function() {
         expect(game.turnManager.getAction(0).name).to.equal('BUY_STOCKS');
       });
 
-      it('should change the action to END_GAME if the game has not ended', function() {
-        const expectedOutput = [
-          { playerName: 'Arnab', money: 6000, rank: 1 },
-          { playerName: 'Gayatri', money: 6000, rank: 2 },
-          { playerName: 'Swagata', money: 6000, rank: 3 },
-          { playerName: 'Dhiru', money: 6000, rank: 4 }
-        ];
+      it('should change the action to END_GAME if all active corps are safe', function() {
+        const expectedOutput = {
+          ranks: [
+            { playerName: 'Arnab', money: 6000, rank: 1 },
+            { playerName: 'Gayatri', money: 6000, rank: 2 },
+            { playerName: 'Swagata', money: 6000, rank: 3 },
+            { playerName: 'Dhiru', money: 6000, rank: 4 }
+          ],
+          cause: 'All active corporations are safe !'
+        };
         game.corporations[0].tiles = generateTiles('A', 11);
+        game.checkGameEnd();
+        expect(game.turnManager.getAction(0).name).to.equal('END_GAME');
+        expect(game.turnManager.getAction(0).data).to.deep.equal(
+          expectedOutput
+        );
+      });
+      it('should change the action to END_GAME if size of any corp is more than 40', function() {
+        const expectedOutput = {
+          ranks: [
+            { playerName: 'Arnab', money: 6000, rank: 1 },
+            { playerName: 'Gayatri', money: 6000, rank: 2 },
+            { playerName: 'Swagata', money: 6000, rank: 3 },
+            { playerName: 'Dhiru', money: 6000, rank: 4 }
+          ],
+          cause: `Size of ${game.corporations[0].getName()} exceeds 40 !`
+        };
+
+        game.corporations[0].concatTiles(generateTiles('A', 11));
+        game.corporations[0].concatTiles(generateTiles('B', 11));
+        game.corporations[0].concatTiles(generateTiles('C', 11));
+        game.corporations[0].concatTiles(generateTiles('D', 11));
         game.checkGameEnd();
         expect(game.turnManager.getAction(0).name).to.equal('END_GAME');
         expect(game.turnManager.getAction(0).data).to.deep.equal(
@@ -788,11 +835,15 @@ describe('replaceUnplayableTiles', function() {
     expect(game.players[0].tiles.some(tile => tile.isSameValue('4A'))).false;
   });
 
-  it('should change the live status bar of player after replacing tiles', function () {
+  it('should change the live status bar of player after replacing tiles', function() {
     game.placeTile('3D');
     game.buyStocks({});
-    const replacedTile = game.getCurrentPlayer().getTiles()[5].getValue();
-    const expectedLog = `Your unplayable tiles 4A are replaced with ` + replacedTile;
+    const replacedTile = game
+      .getCurrentPlayer()
+      .getTiles()[5]
+      .getValue();
+    const expectedLog =
+      `Your unplayable tiles 4A are replaced with ` + replacedTile;
     expect(game.getCurrentPlayer().getLog()).to.equal(expectedLog);
   });
 });

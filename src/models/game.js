@@ -464,6 +464,10 @@ class Game {
     this.distributeReward(minorStockHolders, minorityReward, 'minority bonus');
   }
 
+  getActiveCorporations() {
+    return this.corporations.filter(corporation => corporation.isActive());
+  }
+
   getResults() {
     this.getActiveCorporations().forEach(corporation => {
       this.players.forEach(player => player.sellAllStocks(corporation));
@@ -478,34 +482,44 @@ class Game {
     return results;
   }
 
-  getActiveCorporations() {
-    return this.corporations.filter(corporation => corporation.isActive());
-  }
-
   hasEnded() {
     const activeCorporations = this.getActiveCorporations();
-    if (activeCorporations.length < 1) {
-      return false;
+
+    if (activeCorporations.length == 0) {
+      return { gameEnded: false };
     }
+
+    let cause = 'All active corporations are safe !';
 
     const areAllCorporationsSafe = activeCorporations.every(
       corporation => corporation.getSize() >= 11
     );
 
-    const isAnyCorporationAbove41 = activeCorporations.some(
+    const corporationAbove41 = activeCorporations.find(
       corporation => corporation.getSize() >= 41
     );
-    return areAllCorporationsSafe || isAnyCorporationAbove41;
+
+    if (corporationAbove41) {
+      cause = `Size of ${corporationAbove41.getName()} exceeds 40 !`;
+    }
+
+    const gameEnded = areAllCorporationsSafe || corporationAbove41 != undefined;
+    return { gameEnded, cause };
   }
 
   checkGameEnd() {
-    if (this.hasEnded()) {
-      const gameResults = this.getResults();
-      this.turnManager.changeAction({ name: 'END_GAME', data: gameResults });
-      this.turnManager.setActionGlobal();
+    const { gameEnded, cause } = this.hasEnded();
+    if (!gameEnded) {
+      this.changeActionToBuyStocks();
       return;
     }
-    this.changeActionToBuyStocks();
+
+    const gameResults = {
+      ranks: this.getResults(),
+      cause
+    };
+    this.turnManager.changeAction({ name: 'END_GAME', data: gameResults });
+    this.turnManager.setActionGlobal();
   }
 
   changeActionToFoundCorporation(corporations) {
