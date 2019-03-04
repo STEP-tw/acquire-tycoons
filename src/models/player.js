@@ -122,7 +122,11 @@ class Player {
     return this.stocks[corporationName];
   }
 
-  tradeStocks(survivingCorporationName, defunctCorporationName, numberOfStocks) {
+  tradeStocks(
+    survivingCorporationName,
+    defunctCorporationName,
+    numberOfStocks
+  ) {
     this.stocks[survivingCorporationName] += numberOfStocks / 2;
     this.stocks[defunctCorporationName] -= numberOfStocks;
   }

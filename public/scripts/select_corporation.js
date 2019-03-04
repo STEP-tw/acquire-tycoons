@@ -1,26 +1,26 @@
-const createCorporationsViews = function (
+const createCorporationsViews = function(
   document,
   corporations,
   onclickListener
 ) {
   const corporationNames = corporations.map(corporation => corporation.name);
   return corporationNames.map(name => {
-    const corporationView = document.createElement("div");
-    corporationView.classList.add("inactive-corporation");
+    const corporationView = document.createElement('div');
+    corporationView.classList.add('inactive-corporation');
     corporationView.classList.add(getClassNameForCorporation(name));
 
     const iconAttributes = {
-      className: "corporation-icon",
+      className: 'corporation-icon',
       innerText: name[0]
     };
 
-    const corporationIcon = createElement(document, "p", iconAttributes);
+    const corporationIcon = createElement(document, 'p', iconAttributes);
 
     const nameAttributes = {
-      className: "inactive-corporation-name",
+      className: 'inactive-corporation-name',
       innerText: name
     };
-    const corporationName = createElement(document, "p", nameAttributes);
+    const corporationName = createElement(document, 'p', nameAttributes);
     corporationView.appendChild(corporationIcon);
     corporationView.appendChild(corporationName);
     corporationView.onclick = onclickListener.bind(null, name);
@@ -28,20 +28,21 @@ const createCorporationsViews = function (
   });
 };
 
-const getSelectCorporationOverlay = function (document) {
-  return document.getElementById("select-corporation-overlay");
+const getSelectCorporationOverlay = function(document) {
+  return document.getElementById('select-corporation-overlay');
 };
 
-const closeOverlay = function (document) {
-  getSelectCorporationOverlay(document).style.display = "none";
+const closeOverlay = function(document, id) {
+  document.getElementById(id).style.display = 'none';
 };
 
-const handleSelectedCorporation = function (requestURL, corporationName) {
-  closeOverlay(document);
+const handleSelectedCorporation = function(requestURL, corporationName) {
+  const overlayId = 'select-corporation-overlay';
+  closeOverlay(document, overlayId);
   fetch(requestURL, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "content-type": "application/json"
+      'content-type': 'application/json'
     },
     body: JSON.stringify({ corporationName })
   }).then(() => {
@@ -49,23 +50,23 @@ const handleSelectedCorporation = function (requestURL, corporationName) {
   });
 };
 
-const selectSurvivingCorporation = function (corporationName) {
+const selectSurvivingCorporation = function(corporationName) {
   console.log(corporationName);
 };
 
-const showSelectCorporationPopup = function (
+const showSelectCorporationPopup = function(
   onclickListener,
   popupHeading,
   document,
   corporations
 ) {
-  getSelectCorporationOverlay(document).style.display = "flex";
+  getSelectCorporationOverlay(document).style.display = 'flex';
 
   const corporationsContainer = document.getElementById(
-    "corporations-container"
+    'corporations-container'
   );
 
-  const popupHeader = document.getElementById("popup-heading");
+  const popupHeader = document.getElementById('popup-heading');
   popupHeader.innerText = popupHeading;
 
   const corporationsViews = createCorporationsViews(
@@ -73,6 +74,6 @@ const showSelectCorporationPopup = function (
     corporations,
     onclickListener
   );
-  corporationsContainer.innerHTML = "";
+  corporationsContainer.innerHTML = '';
   appendChildren(corporationsContainer, corporationsViews);
 };

@@ -651,25 +651,21 @@ class Game {
       return;
     }
     surviving.concatTiles(adjacentTile.concat(placedTile));
-    this.changeActionToSellAndTrade(
+
+    const sellTradeData = {
       survivingCorporationName,
       defunctCorporationName,
       currentPriceOfDefunctStock
-    );
+    };
+    this.changeActionToSellAndTrade(sellTradeData);
   }
 
-  changeActionToSellAndTrade(
-    survivingCorporationName,
-    defunctCorporationName,
-    currentPriceOfDefunctStock
-  ) {
+  changeActionToSellAndTrade(sellTradeData) {
     const currentPlayer = this.getCurrentPlayer();
-    const sellTradeData = new Object();
-    sellTradeData.defunctCorpStocks =
-      currentPlayer.stocks[defunctCorporationName];
-    sellTradeData.defunctCorporationName = defunctCorporationName;
-    sellTradeData.survivingCorporationName = survivingCorporationName;
-    sellTradeData.currentPriceOfDefunctStock = currentPriceOfDefunctStock;
+    const defunctCorpStocks = currentPlayer.getStocksOf(
+      sellTradeData.defunctCorporationName
+    );
+    sellTradeData.defunctCorpStocks = defunctCorpStocks;
     this.turnManager.changeAction({ name: 'SELL_TRADE', data: sellTradeData });
   }
 
@@ -682,10 +678,8 @@ class Game {
       currentPriceOfDefunctStock
     } = sellAndTradeDetails;
 
-    const numberOfStock = sellCount;
     const currentPlayer = this.getCurrentPlayer();
-
-    currentPlayer.deductStocks(defunctCorporationName, numberOfStock);
+    currentPlayer.deductStocks(defunctCorporationName, sellCount);
     currentPlayer.addMoney(sellCount * currentPriceOfDefunctStock);
 
     currentPlayer.tradeStocks(
@@ -693,6 +687,12 @@ class Game {
       defunctCorporationName,
       tradeCount
     );
+
+    const defunctCorporation = this.getCorporation(defunctCorporationName);
+    const defunctCorporationStocks = sellCount + tradeCount;
+    defunctCorporation.addStocks(defunctCorporationStocks);
+    const survivingCorporation = this.getCorporation(survivingCorporationName);
+    survivingCorporation.deductStocks(tradeCount / 2);
 
     this.changeActionToBuyStocks();
   }
