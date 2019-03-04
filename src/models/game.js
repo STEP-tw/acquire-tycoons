@@ -11,6 +11,7 @@ const {
   createFalseError,
   createReplaceLog
 } = require('../util.js');
+
 class Game {
   constructor(maxPlayers, random, activityLog) {
     this.maxPlayers = maxPlayers;
@@ -615,6 +616,8 @@ class Game {
     const defunctCorporationName = defunct.getName();
     const survivingCorporationName = surviving.getName();
     const { placedTile, adjacentTile } = this.turnManager.getStack();
+    const currentPriceOfDefunctStock = defunct.getCurrentStockPrice();
+
     const defunctTiles = defunct.getTiles();
     this.removeUnIncorporatedTile(adjacentTile);
 
@@ -622,19 +625,62 @@ class Game {
       `${defunctCorporationName} merged with ${survivingCorporationName}`
     );
     this.distributeMajorityMinority(defunctCorporationName);
-    this.players.forEach(player => player.sellAllStocks(defunct));
     defunct.resetTiles();
     surviving.concatTiles(defunctTiles);
     _.remove(
       mergingCorporations,
       corporation => defunct.getName() == corporation.getName()
     );
+
     if (mergingCorporations.length > 1) {
       this.continueMerging(surviving);
       return;
     }
     surviving.concatTiles(adjacentTile.concat(placedTile));
-    this.checkGameEnd();
+    this.changeActionToSellAndTrade(
+      survivingCorporationName,
+      defunctCorporationName,
+      currentPriceOfDefunctStock
+    );
+  }
+
+  changeActionToSellAndTrade(
+    survivingCorporationName,
+    defunctCorporationName,
+    currentPriceOfDefunctStock
+  ) {
+    const currentPlayer = this.getCurrentPlayer();
+    const sellTradeData = new Object();
+    sellTradeData.defunctCorpStocks =
+      currentPlayer.stocks[defunctCorporationName];
+    sellTradeData.defunctCorporationName = defunctCorporationName;
+    sellTradeData.survivingCorporationName = survivingCorporationName;
+    sellTradeData.currentPriceOfDefunctStock = currentPriceOfDefunctStock;
+    this.turnManager.changeAction({ name: 'SELL_TRADE', data: sellTradeData });
+  }
+
+  sellAndTradeStocks(sellAndTradeDetails) {
+    const {
+      defunctCorporationName,
+      survivingCorporationName,
+      tradeCount,
+      sellCount,
+      currentPriceOfDefunctStock
+    } = sellAndTradeDetails;
+
+    const numberOfStock = sellCount;
+    const currentPlayer = this.getCurrentPlayer();
+
+    currentPlayer.deductStocks(defunctCorporationName, numberOfStock);
+    currentPlayer.addMoney(sellCount * currentPriceOfDefunctStock);
+
+    currentPlayer.tradeStocks(
+      survivingCorporationName,
+      defunctCorporationName,
+      tradeCount
+    );
+
+    this.changeActionToBuyStocks();
   }
 
   replaceUnplayableTiles() {

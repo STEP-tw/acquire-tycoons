@@ -74,7 +74,7 @@ class Player {
     this.stocks[name] += numberOfStock;
   }
 
-  deductStocks({ name, numberOfStock }) {
+  deductStocks(name, numberOfStock) {
     this.stocks[name] -= numberOfStock;
   }
 
@@ -109,8 +109,8 @@ class Player {
 
   sellStocks(corporation, numberOfStocks) {
     this.stocks[corporation.getName()] -= numberOfStocks;
-    corporation.addStocks(numberOfStocks);
     const sellingPrice = numberOfStocks * corporation.getCurrentStockPrice();
+    corporation.addStocks(numberOfStocks);
     this.addMoney(sellingPrice);
   }
 
@@ -120,6 +120,11 @@ class Player {
 
   getStocksOf(corporationName) {
     return this.stocks[corporationName];
+  }
+
+  tradeStocks(survivingCorporationName, defunctCorporationName, numberOfStocks) {
+    this.stocks[survivingCorporationName] += numberOfStocks / 2;
+    this.stocks[defunctCorporationName] -= numberOfStocks;
   }
 }
 

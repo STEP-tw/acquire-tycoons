@@ -434,15 +434,20 @@ ul > li {
   color: #4f4f4f;
 }
 
-.buy-stocks-header {
+.buy-stocks-header,.sell-trade-header {
   font-size: 22px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+.sell-trade-header{
+  border-bottom: 1px solid black;
+}
+
 .buy-stocks-table,
-.game-results-table {
+.game-results-table,
+.sell-trade-table {
   width: 85%;
 
   margin-top: 4%;
@@ -496,11 +501,11 @@ ul > li {
   font-family: inherit;
 }
 
-.buy-btn {
+.buy-btn,.done-btn {
   font-size: 22px;
 }
 
-.error-msg-at-buying {
+.error-msg-at-buying,.error-msg-at-sell-trade {
   margin-top: 2%;
   color: crimson;
 }
@@ -511,4 +516,8 @@ ul > li {
 
 .right-aligned-cell {
   text-align: right;
+}
+
+#merger-img{
+  width:15%;
 }

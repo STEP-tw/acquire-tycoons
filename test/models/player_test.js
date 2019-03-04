@@ -102,8 +102,7 @@ describe('Player', function() {
       let stock = { name: 'Sackson', numberOfStock: 4 };
       player.addStocks(stock);
 
-      stock = { name: 'Sackson', numberOfStock: 2 };
-      player.deductStocks(stock);
+      player.deductStocks('Sackson', 2);
       const expectedOutput = {
         Phoenix: 0,
         Quantum: 0,
@@ -196,6 +195,15 @@ describe('Player', function() {
       player.sellAllStocks(corporation);
       expect(player.getMoney()).to.be.equal(7600);
       expect(player.getStocksOf('Sackson')).to.equal(0);
+    });
+  });
+
+  describe('tradeStocks', function() {
+    it('should increase the surviving corporation stocks by half of the defunct corporation stocks', function() {
+      player.addStocks({ name: 'Sackson', numberOfStock: 4 });
+      player.addStocks({ name: 'Hydra', numberOfStock: 2 });
+      player.tradeStocks('Sackson', 'Hydra', 2);
+      expect(player.getStocksOf('Sackson')).to.equal(5);
     });
   });
 });

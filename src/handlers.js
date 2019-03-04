@@ -8,6 +8,10 @@ const {
 const ActivityLog = require('./models/activity_log');
 const { validateGameSession, validateTurn } = require('./validators');
 // const requiredFunctionality = require('../helpers/main.js').mergerBigSmallTest;
+// const requiredFunctionality = require('../helpers/main.js')
+//   .merger_4_same_size_test;
+// const requiredFunctionality = require('../helpers/main.js')
+// .merger_big_small_test;
 
 const hostGame = function(req, res) {
   let { host, totalPlayers } = req.body;
@@ -118,6 +122,12 @@ const selectDefunctCorporation = function(req, res) {
   res.send(createFalseError());
 };
 
+const sellAndTradeStocks = function(req, res) {
+  const game = req.game;
+  game.sellAndTradeStocks(req.body);
+  res.send({ error: false, message: '' });
+};
+
 module.exports = {
   hostGame,
   joinGame,
@@ -130,5 +140,6 @@ module.exports = {
   establishCorporation,
   buyStocks,
   selectSurvivingCorporation,
-  selectDefunctCorporation
+  selectDefunctCorporation,
+  sellAndTradeStocks
 };

@@ -347,6 +347,7 @@ const performAction = function(id, document, action) {
     PLACE_A_TILE: setOnClickForTiles,
     FOUND_CORPORATION: showEstablishCorporationPopup,
     DO_NOTHING: () => {},
+    SELL_TRADE: generateSellTradeContainer,
     BUY_STOCKS: generateBuyStockContainer,
     END_GAME: showGameResults.bind(null, id),
     SELECT_SURVIVING_CORPORATION: showSurvivingCorporationPopup,

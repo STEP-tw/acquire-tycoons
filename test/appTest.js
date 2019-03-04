@@ -348,6 +348,7 @@ describe('/buy-stocks', function() {
     game.placeTile('4A');
     game.establishCorporation('Sackson');
   });
+
   it('should buy-stocks of sackson', function(done) {
     request(app)
       .post('/confirm-buy')
@@ -408,6 +409,50 @@ describe('/select-defunct-corporation', function() {
       .set('Cookie', [`gameId=${gameID}`, 'playerId=0'])
       .set('content-type', 'application/json')
       .send({ corporationName: 'Phoenix' })
+      .expect({ error: false, message: '' })
+      .expect(200, done);
+  });
+});
+
+describe('/confirm-sellAndTrade', function() {
+  let game, gameID;
+  beforeEach(function() {
+    const random = () => 0;
+    app.gameManager = new GameManager();
+    game = new Game(3, random, new ActivityLog(mockedDate));
+    const host = new Player('Arnab', 0);
+
+    game.addPlayer(host);
+    app.gameManager.addGame(game);
+    gameID = app.gameManager.getLatestId();
+
+    const player2 = new Player('Dheeraj', 1);
+    game.addPlayer(player2);
+    const player3 = new Player('Srushti', 2);
+    game.addPlayer(player3);
+
+    initializeGame(game);
+    game.placeTile('4A');
+  });
+
+  it('should sell and trade stocks of defunct corporation', function(done) {
+    const defunctCorporationName = 'Phoenix';
+    const survivingCorporationName = 'Quantum';
+    const sellCount = 2;
+    const tradeCount = 2;
+    const defunctCorpStocks = 4;
+    const data = {
+      defunctCorporationName,
+      survivingCorporationName,
+      sellCount,
+      tradeCount,
+      defunctCorpStocks
+    };
+
+    request(app)
+      .post('/confirm-sellAndTrade')
+      .set('Cookie', [`gameId=${gameID}`, 'playerId=0'])
+      .send(data)
       .expect({ error: false, message: '' })
       .expect(200, done);
   });

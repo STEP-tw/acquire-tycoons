@@ -1,4 +1,4 @@
-const createCorporationsViews = function(
+const createCorporationsViews = function (
   document,
   corporations,
   onclickListener
@@ -28,15 +28,15 @@ const createCorporationsViews = function(
   });
 };
 
-const getSelectCorporationOverlay = function(document) {
+const getSelectCorporationOverlay = function (document) {
   return document.getElementById("select-corporation-overlay");
 };
 
-const closeOverlay = function(document) {
+const closeOverlay = function (document) {
   getSelectCorporationOverlay(document).style.display = "none";
 };
 
-const handleSelectedCorporation = function(requestURL, corporationName) {
+const handleSelectedCorporation = function (requestURL, corporationName) {
   closeOverlay(document);
   fetch(requestURL, {
     method: "POST",
@@ -49,11 +49,11 @@ const handleSelectedCorporation = function(requestURL, corporationName) {
   });
 };
 
-const selectSurvivingCorporation = function(corporationName) {
+const selectSurvivingCorporation = function (corporationName) {
   console.log(corporationName);
 };
 
-const showSelectCorporationPopup = function(
+const showSelectCorporationPopup = function (
   onclickListener,
   popupHeading,
   document,

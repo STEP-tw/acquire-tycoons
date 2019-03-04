@@ -7,17 +7,17 @@ const corporationsData = require('./data/corporations_data.json');
 const tilesData = require('./data/tiles_data.json');
 const levelsData = require('./data/level_data.json');
 
-const random = function(length) {
+const random = function (length) {
   return Math.floor(Math.random() * length);
 };
 
-const getCorporations = function(corporationsData, levelsData) {
+const getCorporations = function (corporationsData, levelsData) {
   return corporationsData.map(corporationData => {
     return createCorporationInstance(corporationData, levelsData);
   });
 };
 
-const getTileWithCorporationName = function(corporation) {
+const getTileWithCorporationName = function (corporation) {
   const name = corporation.getName();
   return corporation.getTiles().map(tile => {
     return {
@@ -27,39 +27,39 @@ const getTileWithCorporationName = function(corporation) {
   });
 };
 
-const getFaceDownCluster = function(tilesData) {
+const getFaceDownCluster = function (tilesData) {
   const tiles = tilesData.map(({ position, value }) => {
     return new Tile(position, value);
   });
   return new FaceDownCluster(tiles);
 };
 
-const initializeGame = function(game) {
+const initializeGame = function (game) {
   const corporations = getCorporations(corporationsData, levelsData);
   const faceDownCluster = getFaceDownCluster(tilesData);
   game.initialize(corporations, faceDownCluster);
 };
 
-const getLevelName = function(levelId) {
+const getLevelName = function (levelId) {
   return 'level-' + levelId;
 };
 
-const getLevelData = function(levelsData, levelId) {
+const getLevelData = function (levelsData, levelId) {
   const levelName = getLevelName(levelId);
   return levelsData[levelName];
 };
 
-const createCorporationInstance = function({ name, levelId }, levelsData) {
+const createCorporationInstance = function ({ name, levelId }, levelsData) {
   const levelData = getLevelData(levelsData, levelId);
   const level = new Level(levelData);
   return new Corporation(name, level);
 };
 
-const flatPosition = function(position) {
+const flatPosition = function (position) {
   return position.row * 12 + position.column;
 };
 
-const buyStocks = function(player, corporation, noOfStocks) {
+const buyStocks = function (player, corporation, noOfStocks) {
   const currentPrice = corporation.getCurrentStockPrice();
   const moneyToDeduct = noOfStocks * currentPrice;
   player.deductMoney(moneyToDeduct);
@@ -67,7 +67,7 @@ const buyStocks = function(player, corporation, noOfStocks) {
   corporation.deductStocks(noOfStocks);
 };
 
-const getCorporationData = function(corporation) {
+const getCorporationData = function (corporation) {
   return {
     name: corporation.getName(),
     currentPrice: corporation.getCurrentStockPrice(),
@@ -75,7 +75,7 @@ const getCorporationData = function(corporation) {
   };
 };
 
-const getStockHoldersByCount = function(
+const getStockHoldersByCount = function (
   corporationName,
   stockHolders,
   stocksCount
@@ -85,7 +85,7 @@ const getStockHoldersByCount = function(
   );
 };
 
-const getStocksCount = function(corporationName, stockHolder) {
+const getStocksCount = function (corporationName, stockHolder) {
   return stockHolder.getStocksOf(corporationName);
 };
 

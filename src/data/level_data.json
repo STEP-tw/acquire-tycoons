@@ -135,7 +135,7 @@
       "upperLimit": 2,
       "marketPrice": 400,
       "majority": 4000,
-      "minority": 2000
+      "minority": 2000  
     },
     {
       "lowerLimit": 3,

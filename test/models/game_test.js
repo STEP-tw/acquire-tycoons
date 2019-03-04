@@ -644,6 +644,51 @@ describe('Game', function() {
         );
       });
     });
+
+    describe('sellAndTradeStocks', function() {
+      it('should change action to buy stocks after selling and trading of stocks', function() {
+        const defunctCorporationName = 'Phoenix';
+        const survivingCorporationName = 'Quantum';
+        const tradeCount = 2;
+        const sellCount = 2;
+        const currentPriceOfDefunctStock = 400;
+
+        const sellAndTradeDetails = {
+          defunctCorporationName,
+          survivingCorporationName,
+          tradeCount,
+          sellCount,
+          currentPriceOfDefunctStock
+        };
+
+        const tile1 = new Tile(
+          {
+            row: 1,
+            column: 4
+          },
+          '5B'
+        );
+
+        const tile2 = new Tile(
+          {
+            row: 1,
+            column: 5
+          },
+          '6B'
+        );
+
+        game.corporations[0].addTile(tile1);
+        game.corporations[0].addTile(tile2);
+
+        player1.addStocks({ name: 'Phoenix', numberOfStock: 4 });
+        player1.addStocks({ name: 'Quantum', numberOfStock: 2 });
+
+        game.sellAndTradeStocks(sellAndTradeDetails);
+
+        expect(player1.getStocksOf(survivingCorporationName)).to.equal(3);
+        expect(game.turnManager.getAction(0).name).to.equal('BUY_STOCKS');
+      });
+    });
   });
 });
 

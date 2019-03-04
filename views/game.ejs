@@ -1,135 +1,146 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>ACQUIRE</title>
-    <link
-      href="https://fonts.googleapis.com/css?family=Raleway"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" type="text/css" href="/styles/main.css" />
-    <script src="/scripts/buy_stocks.js"></script>
-    <script src="/scripts/select_corporation.js"></script>
-    <script src="/scripts/game.js"></script>
-  </head>
 
-  <body>
-    <section class="overlay" style="display:none" id="buy-stocks-overlay">
-      <div class="overlay-content">
-        <div class="align-content-center">
-          <div class="buy-stocks-header" id="buy-stocks-money"></div>
-          <div id="error-msg-at-buying" class="error-msg-at-buying"></div>
+<head>
+  <title>ACQUIRE</title>
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="/styles/main.css" />
+  <script src="/scripts/buy_stocks.js"></script>
+  <script src="/scripts/select_corporation.js"></script>
+  <script src="/scripts/game.js"></script>
+  <script src="/scripts/sell_trade.js"></script>
+</head>
 
-          <table class="buy-stocks-table">
-            <thead>
-              <tr>
-                <th>Corporation</th>
-                <th>Shares</th>
-                <th>Price</th>
-                <th>Stocks Count</th>
-              </tr>
-            </thead>
-            <tbody id="buy-stocks-body"></tbody>
-          </table>
+<body>
 
-          <button class="btn-default btn-medium buy-btn" id="done-button">
-            Buy
-          </button>
-        </div>
+  <section class="overlay" style="display:none" id="buy-stocks-overlay">
+    <div class="overlay-content">
+      <div class="align-content-center">
+        <div class="buy-stocks-header" id="buy-stocks-money"></div>
+        <div id="error-msg-at-buying" class="error-msg-at-buying"></div>
+
+        <table class="buy-stocks-table">
+          <thead>
+            <tr>
+              <th>Corporation</th>
+              <th>Shares</th>
+              <th>Price</th>
+              <th>Stocks Count</th>
+            </tr>
+          </thead>
+          <tbody id="buy-stocks-body"></tbody>
+        </table>
+
+        <button class="btn-default btn-medium buy-btn" id="done-button">
+          Buy
+        </button>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section
-      class="overlay"
-      style="display:none"
-      id="select-corporation-overlay"
-    >
-      <div class="overlay-content">
-        <div class="align-content-center">
-          <h2 class="heading-medium" id="popup-heading"></h2>
-          <div class="inactive-corporations" id="corporations-container"></div>
-        </div>
+  <section class="overlay" style="display:none" id="select-corporation-overlay">
+    <div class="overlay-content">
+      <div class="align-content-center">
+        <h2 class="heading-medium" id="popup-heading"></h2>
+        <div class="inactive-corporations" id="corporations-container"></div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="overlay" style="display:none" id="game-results-overlay">
-      <div class="overlay-content">
-        <div class="align-content-center">
-          <h2 class="heading-medium">Game Results</h2>
-          <table class="game-results-table">
-            <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Player name</th>
-                <th>Money</th>
-              </tr>
-            </thead>
-            <tbody id="game-results-body"></tbody>
-          </table>
-          <a href="/" class="btn-default btn-medium play-again-btn">
-            Play Again
-          </a>
-        </div>
+  <section class="overlay" style="display:none" id="game-results-overlay">
+    <div class="overlay-content">
+      <div class="align-content-center">
+        <h2 class="heading-medium">Game Results</h2>
+        <table class="game-results-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Player name</th>
+              <th>Money</th>
+            </tr>
+          </thead>
+          <tbody id="game-results-body"></tbody>
+        </table>
+        <a href="/" class="btn-default btn-medium play-again-btn">
+          Play Again
+        </a>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <header id="game-header" style="display: none">
-      <h1 class="app-title">ACQUIRE</h1>
-      <span class="player-name-header" id="player-name"></span>
-    </header>
-    <main>
-      <section class="waiting-area" id="waiting-area">
-        <p style="text-align:center" id="game-id">Game Id:<%= gameId %></p>
-        <p><%= message %></p>
-        <div id="joined-player-names" style="display:none"></div>
-        <img class="img-medium" src="/images/loading.gif" alt="loading" />
+  <section class="overlay" style="display:none" id="sell-trade-overlay">
+    <div class="overlay-content">
+
+      <div class="align-content-center">
+        <div class="sell-trade-header" id="sell-trade-header">
+          <img src="/images/merger-img.jpg" alt="merging with" id="merger-img">
+        </div>
+        <div id="error-msg-at-sell-trade" class="error-msg-at-sell-trade"></div>
+        <div><span id="defunct-corp-name"></span>:<span id="total-defunct-stocks"></span></div>
+        <table class="sell-trade-table">
+          <tbody id="sell-trade-body">
+          </tbody>
+        </table>
+        <button class="btn-default btn-medium done-btn" id="sell-trade-done-button">
+          Done
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <header id="game-header" style="display: none">
+    <h1 class="app-title">ACQUIRE</h1>
+    <span class="player-name-header" id="player-name"></span>
+  </header>
+  <main>
+    <section class="waiting-area" id="waiting-area">
+      <p style="text-align:center" id="game-id">Game Id:<%= gameId %></p>
+      <p><%= message %></p>
+      <div id="joined-player-names" style="display:none"></div>
+      <img class="img-medium" src="/images/loading.gif" alt="loading" />
+    </section>
+    <section id="game-container" style="display: none" class="game-container">
+      <section class="game-top">
+        <div class="status-bar" id="player-log"></div>
       </section>
-      <section id="game-container" style="display: none" class="game-container">
-        <section class="game-top">
-          <div class="status-bar" id="player-log"></div>
-        </section>
-        <section class="game-main">
-          <div class="player-names-section">
-            <div class="player-names" id="player-names-container"></div>
-          </div>
-          <div class="game-board-container" id="game-board-container"></div>
+      <section class="game-main">
+        <div class="player-names-section">
+          <div class="player-names" id="player-names-container"></div>
+        </div>
+        <div class="game-board-container" id="game-board-container"></div>
 
-          <div class="game-information-container">
-            <table class="corporation-details">
-              <thead>
-                <th>Corporation</th>
-                <th>Size</th>
-                <th>Price</th>
-                <th>Stocks</th>
-              </thead>
-              <tbody id="corporation-details-body"></tbody>
-            </table>
-            <div class="activity-log-section">
-              <h3 class="heading-medium">Activity Log</h3>
-              <ul id="activity-log" class="activity-log"></ul>
-            </div>
+        <div class="game-information-container">
+          <table class="corporation-details">
+            <thead>
+              <th>Corporation</th>
+              <th>Size</th>
+              <th>Price</th>
+              <th>Stocks</th>
+            </thead>
+            <tbody id="corporation-details-body"></tbody>
+          </table>
+          <div class="activity-log-section">
+            <h3 class="heading-medium">Activity Log</h3>
+            <ul id="activity-log" class="activity-log"></ul>
           </div>
-        </section>
-        <section class="player-info">
-          <div class="money-section flex-column">
-            <h2>Money</h2>
-            <div class="player-money" id="player-money">$6000</div>
-          </div>
-          <div class="tiles-section flex-column">
-            <h2>Tiles</h2>
-            <div
-              class="tiles  flex-row-space-evenly"
-              id="player-tiles-container"
-            ></div>
-          </div>
-          <div class="stocks-section flex-column">
-            <h2>Stocks</h2>
-            <div
-              class="flex-row-space-evenly"
-              id="player-stocks-container"
-            ></div>
-          </div>
-        </section>
+        </div>
       </section>
-    </main>
-  </body>
+      <section class="player-info">
+        <div class="money-section flex-column">
+          <h2>Money</h2>
+          <div class="player-money" id="player-money">$6000</div>
+        </div>
+        <div class="tiles-section flex-column">
+          <h2>Tiles</h2>
+          <div class="tiles  flex-row-space-evenly" id="player-tiles-container"></div>
+        </div>
+        <div class="stocks-section flex-column">
+          <h2>Stocks</h2>
+          <div class="flex-row-space-evenly" id="player-stocks-container"></div>
+        </div>
+      </section>
+    </section>
+  </main>
+</body>
+
 </html>
