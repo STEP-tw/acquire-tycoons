@@ -170,6 +170,13 @@ p {
   border-radius: 3px;
 }
 
+.name-and-quit-btn {
+  width: 15%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
 .player-name-header {
   font-size: 18px;
   margin-right: 1%;
@@ -388,6 +395,7 @@ ul > li {
   padding: 8px;
   width: 30%;
   background: white;
+  position: relative;
 }
 
 .align-content-center {
@@ -436,14 +444,15 @@ ul > li {
   color: #4f4f4f;
 }
 
-.buy-stocks-header,.sell-trade-header {
+.buy-stocks-header,
+.sell-trade-header {
   font-size: 22px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.sell-trade-header{
+.sell-trade-header {
   border-bottom: 1px solid black;
 }
 
@@ -479,6 +488,7 @@ ul > li {
   background: #66c993;
   color: whitesmoke;
   border: none;
+  text-align: center;
 }
 
 .btn-default:focus {
@@ -503,11 +513,13 @@ ul > li {
   font-family: inherit;
 }
 
-.buy-btn,.done-btn {
+.buy-btn,
+.done-btn {
   font-size: 22px;
 }
 
-.error-msg-at-buying,.error-msg-at-sell-trade {
+.error-msg-at-buying,
+.error-msg-at-sell-trade {
   margin-top: 2%;
   color: crimson;
 }
@@ -520,16 +532,12 @@ ul > li {
   text-align: right;
 }
 
-#merger-img{
-  width:15%;
-}
-
 .event-icon {
   width: 11%;
   height: 25px;
 }
 
-.activity-log-messageHolder{
+.activity-log-messageHolder {
   width: 80%;
   display: flex;
   align-items: center;
@@ -542,9 +550,32 @@ ul > li {
 }
 
 .inactive-status {
-  opacity: 0.5;  
+  opacity: 0.5;
 }
 
 .active-status {
   box-shadow: 0px 0px 2px black;
+}
+.close-button {
+  height: 25px;
+  width: 25px;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
+
+.close-button:hover {
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
+.show-end-popup {
+  width: 100px;
+  padding: 4px;
+  font-weight: lighter;
+  display: none;
+}
+
+#merger-img {
+  width: 15%;
 }

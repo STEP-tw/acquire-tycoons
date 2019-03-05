@@ -193,12 +193,29 @@ const createRankRow = function(document, playerStatus) {
   return row;
 };
 
+const closePopup = function(document, id) {
+  document.getElementById(id).style.display = 'none';
+};
+
+const showPopup = function(document, id) {
+  document.getElementById(id).style.display = 'flex';
+};
+
 const showGameResults = function(id, document, gameResults) {
   clearInterval(id);
   const { playersEndStatus, cause } = gameResults;
   const gameResultsHtml = playersEndStatus.map(
     createRankRow.bind(null, document)
   );
+
+  document.getElementById('show-end-popup').style.display = 'block';
+
+  const closeButton = document.getElementById('close-button');
+  closeButton.onclick = closePopup.bind(null, document, 'game-results-overlay');
+
+  const showRanksBtn = document.getElementById('show-end-popup');
+  showRanksBtn.onclick = showPopup.bind(null, document, 'game-results-overlay');
+
   setTimeout(() => {
     document.getElementById('game-results-overlay').style.display = 'flex';
     document.getElementById('game-end-cause').innerText = cause;

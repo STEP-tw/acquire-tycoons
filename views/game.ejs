@@ -54,6 +54,12 @@
 
     <section class="overlay" style="display:none" id="game-results-overlay">
       <div class="overlay-content">
+        <img
+          class="close-button"
+          id="close-button"
+          src="/images/close-button.png"
+          alt="X"
+        />
         <div class="align-content-center">
           <h2 class="heading-medium">Game Ends!</h2>
           <h4 id="game-end-cause" class="heading-medium"></h4>
@@ -103,7 +109,12 @@
 
     <header id="game-header" style="display: none">
       <h1 class="app-title">ACQUIRE</h1>
-      <span class="player-name-header" id="player-name"></span>
+      <div class="name-and-quit-btn">
+        <span class="player-name-header" id="player-name"></span>
+        <span class="btn-default show-end-popup" id="show-end-popup"
+          >Show Ranks</span
+        >
+      </div>
     </header>
     <main>
       <section class="waiting-area" id="waiting-area">

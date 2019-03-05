@@ -84,6 +84,9 @@ const hostGame = function() {
 };
 
 const initialize = function() {
+  document.cookie = 'gameId=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+  document.cookie = 'playerId=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+
   setDisplay('create-game-form', 'none');
   setDisplay('join-game-form', 'none');
   setDisplay('user-guide', 'none');
