@@ -544,3 +544,7 @@ ul > li {
 .inactive-status {
   opacity: 0.5;  
 }
+
+.active-status {
+  box-shadow: 0px 0px 2px black;
+}

@@ -120,7 +120,7 @@ const displayCorporationDetails = function(document, corporations) {
   corporations.forEach(corporation => {
     const { name, size, marketPrice, availableStocks, status} = corporation;
 
-    const className = getClassNameForCorporation(name)+(status?"":" inactive-status");
+    const className = getClassNameForCorporation(name) + (status ? " active" : " inactive") +"-status";
     const rowAttributes = { className };
     const corporationRow = createElement(document, 'tr', rowAttributes);
 
