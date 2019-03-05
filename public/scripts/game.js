@@ -84,7 +84,6 @@ const getClassNameForCorporation = function(corporation) {
     Phoenix: 'phoenix-color',
     Quantum: 'quantum-color'
   };
-
   return tileClasses[corporation];
 };
 
@@ -119,9 +118,10 @@ const displayCorporationDetails = function(document, corporations) {
   );
 
   corporations.forEach(corporation => {
-    const { name, size, marketPrice, availableStocks } = corporation;
+    const { name, size, marketPrice, availableStocks, status} = corporation;
 
-    const rowAttributes = { className: getClassNameForCorporation(name) };
+    const className = getClassNameForCorporation(name)+(status?"":" inactive-status");
+    const rowAttributes = { className };
     const corporationRow = createElement(document, 'tr', rowAttributes);
 
     const nameCell = createTableCell(document, name);

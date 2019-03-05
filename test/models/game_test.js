@@ -337,43 +337,50 @@ describe('Game', function() {
             name: 'Quantum',
             size: 0,
             marketPrice: 0,
-            availableStocks: 25
+            availableStocks: 25,
+            status:false
           },
           {
             name: 'Phoenix',
             size: 0,
             marketPrice: 0,
-            availableStocks: 25
+            availableStocks: 25,
+            status: false
           },
           {
             name: 'Fusion',
             size: 0,
             marketPrice: 0,
-            availableStocks: 25
+            availableStocks: 25,
+            status: false
           },
           {
             name: 'Hydra',
             size: 0,
             marketPrice: 0,
-            availableStocks: 25
+            availableStocks: 25,
+            status: false
           },
           {
             name: 'America',
             size: 0,
             marketPrice: 0,
-            availableStocks: 25
+            availableStocks: 25,
+            status: false
           },
           {
             name: 'Zeta',
             size: 0,
             marketPrice: 0,
-            availableStocks: 25
+            availableStocks: 25,
+            status: false
           },
           {
             name: 'Sackson',
             size: 0,
             marketPrice: 0,
-            availableStocks: 25
+            availableStocks: 25,
+            status: false
           }
         ];
         expect(game.getCorporationsDetail()).to.deep.equal(expectedOutput);

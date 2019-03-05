@@ -141,7 +141,8 @@ class Game {
         name: corporation.getName(),
         size: corporation.getSize(),
         marketPrice: corporation.getCurrentStockPrice(),
-        availableStocks: corporation.getStocks()
+        availableStocks: corporation.getStocks(),
+        status:corporation.isActive()
       };
     });
     return corporationsDetail;

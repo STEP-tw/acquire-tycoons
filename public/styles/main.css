@@ -540,3 +540,7 @@ ul > li {
   width: 89%;
   padding-left: 5px;
 }
+
+.inactive-status {
+  opacity: 0.5;  
+}
