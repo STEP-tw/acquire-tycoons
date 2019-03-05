@@ -711,21 +711,21 @@ describe('Game', function() {
     });
 
     describe('sellAndTradeStocks', function() {
+      const defunctCorporationName = 'Phoenix';
+      const survivingCorporationName = 'Quantum';
+      const tradeCount = 2;
+      const sellCount = 2;
+      const currentPriceOfDefunctStock = 400;
+
+      const sellAndTradeDetails = {
+        defunctCorporationName,
+        survivingCorporationName,
+        tradeCount,
+        sellCount,
+        currentPriceOfDefunctStock
+      };
+
       it('should change action to buy stocks after selling and trading of stocks', function() {
-        const defunctCorporationName = 'Phoenix';
-        const survivingCorporationName = 'Quantum';
-        const tradeCount = 2;
-        const sellCount = 2;
-        const currentPriceOfDefunctStock = 400;
-
-        const sellAndTradeDetails = {
-          defunctCorporationName,
-          survivingCorporationName,
-          tradeCount,
-          sellCount,
-          currentPriceOfDefunctStock
-        };
-
         const tile1 = new Tile(
           {
             row: 1,
@@ -751,7 +751,17 @@ describe('Game', function() {
         game.sellAndTradeStocks(sellAndTradeDetails);
 
         expect(player1.getStocksOf(survivingCorporationName)).to.equal(3);
-        expect(game.turnManager.getAction(0).name).to.equal('BUY_STOCKS');
+        expect(game.turnManager.getAction(0).name).to.equal('DO_NOTHING');
+      });
+
+      it('should change the action of merger to BUY_STOCKS after merging process', function() {
+        game.sellAndTradeStocks(sellAndTradeDetails);
+        game.sellAndTradeStocks(sellAndTradeDetails);
+        game.sellAndTradeStocks(sellAndTradeDetails);
+        game.sellAndTradeStocks(sellAndTradeDetails);
+
+        expect(game.turnManager.getAction(0).name).to.equal('DO_NOTHING');
+        expect(game.turnManager.getAction(1).name).to.equal('PLACE_A_TILE');
       });
     });
   });

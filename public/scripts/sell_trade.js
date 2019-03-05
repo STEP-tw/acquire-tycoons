@@ -78,6 +78,7 @@ const displayMergingCorporations = function(
   );
 
   const mergerImg = document.getElementById('merger-img');
+  mergerImg.style.display = 'visible';
   const headerDivChildren = [defunctCorpSpan, mergerImg, survivingCorpSpan];
   appendChildren(headerDiv, headerDivChildren);
 };
@@ -151,9 +152,10 @@ const modifyTradeAndSellData = function(document, data) {
 
 const sellAndTradeStocks = function(document, data) {
   modifyTradeAndSellData(document, data);
-
+  document.getElementById('error-msg-at-sell-trade').innerText = '';
   closeOverlay(document, 'sell-trade-overlay');
   removeSellAndTradeHeaderChildren(document);
+
   const postDetails = {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
@@ -180,7 +182,7 @@ const generateSellTradeContainer = function(document, sellTradeData) {
     defunctCorpStocks
   } = sellTradeData;
   document.getElementById('sell-trade-overlay').style.display = 'flex';
-
+  document.getElementById('merger-img').style.display = 'visible';
   displayErrorMessage(document, 'error-msg-at-sell-trade', '');
   displaySellTradeDetails(document, defunctCorpStocks);
 

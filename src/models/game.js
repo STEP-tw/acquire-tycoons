@@ -22,6 +22,7 @@ class Game {
     this.unIncorporatedTiles = [];
     this.isStarted = false;
     this.activityLog = activityLog;
+    this.playerCounterAfterMerger = 1;
     this.lastPlacedTile = {
       getValue: () => {
         return;
@@ -652,12 +653,12 @@ class Game {
       return;
     }
     surviving.concatTiles(adjacentTile.concat(placedTile));
-
     const sellTradeData = {
       survivingCorporationName,
       defunctCorporationName,
       currentPriceOfDefunctStock
     };
+
     this.changeActionToSellAndTrade(sellTradeData);
     //this.checkGameEnd()
   }
@@ -673,17 +674,18 @@ class Game {
 
   sellAndTradeStocks(sellAndTradeDetails) {
     const {
+      sellCount,
+      tradeCount,
       defunctCorporationName,
       survivingCorporationName,
-      tradeCount,
-      sellCount,
       currentPriceOfDefunctStock
     } = sellAndTradeDetails;
 
     const currentPlayer = this.getCurrentPlayer();
+    const defunctCorpStocks = currentPlayer.getStocksOf(defunctCorporationName);
+
     currentPlayer.deductStocks(defunctCorporationName, sellCount);
     currentPlayer.addMoney(sellCount * currentPriceOfDefunctStock);
-
     currentPlayer.tradeStocks(
       survivingCorporationName,
       defunctCorporationName,
@@ -696,7 +698,23 @@ class Game {
     const survivingCorporation = this.getCorporation(survivingCorporationName);
     survivingCorporation.deductStocks(tradeCount / 2);
 
-    this.changeActionToBuyStocks();
+    if (this.getPlayerCounterAfterMerger() == this.maxPlayers) {
+      this.resetPlayerCounterAfterMerger();
+      this.turnManager.changeTurn();
+      this.changeActionToBuyStocks();
+      return;
+    }
+
+    const data = {
+      defunctCorporationName,
+      survivingCorporationName,
+      currentPriceOfDefunctStock,
+      defunctCorpStocks
+    };
+
+    this.updatePlayerCounterAfterMerger();
+    this.turnManager.changeTurn();
+    this.changeActionToSellAndTrade(data);
   }
 
   replaceUnplayableTiles() {
@@ -713,6 +731,18 @@ class Game {
     player.updateLog(log);
     unPlayableTiles.forEach(tile => player.removeTile(tile.getPosition()));
     newTiles.forEach(tile => player.addTile(tile));
+  }
+
+  getPlayerCounterAfterMerger() {
+    return this.playerCounterAfterMerger;
+  }
+
+  updatePlayerCounterAfterMerger() {
+    this.playerCounterAfterMerger++;
+  }
+
+  resetPlayerCounterAfterMerger() {
+    this.playerCounterAfterMerger = 1;
   }
 }
 
