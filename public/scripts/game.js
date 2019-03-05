@@ -199,9 +199,14 @@ const showGameResults = function(id, document, gameResults) {
   const gameResultsHtml = playersEndStatus.map(
     createRankRow.bind(null, document)
   );
-  document.getElementById('game-results-overlay').style.display = 'flex';
-  document.getElementById('game-end-cause').innerText = cause;
-  appendChildren(document.getElementById('game-results-body'), gameResultsHtml);
+  setTimeout(() => {
+    document.getElementById('game-results-overlay').style.display = 'flex';
+    document.getElementById('game-end-cause').innerText = cause;
+    appendChildren(
+      document.getElementById('game-results-body'),
+      gameResultsHtml
+    );
+  }, 1500);
 };
 
 const displayPlayerMoney = function(document, money) {
