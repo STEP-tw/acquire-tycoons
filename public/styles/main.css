@@ -204,12 +204,14 @@ p {
 }
 
 ul {
+  width: 95%;
   padding-left: 8px;
   padding-bottom: 2px;
   list-style: none;
 }
 
 ul > li {
+  width: 100%;
   margin-bottom: 8px;
   border-bottom: 1px dotted gray;
   display: flex;
@@ -523,6 +525,18 @@ ul > li {
 }
 
 .event-icon {
-  width: 25px;
+  width: 11%;
   height: 25px;
+}
+
+.activity-log-messageHolder{
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.activity-log-msg {
+  width: 89%;
+  padding-left: 5px;
 }

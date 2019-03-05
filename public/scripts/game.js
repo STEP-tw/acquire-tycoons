@@ -281,7 +281,7 @@ const clearGameScreen = function(document) {
   gameElements.forEach(gameElement => (gameElement.innerHTML = ''));
 };
 
-const createLog = function({ log, timeStamp, eventName }) {
+const createLog = function(document,{ log, timeStamp, eventName }) {
   const logItem = document.createElement('li');
 
   const messageAttributes = { className: 'activity-log-msg', innerText: log };
@@ -298,13 +298,16 @@ const createLog = function({ log, timeStamp, eventName }) {
   const iconAttributes = { className: 'event-icon', src: iconSrc };
   const iconHolder = createElement(document, 'img', iconAttributes);
 
-  appendChildren(logItem, [iconHolder, messageContainer, timeHolder]);
+  const messageHolderAttributes = {className:'activity-log-messageHolder'}
+  const messageHolder = createElement(document,'div',messageHolderAttributes);
+  appendChildren(messageHolder,[iconHolder,messageContainer]);
+  appendChildren(logItem, [messageHolder, timeHolder]);
   return logItem;
 };
 
 const displayActivityLog = function(document, logs) {
   const activityLog = document.getElementById('activity-log');
-  const logItems = logs.map(createLog);
+  const logItems = logs.map(createLog.bind(null,document));
   appendChildren(activityLog, logItems);
 };
 
