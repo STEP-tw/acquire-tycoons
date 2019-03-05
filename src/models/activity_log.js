@@ -4,9 +4,9 @@ class ActivityLog {
     this.DateProvider = DateProvider;
   }
 
-  addLog(log) {
+  addLog(log,eventName) {
     let timeStamp = new this.DateProvider();
-    this.logs.unshift({ log, timeStamp });
+    this.logs.unshift({ log, timeStamp,eventName });
   }
 
   getLogs() {

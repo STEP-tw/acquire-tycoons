@@ -521,3 +521,8 @@ ul > li {
 #merger-img{
   width:15%;
 }
+
+.event-icon {
+  width: 25px;
+  height: 25px;
+}

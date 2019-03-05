@@ -281,26 +281,31 @@ const clearGameScreen = function(document) {
   gameElements.forEach(gameElement => (gameElement.innerHTML = ''));
 };
 
+const createLog = function({ log, timeStamp, eventName }) {
+  const logItem = document.createElement('li');
+
+  const messageAttributes = { className: 'activity-log-msg', innerText: log };
+  const messageContainer = createElement(document, 'span', messageAttributes);
+
+  const localeTime = new Date(timeStamp).toLocaleTimeString();
+  const timeAttributes = {
+    className: 'activity-log-time',
+    innerText: localeTime
+  };
+  const timeHolder = createElement(document, 'span', timeAttributes);
+
+  const iconSrc = 'images/' + eventName + '.png';
+  const iconAttributes = { className: 'event-icon', src: iconSrc };
+  const iconHolder = createElement(document, 'img', iconAttributes);
+
+  appendChildren(logItem, [iconHolder, messageContainer, timeHolder]);
+  return logItem;
+};
+
 const displayActivityLog = function(document, logs) {
-  let activityLog = document.getElementById('activity-log');
-  logs.map(({ log, timeStamp }) => {
-    let logItem = document.createElement('li');
-    const messageAttributes = { className: 'activity-log-msg', innerText: log };
-    const messageContainer = createElement(document, 'span', messageAttributes);
-
-    const localeTime = new Date(timeStamp).toLocaleTimeString();
-    const timeAttributes = {
-      className: 'activity-log-time',
-      innerText: localeTime
-    };
-
-    const timeHolder = createElement(document, 'span', timeAttributes);
-
-    logItem.appendChild(messageContainer);
-    logItem.appendChild(timeHolder);
-
-    activityLog.appendChild(logItem);
-  });
+  const activityLog = document.getElementById('activity-log');
+  const logItems = logs.map(createLog);
+  appendChildren(activityLog, logItems);
 };
 
 const displayPlayerInformation = function(document, playerData) {

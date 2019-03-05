@@ -70,7 +70,7 @@ class Game {
       const tile = tiles[index];
       player.setInitialTile(tiles[index]);
       this.activityLog.addLog(
-        `${player.getName()} got tile ${tile.getValue()}`
+        `${player.getName()} got tile ${tile.getValue()}`,`INITIAL_TILE`
       );
     }
   }
@@ -99,7 +99,7 @@ class Game {
   updateTurnLog() {
     const currentPlayer = this.getCurrentPlayer();
     currentPlayer.updateLog(`It's your turn`);
-    this.activityLog.addLog(`It's ${currentPlayer.getName()}'s turn`);
+    this.activityLog.addLog(`It's ${currentPlayer.getName()}'s turn`,`SWITCH_TURN`);
   }
 
   initialize(corporations, faceDownCluster) {
@@ -227,7 +227,7 @@ class Game {
     player.addStocks({ name: corporationName, numberOfStock: 1 });
     corporation.deductStocks(1);
     this.activityLog.addLog(
-      `${player.getName()} established ${corporationName}`
+      `${player.getName()} established ${corporationName}`,`ESTABLISH_CORPORATION`
     );
     this.checkGameEnd();
   }
@@ -397,7 +397,7 @@ class Game {
   }
 
   updateGameStatus(tile, log) {
-    this.activityLog.addLog(log);
+    this.activityLog.addLog(log,`PLACE_TILE`);
     this.lastPlacedTile = tile;
   }
 
@@ -414,7 +414,7 @@ class Game {
     stockHolders.forEach(stockHolder => {
       stockHolder.addMoney(reward);
       this.activityLog.addLog(
-        `${stockHolder.name} got ${reward} as ${rewardName}`
+        `${stockHolder.name} got ${reward} as ${rewardName}`,`DISTRIBUTE_REWARD`
       );
     });
   }
@@ -554,7 +554,7 @@ class Game {
     const currentPlayer = this.getCurrentPlayer();
     if (newTile) {
       currentPlayer.addTile(newTile);
-      this.activityLog.addLog(`${currentPlayer.getName()} got a new tile`);
+      // this.activityLog.addLog(`${currentPlayer.getName()} got a new tile`);
       currentPlayer.updateLog(`You got ${newTile.getValue()} tile`);
     }
   }
@@ -637,7 +637,7 @@ class Game {
     this.removeUnIncorporatedTile(adjacentTile);
 
     this.activityLog.addLog(
-      `${defunctCorporationName} merged with ${survivingCorporationName}`
+      `${defunctCorporationName} merged with ${survivingCorporationName}`,`MERGER`
     );
     this.distributeMajorityMinority(defunctCorporationName);
     defunct.resetTiles();
