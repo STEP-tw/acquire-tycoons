@@ -39,7 +39,7 @@ const displayErrorMessage = function (document, message) {
 };
 
 const createName = function (document, name) {
-  const nameAttributes = { className: 'left-aligned-cell', innerText: name };
+  const nameAttributes = { className: `left-aligned-cell`, innerText: name };
   const nameTd = createElement(document, 'td', nameAttributes);
   return nameTd;
 };
@@ -158,7 +158,7 @@ const createShareDealings = function (document, corporation, buyStocksData) {
   const shareDealings = document.createElement('td');
   shareDealings.className = 'selected-stocks-count';
   const subButtonAttributes = {
-    className: 'btn-default',
+    className: 'buy-stocks-button',
     innerText: '-',
     onclick: decreaseSelectedStock.bind(
       null,
@@ -170,7 +170,7 @@ const createShareDealings = function (document, corporation, buyStocksData) {
   const subButton = createElement(document, 'button', subButtonAttributes);
 
   const addButtonAttributes = {
-    className: 'btn-default',
+    className: 'buy-stocks-button',
     innerText: '+',
     onclick: increaseSelectedStock.bind(
       null,
@@ -191,7 +191,7 @@ const createShareDealings = function (document, corporation, buyStocksData) {
 };
 
 const createCorpRow = function (document, corporation, buyStocksData) {
-  const row = document.createElement('tr');
+  const row = createElement(document,'tr',{className:`${corporation.name.toLowerCase()}-color`});
   const name = createName(document, corporation.name);
   const availableStocks = createAvailableStocks(document, corporation);
   const price = createPrice(document, corporation.currentPrice);

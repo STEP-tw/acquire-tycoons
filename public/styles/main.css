@@ -476,6 +476,15 @@ ul > li {
   border-bottom: 1px solid gray;
 }
 
+.buy-stocks-button {
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  background: #F0F0F4;
+  border: none;
+  text-align: center;
+}
+
 .selected-stocks-count {
   display: flex;
   justify-content: space-evenly;
@@ -526,6 +535,7 @@ ul > li {
 
 .left-aligned-cell {
   text-align: left;
+  /* border-radius: 10%; */
 }
 
 .right-aligned-cell {
