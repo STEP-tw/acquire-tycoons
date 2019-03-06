@@ -556,8 +556,6 @@ class Game {
     const currentPlayer = this.getCurrentPlayer();
     if (newTile) {
       currentPlayer.addTile(newTile);
-      // this.activityLog.addLog(`${currentPlayer.getName()} got a new tile`);
-      currentPlayer.updateLog(`You got ${newTile.getValue()} tile`);
     }
   }
 
