@@ -419,10 +419,11 @@ class Game {
   }
 
   distributeReward(stockHolders, reward, rewardName) {
+    const roundedReward = Math.ceil(reward / 100) * 100;
     stockHolders.forEach(stockHolder => {
-      stockHolder.addMoney(reward);
+      stockHolder.addMoney(roundedReward);
       this.activityLog.addLog(
-        `${stockHolder.name} got ${reward} as ${rewardName}`,
+        `${stockHolder.name} got ${roundedReward} as ${rewardName}`,
         `DISTRIBUTE_REWARD`
       );
     });
