@@ -25,7 +25,7 @@ module.exports = {
     },
     {
       id: 'buyStocks',
-      data: { Quantum: 3 },
+      data: { Quantum: 3, Phoenix: 2 },
       comments: 'Player1 bought 3 Quantum stocks'
     },
     {
@@ -40,7 +40,7 @@ module.exports = {
     },
     {
       id: 'buyStocks',
-      data: { Quantum: 2, Phoenix: 1 },
+      data: { Quantum: 18, Phoenix: 2 },
       comments: 'Player2 bought 2-Quantum and 1-Phoenix stocks'
     },
     {
@@ -50,7 +50,7 @@ module.exports = {
     },
     {
       id: 'buyStocks',
-      data: { Quantum: 1, Phoenix: 1 },
+      data: { Quantum: 1, Phoenix: 2 },
       comments: 'Player3 bought 1 Quantum and 1Pheonix stocks'
     },
     {
@@ -60,7 +60,7 @@ module.exports = {
     },
     {
       id: 'buyStocks',
-      data: { Quantum: 1, Phoenix: 1 },
+      data: { Quantum: 1, Phoenix: 2 },
       comments: 'Player4 bought 1 Quantum and 1 Pheonix stocks'
     }
   ]

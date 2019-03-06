@@ -146,7 +146,7 @@ class Game {
         size: corporation.getSize(),
         marketPrice: corporation.getCurrentStockPrice(),
         availableStocks: corporation.getStocks(),
-        status:corporation.isActive()
+        status: corporation.isActive()
       };
     });
     return corporationsDetail;
@@ -563,6 +563,7 @@ class Game {
     const currentPlayer = this.getCurrentPlayer();
     if (newTile) {
       currentPlayer.addTile(newTile);
+      currentPlayer.updateLog(`You got ${newTile.getValue()} tile`);
     }
   }
 
@@ -640,6 +641,7 @@ class Game {
     const survivingCorporationName = surviving.getName();
     const { adjacentTile } = this.turnManager.getStack();
     const currentPriceOfDefunctStock = defunct.getCurrentStockPrice();
+    const survivingCorpStocks = surviving.getStocks();
 
     const defunctTiles = defunct.getTiles();
     this.removeUnIncorporatedTile(adjacentTile);
@@ -659,6 +661,7 @@ class Game {
     const sellTradeData = {
       survivingCorporationName,
       defunctCorporationName,
+      survivingCorpStocks,
       currentPriceOfDefunctStock
     };
 
@@ -691,7 +694,6 @@ class Game {
     this.getCurrentPlayer().updateLog(log);
 
     const currentPlayer = this.getCurrentPlayer();
-    const defunctCorpStocks = currentPlayer.getStocksOf(defunctCorporationName);
 
     currentPlayer.deductStocks(defunctCorporationName, sellCount);
     currentPlayer.addMoney(sellingStocksMoney);
@@ -706,7 +708,7 @@ class Game {
     defunctCorporation.addStocks(defunctCorporationStocks);
     const survivingCorporation = this.getCorporation(survivingCorporationName);
     survivingCorporation.deductStocks(gettingStocksAfterTrading);
-
+    const survivingCorpStocks = survivingCorporation.getStocks();
     if (this.getPlayerCounterAfterMerger() == this.maxPlayers) {
       this.resetPlayerCounterAfterMerger();
       this.turnManager.changeTurn();
@@ -728,7 +730,7 @@ class Game {
       defunctCorporationName,
       survivingCorporationName,
       currentPriceOfDefunctStock,
-      defunctCorpStocks
+      survivingCorpStocks
     };
 
     this.updatePlayerCounterAfterMerger();

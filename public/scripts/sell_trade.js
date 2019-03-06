@@ -1,8 +1,14 @@
-const generateAddButton = function(document, id, updater) {
+const generateAddButton = function(document, id, updater, survivingCorpStocks) {
   const addButtonAttributes = {
     className: 'btn-default',
     innerText: '+',
-    onclick: increaseSellAndTradeCount.bind(null, document, id, updater)
+    onclick: increaseSellAndTradeCount.bind(
+      null,
+      document,
+      id,
+      updater,
+      survivingCorpStocks
+    )
   };
   return createElement(document, 'button', addButtonAttributes);
 };
@@ -31,15 +37,29 @@ const decreaseSellAndTradeCount = function(document, id, updater) {
   countSpan.innerText = count;
 };
 
-const increaseSellAndTradeCount = function(document, id, updater) {
+const increaseSellAndTradeCount = function(
+  document,
+  id,
+  updater,
+  survivingCorpStocks
+) {
   const msgDiv = document.getElementById('error-msg-at-sell-trade');
   msgDiv.innerText = '';
+  const survivingCorporationName = document.getElementById(
+    'survivingCorporationName'
+  ).innerText;
   const countSpan = document.getElementById(id);
   let count = +countSpan.innerText;
   if (exceededStocksUpperLimit(document, updater)) {
     msgDiv.innerText = "You don't have enough stocks";
     return;
   }
+
+  if (updater == 2 && survivingCorpStocks == 0) {
+    msgDiv.innerText = `Stocks of ${survivingCorporationName} are not available`;
+    return;
+  }
+
   count += updater;
   countSpan.innerText = count;
 };
@@ -83,7 +103,12 @@ const displayMergingCorporations = function(
   appendChildren(headerDiv, headerDivChildren);
 };
 
-const getSellAndTradeRow = function(document, actionName, actionId) {
+const getSellAndTradeRow = function(
+  document,
+  actionName,
+  actionId,
+  survivingCorpStocks
+) {
   const sellAndTradeRow = document.createElement('tr');
 
   const sellAndTradeHeadingTd = createElement(document, 'td', {
@@ -99,7 +124,12 @@ const getSellAndTradeRow = function(document, actionName, actionId) {
   }
 
   const subButton = generateSubButton(document, actionId, updater);
-  const addButton = generateAddButton(document, actionId, updater);
+  const addButton = generateAddButton(
+    document,
+    actionId,
+    updater,
+    survivingCorpStocks
+  );
 
   const stocksCountAttribute = { id: actionId, innerText: 0 };
   const stocksCountSpan = createElement(document, 'span', stocksCountAttribute);
@@ -112,11 +142,22 @@ const getSellAndTradeRow = function(document, actionName, actionId) {
   return sellAndTradeRow;
 };
 
-const displaySellTradeDetails = function(document) {
+const displaySellTradeDetails = function(document, survivingCorpStocks) {
   const sellTradeBody = document.getElementById('sell-trade-body');
   sellTradeBody.innerText = '';
-  const tradeRow = getSellAndTradeRow(document, 'Trade', 'trade-stocks-count');
-  const sellRow = getSellAndTradeRow(document, 'Sell', 'sell-stocks-count');
+  const tradeRow = getSellAndTradeRow(
+    document,
+    'Trade',
+    'trade-stocks-count',
+    survivingCorpStocks
+  );
+
+  const sellRow = getSellAndTradeRow(
+    document,
+    'Sell',
+    'sell-stocks-count',
+    survivingCorpStocks
+  );
   const sellTradeElements = [tradeRow, sellRow];
   appendChildren(sellTradeBody, sellTradeElements);
 };
@@ -179,12 +220,14 @@ const generateSellTradeContainer = function(document, sellTradeData) {
   const {
     defunctCorporationName,
     survivingCorporationName,
-    defunctCorpStocks
+    defunctCorpStocks,
+    survivingCorpStocks
   } = sellTradeData;
+
   document.getElementById('sell-trade-overlay').style.display = 'flex';
   document.getElementById('merger-img').style.display = 'visible';
   displayErrorMessage(document, 'error-msg-at-sell-trade', '');
-  displaySellTradeDetails(document, defunctCorpStocks);
+  displaySellTradeDetails(document, survivingCorpStocks);
 
   displayMergingCorporations(
     document,
