@@ -21,7 +21,7 @@ class TurnManager {
   changeTurn() {
     this.currentPlayerIndex =
       (this.currentPlayerIndex + 1) % this.orderedPlayerIds.length;
-    this.resetStack();
+    // this.resetStack();
   }
 
   changeAction(action) {

@@ -754,68 +754,47 @@ describe('Game', function() {
 
         player1.addStocks({ name: 'Phoenix', numberOfStock: 4 });
         player1.addStocks({ name: 'Quantum', numberOfStock: 2 });
-
         game.sellAndTradeStocks(sellAndTradeDetails);
-
         expect(player1.getStocksOf(survivingCorporationName)).to.equal(3);
         expect(game.turnManager.getAction(0).name).to.equal('DO_NOTHING');
+        expect(player1.getLog()).to.equal(
+          'You got $800 and 1 stocks of Quantum'
+        );
       });
 
-      it('should change the action of merger to BUY_STOCKS after merging process', function() {
+      it('should change the action of merger to SELL_TRADE after merging process', function() {
+        const phoenix = game.getCorporation('Phoenix');
+        const quantum = game.getCorporation('Quantum');
+
+        game.turnManager.addStack('adjacentTile', []);
+        game.turnManager.addStack('mergingCorporations', [quantum, phoenix]);
         game.sellAndTradeStocks(sellAndTradeDetails);
         game.sellAndTradeStocks(sellAndTradeDetails);
         game.sellAndTradeStocks(sellAndTradeDetails);
         game.sellAndTradeStocks(sellAndTradeDetails);
 
-        expect(game.turnManager.getAction(0).name).to.equal('DO_NOTHING');
-        expect(game.turnManager.getAction(1).name).to.equal('PLACE_A_TILE');
+        expect(game.turnManager.getAction(0).name).to.equal('SELL_TRADE');
+        expect(game.turnManager.getAction(1).name).to.equal('DO_NOTHING');
+      });
+
+      it('should change action to BUY_STOCKS of merger after two corporations merging', function() {
+        const phoenix = game.getCorporation('Phoenix');
+        const quantum = game.getCorporation('Quantum');
+
+        game.turnManager.addStack('adjacentTile', []);
+        game.turnManager.addStack('mergingCorporations', [quantum]);
+        game.sellAndTradeStocks(sellAndTradeDetails);
+        game.sellAndTradeStocks(sellAndTradeDetails);
+        game.sellAndTradeStocks(sellAndTradeDetails);
+        game.sellAndTradeStocks(sellAndTradeDetails);
+
+        expect(game.turnManager.getAction(0).name).to.equal('BUY_STOCKS');
       });
     });
   });
 });
 
-describe('merger of two different size corporations', function() {
-  it('should merge defunct corporation to surviving corporation', function() {
-    const game = mergerBigSmallTest();
-    const survivingCorpTiles = [
-      { position: { row: 0, column: 0 }, value: '1A' },
-      { position: { row: 0, column: 1 }, value: '2A' },
-      { position: { row: 1, column: 0 }, value: '1B' },
-      { position: { row: 0, column: 3 }, value: '4A' },
-      { position: { row: 0, column: 4 }, value: '5A' },
-      { position: { row: 1, column: 2 }, value: '3B' },
-      { position: { row: 0, column: 2 }, value: '3A' }
-    ];
-    game.placeTile('3A');
-    expect(game.getCorporation('Quantum').isActive()).true;
-    expect(game.getCorporation('Phoenix').isActive()).false;
-    expect(game.getCorporation('Quantum').getTiles()).to.deep.equal(
-      survivingCorpTiles
-    );
-  });
-
-  it('should merge defunct corporation to surviving corporation ', function() {
-    const game = mergerSmallBigTest();
-    game.placeTile('3A');
-    const survivingCorpTiles = [
-      { position: { row: 0, column: 0 }, value: '1A' },
-      { position: { row: 0, column: 1 }, value: '2A' },
-      { position: { row: 1, column: 0 }, value: '1B' },
-      { position: { row: 1, column: 1 }, value: '2B' },
-      { position: { row: 0, column: 3 }, value: '4A' },
-      { position: { row: 0, column: 4 }, value: '5A' },
-      { position: { row: 1, column: 3 }, value: '4B' },
-      { position: { row: 0, column: 2 }, value: '3A' }
-    ];
-    expect(game.getCorporation('Quantum').isActive()).false;
-    expect(game.getCorporation('Phoenix').isActive()).true;
-    expect(game.getCorporation('Phoenix').getTiles()).to.deep.equal(
-      survivingCorpTiles
-    );
-  });
-});
-
-describe('Two same size copopration merger', function() {
+describe('Two same size corporation merger', function() {
   it('should ask to select surviving corporation', function() {
     const game = merger2SameSizeCorpTest();
     game.placeTile('3A');
@@ -825,7 +804,7 @@ describe('Two same size copopration merger', function() {
   });
 });
 
-describe('Four same size copopration merger', function() {
+describe('Four same size corporation merger', function() {
   let game;
   beforeEach(function() {
     game = merger4SameSizeCorpTest();

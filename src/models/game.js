@@ -71,7 +71,8 @@ class Game {
       const tile = tiles[index];
       player.setInitialTile(tiles[index]);
       this.activityLog.addLog(
-        `${player.getName()} got tile ${tile.getValue()}`,`INITIAL_TILE`
+        `${player.getName()} got tile ${tile.getValue()}`,
+        `INITIAL_TILE`
       );
     }
   }
@@ -100,7 +101,10 @@ class Game {
   updateTurnLog() {
     const currentPlayer = this.getCurrentPlayer();
     currentPlayer.updateLog(`It's your turn`);
-    this.activityLog.addLog(`It's ${currentPlayer.getName()}'s turn`,`SWITCH_TURN`);
+    this.activityLog.addLog(
+      `It's ${currentPlayer.getName()}'s turn`,
+      `SWITCH_TURN`
+    );
   }
 
   initialize(corporations, faceDownCluster) {
@@ -229,7 +233,8 @@ class Game {
     player.addStocks({ name: corporationName, numberOfStock: 1 });
     corporation.deductStocks(1);
     this.activityLog.addLog(
-      `${player.getName()} established ${corporationName}`,`ESTABLISH_CORPORATION`
+      `${player.getName()} established ${corporationName}`,
+      `ESTABLISH_CORPORATION`
     );
     this.checkGameEnd();
   }
@@ -358,11 +363,12 @@ class Game {
     const largestCorporations = this.getLargestCorporationsBySize(
       defunctCorporations
     );
+    const defunctCorporation = largestCorporations[0];
+
     if (largestCorporations.length > 1) {
       this.actionSelectDefunct(largestCorporations);
       return;
     }
-    const defunctCorporation = largestCorporations[0];
 
     this.mergeCorporations(survivingCorporation, defunctCorporation);
   }
@@ -399,7 +405,7 @@ class Game {
   }
 
   updateGameStatus(tile, log) {
-    this.activityLog.addLog(log,`PLACE_TILE`);
+    this.activityLog.addLog(log, `PLACE_TILE`);
     this.lastPlacedTile = tile;
   }
 
@@ -416,7 +422,8 @@ class Game {
     stockHolders.forEach(stockHolder => {
       stockHolder.addMoney(reward);
       this.activityLog.addLog(
-        `${stockHolder.name} got ${reward} as ${rewardName}`,`DISTRIBUTE_REWARD`
+        `${stockHolder.name} got ${reward} as ${rewardName}`,
+        `DISTRIBUTE_REWARD`
       );
     });
   }
@@ -562,6 +569,7 @@ class Game {
   changeTurn() {
     this.provideNewTile();
     this.turnManager.changeTurn();
+    this.turnManager.resetStack();
     this.turnManager.changeAction({ name: 'PLACE_A_TILE', data: {} });
     this.faceDownCluster.removeTiles(tile => !this.isUnplayableTile(tile));
     this.updateTurnLog();
@@ -630,14 +638,15 @@ class Game {
     const { mergingCorporations } = this.turnManager.getStack();
     const defunctCorporationName = defunct.getName();
     const survivingCorporationName = surviving.getName();
-    const { placedTile, adjacentTile } = this.turnManager.getStack();
+    const { adjacentTile } = this.turnManager.getStack();
     const currentPriceOfDefunctStock = defunct.getCurrentStockPrice();
 
     const defunctTiles = defunct.getTiles();
     this.removeUnIncorporatedTile(adjacentTile);
 
     this.activityLog.addLog(
-      `${defunctCorporationName} merged with ${survivingCorporationName}`,`MERGER`
+      `${defunctCorporationName} merged with ${survivingCorporationName}`,
+      `MERGER`
     );
     this.distributeMajorityMinority(defunctCorporationName);
     defunct.resetTiles();
@@ -647,11 +656,6 @@ class Game {
       corporation => defunct.getName() == corporation.getName()
     );
 
-    if (mergingCorporations.length > 1) {
-      this.continueMerging(surviving);
-      return;
-    }
-    surviving.concatTiles(adjacentTile.concat(placedTile));
     const sellTradeData = {
       survivingCorporationName,
       defunctCorporationName,
@@ -659,7 +663,6 @@ class Game {
     };
 
     this.changeActionToSellAndTrade(sellTradeData);
-    //this.checkGameEnd()
   }
 
   changeActionToSellAndTrade(sellTradeData) {
@@ -680,11 +683,18 @@ class Game {
       currentPriceOfDefunctStock
     } = sellAndTradeDetails;
 
+    const gettingStocksAfterTrading = tradeCount / 2;
+    const sellingStocksMoney = sellCount * currentPriceOfDefunctStock;
+
+    // updating player's log
+    let log = `You got $${sellingStocksMoney} and ${gettingStocksAfterTrading} stocks of ${survivingCorporationName}`;
+    this.getCurrentPlayer().updateLog(log);
+
     const currentPlayer = this.getCurrentPlayer();
     const defunctCorpStocks = currentPlayer.getStocksOf(defunctCorporationName);
 
     currentPlayer.deductStocks(defunctCorporationName, sellCount);
-    currentPlayer.addMoney(sellCount * currentPriceOfDefunctStock);
+    currentPlayer.addMoney(sellingStocksMoney);
     currentPlayer.tradeStocks(
       survivingCorporationName,
       defunctCorporationName,
@@ -695,12 +705,22 @@ class Game {
     const defunctCorporationStocks = sellCount + tradeCount;
     defunctCorporation.addStocks(defunctCorporationStocks);
     const survivingCorporation = this.getCorporation(survivingCorporationName);
-    survivingCorporation.deductStocks(tradeCount / 2);
+    survivingCorporation.deductStocks(gettingStocksAfterTrading);
 
     if (this.getPlayerCounterAfterMerger() == this.maxPlayers) {
       this.resetPlayerCounterAfterMerger();
       this.turnManager.changeTurn();
-      this.changeActionToBuyStocks();
+      const {
+        mergingCorporations,
+        adjacentTile,
+        placedTile
+      } = this.turnManager.getStack();
+      if (mergingCorporations.length > 1) {
+        this.continueMerging(survivingCorporation);
+        return;
+      }
+      survivingCorporation.concatTiles(adjacentTile.concat(placedTile));
+      this.checkGameEnd();
       return;
     }
 
