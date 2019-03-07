@@ -13,11 +13,10 @@ const Tile = require('../../src/models/tile.js');
 const { getCorporations, getFaceDownCluster } = require('../../src/util.js');
 
 const {
-  mergerBigSmallTest,
-  mergerSmallBigTest,
   merger2SameSizeCorpTest,
   merger4SameSizeCorpTest,
-  replaceUnplayableTilesTest
+  replaceUnplayableTilesTest,
+  merger3CorpTest
 } = require('../../helpers/main.js');
 
 const generateTiles = function(row, noOfTiles) {
@@ -801,6 +800,15 @@ describe('Two same size corporation merger', function() {
     expect(game.turnManager.getAction(1).name).to.equal(
       'SELECT_SURVIVING_CORPORATION'
     );
+  });
+});
+
+describe('Three corporation merger', function() {
+  it('should ask to select surviving corporation', function() {
+    const game = merger3CorpTest();
+    console.log(game.getCurrentPlayer());
+    game.placeTile('3B');
+    expect(game.turnManager.getAction(2).name).to.equal('SELL_TRADE');
   });
 });
 

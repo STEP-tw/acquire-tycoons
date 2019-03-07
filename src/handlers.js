@@ -1,7 +1,7 @@
 const Game = require('./models/game.js');
 const Player = require('./models/player.js');
 const {
-  // initializeGame,
+  initializeGame,
   createTrueError,
   createFalseError
 } = require('./util.js');
@@ -12,8 +12,8 @@ const { validateGameSession, validateTurn } = require('./validators');
 // .merger4SameSizeCorpTest;
 // const requiredFunctionality = require('../helpers/main.js')
 // .merger_big_small_test;
-const requiredFunctionality = require('../helpers/main.js')
-  .merger2SameSizeCorpTest;
+// const requiredFunctionality = require('../helpers/main.js')
+// .merger2SameSizeCorpTest;
 
 const hostGame = function(req, res) {
   let { host, totalPlayers } = req.body;
@@ -51,8 +51,8 @@ const joinGame = function(req, res) {
   res.cookie('playerId', `${playerId}`);
   res.send(createFalseError());
   if (game.isFull()) {
-    gameManager.games[gameID] = requiredFunctionality();
-    // initializeGame(game);
+    // gameManager.games[gameID] = requiredFunctionality();
+    initializeGame(game);
   }
 };
 

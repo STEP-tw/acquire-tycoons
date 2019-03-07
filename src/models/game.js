@@ -1,4 +1,3 @@
-/* eslint-disable */
 const _ = require('lodash');
 const TurnManager = require('./turn_manager.js');
 const {
@@ -336,6 +335,7 @@ class Game {
       this.actionSelectSurviving(largestCorporations);
       return;
     }
+    const survivingCorporation = largestCorporations[0];
     this.continueMerging(survivingCorporation);
   }
 
@@ -564,6 +564,7 @@ class Game {
     const currentPlayer = this.getCurrentPlayer();
     if (newTile) {
       currentPlayer.addTile(newTile);
+      currentPlayer.updateLog(`You got ${newTile.getValue()} tile`);
     }
   }
 
