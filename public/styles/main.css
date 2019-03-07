@@ -63,7 +63,8 @@ p {
 .game-top {
   height: 6%;
   display: flex;
-  justify-content: center;
+  margin-right: 2%;
+  justify-content: flex-end;
   align-items: center;
 }
 
@@ -140,6 +141,7 @@ p {
 
 .status-bar {
   width: 58%;
+  margin-right: 20%;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 20px;
 }
@@ -588,4 +590,15 @@ ul > li {
 
 #merger-img {
   width: 15%;
+}
+
+.info-icon {
+  width: 35px;
+  height: 35px;
+  margin-top: 0.5%;
+}
+
+.info-card{
+  height: 100%;
+  width: 100%;
 }

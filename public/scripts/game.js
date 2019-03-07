@@ -112,6 +112,15 @@ const createTableCell = function(document, cellValue) {
   return cell;
 };
 
+const closeInformationCard = function() {
+  document.getElementById('information-card-overlay').style.display = "none";
+}
+
+const showInformationCard = function() {
+  document.getElementById('information-card-overlay').style.display = "flex";
+  document.getElementById('close-information-card').onclick = closeInformationCard;
+}
+
 const displayCorporationDetails = function(document, corporations) {
   const corporationDetailsBody = document.getElementById(
     'corporation-details-body'
