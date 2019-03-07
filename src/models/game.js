@@ -564,7 +564,6 @@ class Game {
     const currentPlayer = this.getCurrentPlayer();
     if (newTile) {
       currentPlayer.addTile(newTile);
-      currentPlayer.updateLog(`You got ${newTile.getValue()} tile`);
     }
   }
 
