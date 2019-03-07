@@ -228,7 +228,7 @@ describe('GET /place-tile', function() {
       .post('/place-tile')
       .set('Cookie', [`gameId=${gameID}`, `playerId=0`])
       .send({ tileValue: '12B' })
-      .expect({ error: true, message: 'You don\'t have 12B tile' })
+      .expect({ error: true, message: "You don't have 12B tile" })
       .expect('Content-Type', 'application/json; charset=utf-8')
       .expect(200, done);
   });
@@ -276,12 +276,12 @@ describe('GET /place-tile', function() {
       .expect(200, done);
   });
 
-  it('should provide error when playerId cookie doesn\'t match with current player id', function(done) {
+  it("should provide error when playerId cookie doesn't match with current player id", function(done) {
     request(app)
       .post('/place-tile')
       .set('Cookie', [`gameId=${gameID};playerId=2`])
       .send({ tileValue: '5A' })
-      .expect({ error: true, message: 'It\'s not your turn' })
+      .expect({ error: true, message: "It's not your turn" })
       .expect('Content-Type', 'application/json; charset=utf-8')
       .expect(200, done);
   });
@@ -367,10 +367,10 @@ describe('/select-surviving-corporation', function() {
     const game = merger2SameSizeCorpTest();
     app.gameManager.addGame(game);
     const gameID = app.gameManager.getLatestId();
-    game.placeTile('3A');
+    game.placeTile('3B');
     request(app)
       .post('/select-surviving-corporation')
-      .set('Cookie', [`gameId=${gameID}`, 'playerId=0'])
+      .set('Cookie', [`gameId=${gameID}`, 'playerId=1'])
       .set('content-type', 'application/json')
       .send({ corporationName: 'Hydra' })
       .expect({ error: false, message: '' })

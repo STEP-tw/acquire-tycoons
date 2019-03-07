@@ -338,7 +338,7 @@ describe('Game', function() {
             size: 0,
             marketPrice: 0,
             availableStocks: 25,
-            status:false
+            status: false
           },
           {
             name: 'Phoenix',
@@ -797,8 +797,8 @@ describe('Game', function() {
 describe('Two same size corporation merger', function() {
   it('should ask to select surviving corporation', function() {
     const game = merger2SameSizeCorpTest();
-    game.placeTile('3A');
-    expect(game.turnManager.getAction(0).name).to.equal(
+    game.placeTile('3B');
+    expect(game.turnManager.getAction(1).name).to.equal(
       'SELECT_SURVIVING_CORPORATION'
     );
   });

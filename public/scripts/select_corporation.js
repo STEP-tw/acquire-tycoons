@@ -50,10 +50,6 @@ const handleSelectedCorporation = function(requestURL, corporationName) {
   });
 };
 
-const selectSurvivingCorporation = function(corporationName) {
-  console.log(corporationName);
-};
-
 const showSelectCorporationPopup = function(
   onclickListener,
   popupHeading,

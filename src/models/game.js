@@ -1,3 +1,4 @@
+/* eslint-disable */
 const _ = require('lodash');
 const TurnManager = require('./turn_manager.js');
 const {
@@ -253,6 +254,7 @@ class Game {
 
   isFoundingCorporation(tile) {
     return (
+      !this.isMerger(tile) &&
       this.getUnincorporatedNeighbors(tile).length > 0 &&
       !this.isGrowingCorporation(tile)
     );
@@ -335,7 +337,6 @@ class Game {
       this.actionSelectSurviving(largestCorporations);
       return;
     }
-    const survivingCorporation = largestCorporations[0];
     this.continueMerging(survivingCorporation);
   }
 
