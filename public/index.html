@@ -3,20 +3,27 @@
   <head>
     <title>ACQUIRE</title>
     <link rel="stylesheet" type="text/css" href="/styles/home.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Raleway"
+      rel="stylesheet"
+    />
     <script src="/scripts/home.js"></script>
   </head>
   <body>
-    <header><h3>ACQUIRE</h3></header>
+    
     <main>
       <section class="game_options" id="game-options-container">
+          <header class="acquire-heading">ACQUIRE</header>
+        <!-- <div class="game-options-icon"><img src="/images/oie_trans.gif" height="200px" width="400px" alt=""></div> -->
         <button class="input-light" id="create-game-btn">Create Game</button>
         <button class="input-light" id="join-game-btn">Join Game</button>
         <button class="input-light" id="user-guide-btn">User Guide</button>
       </section>
 
       <section class="game_options" id="create-game-form" style="display:none">
+        
           <div class="home_button" id="host-game-back-btn">
-              <img src="./images/home.png" alt="back-btn" />
+              <img src="./images/home-img.png" alt="back-btn" />
         </div>
         <p class="error" id="host-error-box"></p>
         <input
@@ -25,7 +32,7 @@
           placeholder="Host Name"
           id="host-name"
         />
-        <select class="input-light" id="total-players">
+        <select class="input-light select-box" id="total-players">
           <option value="0">No. of Players</option>
           <option value="3">3</option>
           <option value="4">4</option>
@@ -39,7 +46,7 @@
 
       <section class="game_options" id="join-game-form" style="display:none">
         <div class="home_button" id="join-game-back-btn">
-              <img src="./images/home.png" alt="back-btn" />
+          <img src="./images/home-img.png" alt="back-btn" />
         </div>
         <p class="error" id="join-error-box"></p>
         <input
@@ -60,7 +67,7 @@
       </section>
       <section class="user-guide-container" id="user-guide" style="display:none">
         <div class="home_button" id="user-guide-back-btn">
-          <img src= "./images/left-arrow.png" alt="back-btn" />
+          <img src= "./images/home-img.png" alt="back-btn" />
         </div>
         <embed src="./media/acquire.pdf" style="height: 100%; width: 100%; overflow: scroll" />
     </main>

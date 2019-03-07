@@ -261,7 +261,6 @@ class Game {
   }
 
   isFounding8thCorporation(tile) {
-    //for 8th corporation validation   isTemporaryUnplayable(tile)
     return (
       !this.isMerger(tile) &&
       this.isFoundingCorporation(tile) &&
