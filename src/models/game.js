@@ -480,8 +480,10 @@ class Game {
 
   getResults() {
     this.getActiveCorporations().forEach(corporation => {
-      this.players.forEach(player => player.sellAllStocks(corporation));
       this.distributeMajorityMinority(corporation.getName());
+      this.players.forEach((player) =>{
+        player.sellAllStocks(corporation);
+      });
     });
     const sortedPlayers = _.sortBy(this.players, 'money').reverse();
     const results = sortedPlayers.map((player, index) => ({

@@ -7,13 +7,7 @@ const {
 } = require('./util.js');
 const ActivityLog = require('./models/activity_log');
 const { validateGameSession, validateTurn } = require('./validators');
-// const requiredFunctionality = require('../helpers/main.js').mergerBigSmallTest;
-// const requiredFunctionality = require('../helpers/main.js')
-// .merger4SameSizeCorpTest;
-// const requiredFunctionality = require('../helpers/main.js')
-// .merger_big_small_test;
-// const requiredFunctionality = require('../helpers/main.js')
-// .merger2SameSizeCorpTest;
+// const requiredFunctionality = require('../helpers/main.js').gameResultsTest;
 
 const hostGame = function(req, res) {
   let { host, totalPlayers } = req.body;

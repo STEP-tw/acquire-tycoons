@@ -1,9 +1,9 @@
 // const mergerBigSmall = require('./merger_big_small.js');
-// const mergerSmallBig = require('./merger_small_big.js');
 const merger2SameSizeCorp = require('./merger_2_same_size_corp.js');
 const generateIndexes = require('./util.js');
 const merger_of_3corps = require('./merger_of_3corps.js');
 const merger4SameSize = require('./merger_4_same_size.js');
+const gameResults = require('./game_end_results.js');
 
 const replaceUnplayableTiles = require('./replace_unplayable_tiles');
 
@@ -43,8 +43,6 @@ const randomGenerator = function(values) {
 
 // const mergerBigSmallTest = () =>
 // runGame(randomGenerator(mergerBigSmall.array), mergerBigSmall.processes);
-// const mergerSmallBigTest = () =>
-// runGame(randomGenerator(mergerSmallBig.array), mergerSmallBig.processes);
 const merger2SameSizeCorpTest = () =>
   runGame(
     randomGenerator(merger2SameSizeCorp.array),
@@ -59,12 +57,15 @@ const replaceUnplayableTilesTest = () =>
     randomGenerator(replaceUnplayableTiles.array),
     replaceUnplayableTiles.processes
   );
+const gameResultsTest = () =>
+  runGame(randomGenerator(gameResults.array),gameResults.processes);
+
 
 module.exports = {
   // mergerBigSmallTest,
-  // mergerSmallBigTest,
   merger2SameSizeCorpTest,
   merger4SameSizeCorpTest,
   merger3CorpTest,
-  replaceUnplayableTilesTest
+  replaceUnplayableTilesTest,
+  gameResultsTest
 };
