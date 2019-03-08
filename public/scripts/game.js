@@ -112,15 +112,17 @@ const createTableCell = function(document, cellValue) {
   return cell;
 };
 
-const closeInformationCard = function() {
-  document.getElementById('information-card-overlay').style.display = 'none';
+const closeInformationCard = function(document) {
+  closePopup(document, 'information-card-overlay');
+  document.getElementById('information-card-content').style.width = '30%';
 };
 
 const showInformationCard = function() {
-  document.getElementById('information-card-overlay').style.display = 'flex';
+  document.getElementById('information-card-content').style.width = '40%';
+  showPopup(document, 'information-card-overlay');
   document.getElementById(
     'close-information-card'
-  ).onclick = closeInformationCard;
+  ).onclick = closeInformationCard.bind(null, document);
 };
 
 const displayCorporationDetails = function(document, corporations) {

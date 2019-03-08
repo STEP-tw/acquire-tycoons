@@ -595,14 +595,9 @@ ul > li {
 }
 
 .info-icon {
-  width: 35px;
-  height: 35px;
+  width: 45px;
+  height: 45px;
   margin-top: 0.5%;
-}
-
-.info-card {
-  height: 100%;
-  width: 100%;
 }
 
 .joined-player-names {
@@ -613,4 +608,30 @@ ul > li {
 
 .joined-player-names p {
   padding: 5px;
+}
+
+.info-icon:hover {
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
+.info-card h1 {
+  margin-bottom: 10px;
+}
+
+.info-card table {
+  padding: 4px;
+  border-collapse: collapse;
+  color: rgb(50, 50, 50);
+  text-align: center;
+  border: 1px solid gray;
+  height: 100%;
+  width: 100%;
+}
+
+.info-card td {
+  border-bottom: 1px solid gray;
+  border-right: 1px solid gray;
+  height: 10%;
+  width: 40%;
 }
