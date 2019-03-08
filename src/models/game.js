@@ -481,7 +481,7 @@ class Game {
   getResults() {
     this.getActiveCorporations().forEach(corporation => {
       this.distributeMajorityMinority(corporation.getName());
-      this.players.forEach((player) =>{
+      this.players.forEach(player => {
         player.sellAllStocks(corporation);
       });
     });
@@ -566,7 +566,6 @@ class Game {
     const currentPlayer = this.getCurrentPlayer();
     if (newTile) {
       currentPlayer.addTile(newTile);
-      currentPlayer.updateLog(`You got ${newTile.getValue()} tile`);
     }
   }
 
