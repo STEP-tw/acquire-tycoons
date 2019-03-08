@@ -113,13 +113,15 @@ const createTableCell = function(document, cellValue) {
 };
 
 const closeInformationCard = function() {
-  document.getElementById('information-card-overlay').style.display = "none";
-}
+  document.getElementById('information-card-overlay').style.display = 'none';
+};
 
 const showInformationCard = function() {
-  document.getElementById('information-card-overlay').style.display = "flex";
-  document.getElementById('close-information-card').onclick = closeInformationCard;
-}
+  document.getElementById('information-card-overlay').style.display = 'flex';
+  document.getElementById(
+    'close-information-card'
+  ).onclick = closeInformationCard;
+};
 
 const displayCorporationDetails = function(document, corporations) {
   const corporationDetailsBody = document.getElementById(
@@ -127,9 +129,12 @@ const displayCorporationDetails = function(document, corporations) {
   );
 
   corporations.forEach(corporation => {
-    const { name, size, marketPrice, availableStocks, status} = corporation;
+    const { name, size, marketPrice, availableStocks, status } = corporation;
 
-    const className = getClassNameForCorporation(name) + (status ? " active" : " inactive") +"-status";
+    const className =
+      getClassNameForCorporation(name) +
+      (status ? ' active' : ' inactive') +
+      '-status';
     const rowAttributes = { className };
     const corporationRow = createElement(document, 'tr', rowAttributes);
 
@@ -307,7 +312,7 @@ const clearGameScreen = function(document) {
   gameElements.forEach(gameElement => (gameElement.innerHTML = ''));
 };
 
-const createLog = function(document,{ log, timeStamp, eventName }) {
+const createLog = function(document, { log, timeStamp, eventName }) {
   const logItem = document.createElement('li');
 
   const messageAttributes = { className: 'activity-log-msg', innerText: log };
@@ -324,16 +329,16 @@ const createLog = function(document,{ log, timeStamp, eventName }) {
   const iconAttributes = { className: 'event-icon', src: iconSrc };
   const iconHolder = createElement(document, 'img', iconAttributes);
 
-  const messageHolderAttributes = {className:'activity-log-messageHolder'}
-  const messageHolder = createElement(document,'div',messageHolderAttributes);
-  appendChildren(messageHolder,[iconHolder,messageContainer]);
+  const messageHolderAttributes = { className: 'activity-log-messageHolder' };
+  const messageHolder = createElement(document, 'div', messageHolderAttributes);
+  appendChildren(messageHolder, [iconHolder, messageContainer]);
   appendChildren(logItem, [messageHolder, timeHolder]);
   return logItem;
 };
 
 const displayActivityLog = function(document, logs) {
   const activityLog = document.getElementById('activity-log');
-  const logItems = logs.map(createLog.bind(null,document));
+  const logItems = logs.map(createLog.bind(null, document));
   appendChildren(activityLog, logItems);
 };
 
@@ -427,7 +432,7 @@ const showJoinedPlayerNames = function(document, playerNames) {
   joinedPlayerNamesContainer.innerHTML = '';
   playerNames.forEach(playerName => {
     const playerNameHolder = document.createElement('p');
-    playerNameHolder.innerText = `${playerName} joined the game.`;
+    playerNameHolder.innerHTML = `${playerName} has joined`;
     joinedPlayerNamesContainer.appendChild(playerNameHolder);
   });
 };

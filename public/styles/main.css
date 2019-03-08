@@ -4,6 +4,7 @@ body {
   height: 100%;
   width: 100%;
   font-family: 'Raleway', sans-serif;
+  background-image: url('/images/acquire-back-img.jpg');
 }
 
 header {
@@ -12,7 +13,7 @@ header {
   justify-content: space-between;
   align-items: center;
   border-bottom: 2px solid gray;
-
+  background: whitesmoke;
   box-sizing: border-box;
 }
 
@@ -32,7 +33,6 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: whitesmoke;
 }
 
 .game-container {
@@ -361,21 +361,23 @@ ul > li {
 }
 
 .waiting-area {
-  height: 480px;
+  height: 380px;
   width: 340px;
   border: 1px solid gray;
+
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
+
+  color: white;
   border-radius: 3px;
-  background: white;
   box-shadow: 0px 0px 3px 1px gray;
 }
 
 .img-medium {
-  width: 96px;
-  height: 96px;
+  width: 210px;
+  height: 120px;
 }
 
 .overlay {
@@ -482,7 +484,7 @@ ul > li {
   cursor: pointer;
   font-size: 16px;
   border-radius: 5px;
-  background: #F0F0F4;
+  background: #f0f0f4;
   border: none;
   text-align: center;
 }
@@ -598,7 +600,17 @@ ul > li {
   margin-top: 0.5%;
 }
 
-.info-card{
+.info-card {
   height: 100%;
   width: 100%;
+}
+
+.joined-player-names {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.joined-player-names p {
+  padding: 5px;
 }

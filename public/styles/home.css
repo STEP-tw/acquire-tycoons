@@ -53,6 +53,7 @@ main {
 
 .input-light:hover {
   box-shadow: inset 0 0 7px #f0e3ef, 0 0 7px rgba(223, 223, 233, 0.9);
+  cursor: pointer;
 }
 
 form {

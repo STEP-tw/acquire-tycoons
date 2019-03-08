@@ -53,15 +53,24 @@
     </section>
 
     <section
-    class="overlay"
-    style="display: none"
-    id="information-card-overlay"
+      class="overlay"
+      style="display: none"
+      id="information-card-overlay"
     >
-    <div class="overlay-content">
-  <img class="close-button" id="close-information-card" src="/images/close-button.png" alt="X" />
-  <img class="info-card" src="/images/information-card.png" alt="corporation details">
-  </div>
-  </section>
+      <div class="overlay-content">
+        <img
+          class="close-button"
+          id="close-information-card"
+          src="/images/close-button.png"
+          alt="X"
+        />
+        <img
+          class="info-card"
+          src="/images/information-card.png"
+          alt="corporation details"
+        />
+      </div>
+    </section>
 
     <section class="overlay" style="display:none" id="game-results-overlay">
       <div class="overlay-content">
@@ -127,17 +136,28 @@
         >
       </div>
     </header>
+
     <main>
       <section class="waiting-area" id="waiting-area">
-        <p style="text-align:center" id="game-id">Game Id:<%= gameId %></p>
-        <p><%= message %></p>
-        <div id="joined-player-names" style="display:none"></div>
-        <img class="img-medium" src="/images/loading.gif" alt="loading" />
+        <p style="text-align:center;font-size:24px" id="game-id">
+          Game Id : <%= gameId %>
+        </p>
+        <p><%= message %> . . .</p>
+        <div
+          id="joined-player-names"
+          class="joined-player-names"
+          style="display:none"
+        ></div>
+        <img class="img-medium" src="/images/oie_trans.gif" alt="loading" />
       </section>
       <section id="game-container" style="display: none" class="game-container">
         <section class="game-top">
           <div class="status-bar" id="player-log"></div>
-          <img class="info-icon" onclick="showInformationCard()" src="/images/information-card-icon.png" />
+          <img
+            class="info-icon"
+            onclick="showInformationCard()"
+            src="/images/information-card-icon.png"
+          />
         </section>
         <section class="game-main">
           <div class="player-names-section">
