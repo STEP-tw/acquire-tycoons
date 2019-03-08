@@ -604,10 +604,19 @@ ul > li {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
+  width: 60%;
 }
 
 .joined-player-names p {
   padding: 5px;
+  border-bottom: 1px dotted #1093d5;
+  text-align: center;
+}
+
+.name-span {
+  text-shadow: 1px 1px 12px #f8e206;
+  font-size: 20px;
 }
 
 .info-icon:hover {

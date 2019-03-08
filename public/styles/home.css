@@ -81,3 +81,8 @@ form {
   border: none;
   border-bottom: 1px solid white;
 }
+
+.error {
+  color: #d24630;
+  text-align: center;
+}

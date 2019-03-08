@@ -434,7 +434,7 @@ const showJoinedPlayerNames = function(document, playerNames) {
   joinedPlayerNamesContainer.innerHTML = '';
   playerNames.forEach(playerName => {
     const playerNameHolder = document.createElement('p');
-    playerNameHolder.innerHTML = `${playerName} has joined`;
+    playerNameHolder.innerHTML = `<span class="name-span">${playerName}</span> has joined`;
     joinedPlayerNamesContainer.appendChild(playerNameHolder);
   });
 };
