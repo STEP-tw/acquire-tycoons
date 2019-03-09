@@ -319,8 +319,8 @@ const createLog = function(document, { log, timeStamp, eventName }) {
 
   const messageAttributes = { className: 'activity-log-msg', innerText: log };
   const messageContainer = createElement(document, 'span', messageAttributes);
-
-  const localeTime = new Date(timeStamp).toLocaleTimeString();
+  const time = new Date(timeStamp);
+  const localeTime = time.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit' });
   const timeAttributes = {
     className: 'activity-log-time',
     innerText: localeTime
