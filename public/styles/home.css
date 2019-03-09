@@ -70,6 +70,17 @@ form {
   height: 50px;
 }
 
+.home_button {
+  width: 54px;
+  height: 54px;
+}
+
+.home_button img:hover {
+  width: 51px;
+  height: 51px;
+  cursor: pointer;
+}
+
 .user-guide-container {
   height: 100%;
   width: 60%;
