@@ -581,14 +581,22 @@ class Game {
 
   buyStocks(stockDetails) {
     const player = this.getCurrentPlayer();
+    let totalNumberOfStocks = 0;
     Object.keys(stockDetails).forEach(corporationName => {
       const noOfStocks = stockDetails[corporationName];
+      totalNumberOfStocks += noOfStocks;
       const corporation = this.corporations.find(
         corporation => corporation.getName() == corporationName
       );
       buyStocks(player, corporation, noOfStocks);
     });
-    this.activityLog.addLog(`${player.getName()} bought stocks`, 'BUY_STOCKS');
+    let buyMsg = `${player.getName()} bought stocks`;
+
+    if (!totalNumberOfStocks) {
+      buyMsg = `${player.getName()} haven't bought stocks`;
+    }
+    this.activityLog.addLog(buyMsg, 'BUY_STOCKS');
+
     this.changeTurn();
   }
 
