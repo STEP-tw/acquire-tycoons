@@ -634,13 +634,17 @@ ul > li {
   color: rgb(50, 50, 50);
   text-align: center;
   border: 1px solid gray;
-  height: 100%;
   width: 100%;
 }
 
 .info-card td {
   border-bottom: 1px solid gray;
   border-right: 1px solid gray;
-  height: 10%;
-  width: 40%;
+  width: 16.667%;
+}
+
+.information-card-content {
+  width: 60%;
+  height: 60%;
+  font-size: 20px;
 }

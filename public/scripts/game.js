@@ -112,17 +112,13 @@ const createTableCell = function(document, cellValue) {
   return cell;
 };
 
-const closeInformationCard = function(document) {
-  closePopup(document, 'information-card-overlay');
-  document.getElementById('information-card-content').style.width = '30%';
-};
-
 const showInformationCard = function() {
-  document.getElementById('information-card-content').style.width = '40%';
   showPopup(document, 'information-card-overlay');
-  document.getElementById(
-    'close-information-card'
-  ).onclick = closeInformationCard.bind(null, document);
+  document.getElementById('close-information-card').onclick = closePopup.bind(
+    null,
+    document,
+    'information-card-overlay'
+  );
 };
 
 const displayCorporationDetails = function(document, corporations) {
@@ -320,7 +316,10 @@ const createLog = function(document, { log, timeStamp, eventName }) {
   const messageAttributes = { className: 'activity-log-msg', innerText: log };
   const messageContainer = createElement(document, 'span', messageAttributes);
   const time = new Date(timeStamp);
-  const localeTime = time.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit' });
+  const localeTime = time.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
   const timeAttributes = {
     className: 'activity-log-time',
     innerText: localeTime
