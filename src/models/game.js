@@ -588,6 +588,7 @@ class Game {
       );
       buyStocks(player, corporation, noOfStocks);
     });
+    this.activityLog.addLog(`${player.getName()} bought stocks`,'BUY_STOCKS');
     this.changeTurn();
   }
 
