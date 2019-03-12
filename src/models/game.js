@@ -588,7 +588,7 @@ class Game {
       );
       buyStocks(player, corporation, noOfStocks);
     });
-    this.activityLog.addLog(`${player.getName()} bought stocks`,'BUY_STOCKS');
+    this.activityLog.addLog(`${player.getName()} bought stocks`, 'BUY_STOCKS');
     this.changeTurn();
   }
 
@@ -680,6 +680,21 @@ class Game {
     this.turnManager.changeAction({ name: 'SELL_TRADE', data: sellTradeData });
   }
 
+  updateSellAndTradeLog(currentPlayer, sellCount, tradeCount) {
+    let sellMsg = `didn't sell any stocks`;
+    let tradeMsg = `didn't trade any stocks`;
+    if (sellCount) {
+      sellMsg = `sold ${sellCount} stocks`;
+    }
+    if (tradeCount) {
+      tradeMsg = `traded ${tradeCount} stocks`;
+    }
+    this.activityLog.addLog(
+      `${currentPlayer.getName()} ${sellMsg} and ${tradeMsg}`,
+      `TRADE_STOCKS`
+    );
+  }
+
   sellAndTradeStocks(sellAndTradeDetails) {
     const {
       sellCount,
@@ -693,10 +708,11 @@ class Game {
     const sellingStocksMoney = sellCount * currentPriceOfDefunctStock;
 
     // updating player's log
-    let log = `You got $${sellingStocksMoney} and ${gettingStocksAfterTrading} stocks of ${survivingCorporationName}`;
-    this.getCurrentPlayer().updateLog(log);
-
     const currentPlayer = this.getCurrentPlayer();
+    let log = `You got $${sellingStocksMoney} and ${gettingStocksAfterTrading} stocks of ${survivingCorporationName}`;
+    currentPlayer.updateLog(log);
+
+    this.updateSellAndTradeLog(currentPlayer, sellCount, tradeCount);
 
     currentPlayer.deductStocks(defunctCorporationName, sellCount);
     currentPlayer.addMoney(sellingStocksMoney);

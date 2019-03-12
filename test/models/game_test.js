@@ -1,5 +1,6 @@
 const expect = require('chai').expect;
 const sinon = require('sinon');
+const _ = require('lodash');
 
 const tilesData = require('../../src/data/tiles_data.json');
 const levelsData = require('../../src/data/level_data.json');
@@ -789,6 +790,24 @@ describe('Game', function() {
 
         expect(game.turnManager.getAction(0).name).to.equal('BUY_STOCKS');
       });
+    });
+  });
+
+  describe('updateSellAndTradeLog', function() {
+    it('should update numberOfStocks the player is selling', function() {
+      game.updateSellAndTradeLog(player1, 2, 0);
+      const activityLog = _.head(game.activityLog.getLogs());
+      expect(activityLog.log).to.equal(
+        "Dhiru sold 2 stocks and didn't trade any stocks"
+      );
+    });
+
+    it('should update numberOfStocks the player is trading', function() {
+      game.updateSellAndTradeLog(player1, 0, 2);
+      const activityLog = _.head(game.activityLog.getLogs());
+      expect(activityLog.log).to.equal(
+        "Dhiru didn't sell any stocks and traded 2 stocks"
+      );
     });
   });
 });
