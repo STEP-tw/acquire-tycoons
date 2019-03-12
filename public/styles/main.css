@@ -648,3 +648,7 @@ ul > li {
   height: 60%;
   font-size: 20px;
 }
+
+.full-width {
+  width: 100%;
+}

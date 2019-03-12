@@ -1,9 +1,9 @@
-const saveBuyingDetails = function (document, buyStocksData) {
+const saveBuyingDetails = function(document, buyStocksData) {
   const doneButton = document.getElementById('done-button');
   doneButton.onclick = buyStocks.bind(null, buyStocksData);
 };
 
-const buyStocks = function (buyStocksData) {
+const buyStocks = function(buyStocksData) {
   selectedCorps = buyStocksData.corporations.filter(
     corp => corp.selectedStocks != 0
   );
@@ -30,21 +30,21 @@ const buyStocks = function (buyStocksData) {
   fetchGameData(document);
 };
 
-const displayBuyStocksMoney = function (document, money) {
+const displayBuyStocksMoney = function(document, money) {
   document.getElementById('buy-stocks-money').innerText = `You have $${money}`;
 };
 
-const displayErrorMessage = function (document, message) {
+const displayErrorMessage = function(document, message) {
   document.getElementById('error-msg-at-buying').innerText = message;
 };
 
-const createName = function (document, name) {
+const createName = function(document, name) {
   const nameAttributes = { className: `left-aligned-cell`, innerText: name };
   const nameTd = createElement(document, 'td', nameAttributes);
   return nameTd;
 };
 
-const createAvailableStocks = function (document, corporation) {
+const createAvailableStocks = function(document, corporation) {
   const availableStocksAttrs = {
     className: 'right-aligned-cell',
     innerText: corporation.stocks,
@@ -54,38 +54,38 @@ const createAvailableStocks = function (document, corporation) {
   return availableStocksTd;
 };
 
-const createPrice = function (document, price) {
+const createPrice = function(document, price) {
   const priceAttrs = { className: 'right-aligned-cell', innerText: price };
   const priceTd = createElement(document, 'td', priceAttrs);
   return priceTd;
 };
 
-const upperStockLimitExceeds = function (buyStocksData) {
+const upperStockLimitExceeds = function(buyStocksData) {
   return buyStocksData.totalSelectedStock == 3;
 };
 
-const lowerStockLimitExceeds = function (corporation) {
+const lowerStockLimitExceeds = function(corporation) {
   return corporation.selectedStocks < 1;
 };
 
-const isMoneyLow = function (corporation, buyStocksData) {
+const isMoneyLow = function(corporation, buyStocksData) {
   return buyStocksData.money < corporation.currentPrice;
 };
 
-const sum = function (x, y) {
+const sum = function(x, y) {
   return x + y;
 };
 
-const sub = function (x, y) {
+const sub = function(x, y) {
   return x - y;
 };
 
-const updateInnerText = function (id, text) {
+const updateInnerText = function(id, text) {
   const element = document.getElementById(id);
   element.innerText = text;
 };
 
-const calculateStocksAndPrice = function (
+const calculateStocksAndPrice = function(
   document,
   corporation,
   buyStocksData,
@@ -121,11 +121,11 @@ const calculateStocksAndPrice = function (
   );
 };
 
-const corporationStocksLacks = function (corporation) {
+const corporationStocksLacks = function(corporation) {
   return corporation.stocks <= 0;
 };
 
-const increaseSelectedStock = function (document, corporation, buyStocksData) {
+const increaseSelectedStock = function(document, corporation, buyStocksData) {
   displayErrorMessage(document, '');
   if (upperStockLimitExceeds(buyStocksData)) {
     displayErrorMessage(document, 'You can only buy 3 at a time.');
@@ -145,7 +145,7 @@ const increaseSelectedStock = function (document, corporation, buyStocksData) {
   calculateStocksAndPrice(document, corporation, buyStocksData, sub, sum);
 };
 
-const decreaseSelectedStock = function (document, corporation, buyStocksData) {
+const decreaseSelectedStock = function(document, corporation, buyStocksData) {
   displayErrorMessage(document, '');
   if (lowerStockLimitExceeds(corporation)) {
     displayErrorMessage(document, 'You are already at 0.');
@@ -154,7 +154,7 @@ const decreaseSelectedStock = function (document, corporation, buyStocksData) {
   calculateStocksAndPrice(document, corporation, buyStocksData, sum, sub);
 };
 
-const createShareDealings = function (document, corporation, buyStocksData) {
+const createShareDealings = function(document, corporation, buyStocksData) {
   const shareDealings = document.createElement('td');
   shareDealings.className = 'selected-stocks-count';
   const subButtonAttributes = {
@@ -190,8 +190,10 @@ const createShareDealings = function (document, corporation, buyStocksData) {
   return shareDealings;
 };
 
-const createCorpRow = function (document, corporation, buyStocksData) {
-  const row = createElement(document,'tr',{className:`${corporation.name.toLowerCase()}-color`});
+const createCorpRow = function(document, corporation, buyStocksData) {
+  const row = createElement(document, 'tr', {
+    className: `${corporation.name.toLowerCase()}-color`
+  });
   const name = createName(document, corporation.name);
   const availableStocks = createAvailableStocks(document, corporation);
   const price = createPrice(document, corporation.currentPrice);
@@ -207,7 +209,15 @@ const createCorpRow = function (document, corporation, buyStocksData) {
   return row;
 };
 
-const displayCorporation = function (document, buyStocksData) {
+const skipBuyingStocks = function(buyStocksData) {
+  buyStocksData.corporations.forEach(corporation => {
+    corporation['selectedStocks'] = 0;
+    buyStocksData.totalSelectedStock = 0;
+  });
+  buyStocks(buyStocksData);
+};
+
+const displayCorporation = function(document, buyStocksData) {
   const body = document.getElementById('buy-stocks-body');
   body.innerHTML = '';
   buyStocksData.corporations.forEach(corporation => {
@@ -218,8 +228,12 @@ const displayCorporation = function (document, buyStocksData) {
   });
 };
 
-const generateBuyStockContainer = function (document, buyStocksData) {
+const generateBuyStockContainer = function(document, buyStocksData) {
   document.getElementById('buy-stocks-overlay').style.display = 'flex';
+
+  const skipButton = document.getElementById('skip-buying-stocks');
+  skipButton.onclick = skipBuyingStocks.bind(null, buyStocksData);
+
   displayErrorMessage(document, '');
   displayBuyStocksMoney(document, buyStocksData.money);
   displayCorporation(document, buyStocksData);
