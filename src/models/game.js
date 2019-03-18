@@ -418,12 +418,14 @@ class Game {
     return this.players.filter(player => player.hasStocksOf(corporationName));
   }
 
-  distributeReward(stockHolders, reward, rewardName) {
+  distributeReward(stockHolders, reward, rewardName, defunctCorporationName) {
     const roundedReward = Math.ceil(reward / 100) * 100;
     stockHolders.forEach(stockHolder => {
       stockHolder.addMoney(roundedReward);
       this.activityLog.addLog(
-        `${stockHolder.name} got ${roundedReward} as ${rewardName}`,
+        `${
+          stockHolder.name
+        } got ${roundedReward} as ${rewardName} of ${defunctCorporationName}`,
         `DISTRIBUTE_REWARD`
       );
     });
@@ -455,14 +457,16 @@ class Game {
       this.distributeReward(
         majorStockHolders,
         majorityReward,
-        'majority and minority bonus'
+        'majority and minority bonus',
+        corporationName
       );
       return;
     }
     this.distributeReward(
       majorStockHolders,
       majorityStockHolderBonus,
-      'majority bonus'
+      'majority bonus',
+      corporationName
     );
     const minorStocksCount = _.nth(sortedStocksCountList, -2);
     const minorStockHolders = getStockHoldersByCount(
@@ -471,7 +475,12 @@ class Game {
       minorStocksCount
     );
     const minorityReward = minorityStockHolderBonus / minorStockHolders.length;
-    this.distributeReward(minorStockHolders, minorityReward, 'minority bonus');
+    this.distributeReward(
+      minorStockHolders,
+      minorityReward,
+      'minority bonus',
+      corporationName
+    );
   }
 
   getActiveCorporations() {
