@@ -175,7 +175,17 @@ const displayDefunctStocks = function(
 
 const saveSellAndTradeDetails = function(document, sellTradeData) {
   const doneButton = document.getElementById('sell-trade-done-button');
+  const holdAllButton = document.getElementById('hold-stocks-button');
+
   doneButton.onclick = sellAndTradeStocks.bind(null, document, sellTradeData);
+  holdAllButton.onclick = holdAllStocks.bind(null, document, sellTradeData);
+};
+
+const holdAllStocks = function(document, data) {
+  data.sellCount = 0;
+  data.tradeCount = 0;
+  finalizeSellingAndTrading(document, data);
+  fetchGameData(document);
 };
 
 const removeSellAndTradeHeaderChildren = function(document) {
@@ -193,6 +203,11 @@ const modifyTradeAndSellData = function(document, data) {
 
 const sellAndTradeStocks = function(document, data) {
   modifyTradeAndSellData(document, data);
+  finalizeSellingAndTrading(document, data);
+  fetchGameData(document);
+};
+
+const finalizeSellingAndTrading = function(document, data) {
   document.getElementById('error-msg-at-sell-trade').innerText = '';
   closeOverlay(document, 'sell-trade-overlay');
   removeSellAndTradeHeaderChildren(document);
@@ -213,7 +228,6 @@ const sellAndTradeStocks = function(document, data) {
         return;
       }
     });
-  fetchGameData(document);
 };
 
 const generateSellTradeContainer = function(document, sellTradeData) {

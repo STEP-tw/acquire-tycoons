@@ -8,7 +8,7 @@ const {
 const ActivityLog = require('./models/activity_log');
 const { validateGameSession, validateTurn } = require('./validators');
 // const requiredFunctionality = require('../helpers/main.js')
-// .merger4SameSizeCorpTest;
+//   .merger4SameSizeCorpTest;
 
 const hostGame = function(req, res) {
   let { host, totalPlayers } = req.body;
@@ -46,7 +46,7 @@ const joinGame = function(req, res) {
   res.cookie('playerId', `${playerId}`);
   res.send(createFalseError());
   if (game.isFull()) {
-    // gameManager.games[gameID] = requiredFunctionality();
+    // gamManager.games[gameID] = requiredFunctionality();
     initializeGame(game);
   }
 };
