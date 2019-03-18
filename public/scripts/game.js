@@ -220,12 +220,12 @@ const showGameResults = function(id, document, gameResults) {
     createRankRow.bind(null, document)
   );
 
-  document.getElementById('show-end-popup').style.display = 'block';
+  document.getElementById('show-rank-btn').style.display = 'block';
 
   const closeButton = document.getElementById('close-button');
   closeButton.onclick = closePopup.bind(null, document, 'game-results-overlay');
 
-  const showRanksBtn = document.getElementById('show-end-popup');
+  const showRanksBtn = document.getElementById('show-rank-btn');
   showRanksBtn.onclick = showPopup.bind(null, document, 'game-results-overlay');
 
   setTimeout(() => {

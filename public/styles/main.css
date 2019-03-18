@@ -63,8 +63,8 @@ p {
 .game-top {
   height: 6%;
   display: flex;
-  margin-right: 2%;
-  justify-content: flex-end;
+  /* margin-right: 2%; */
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -139,13 +139,6 @@ p {
   border: 2px solid rgb(58, 58, 58);
 }
 
-.status-bar {
-  width: 58%;
-  margin-right: 20%;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 20px;
-}
-
 .player-names {
   height: 60%;
   width: 90%;
@@ -174,11 +167,32 @@ p {
   background-color: white;
 }
 
-.name-and-quit-btn {
-  width: 15%;
+.game-top-left-div {
+  width: 20%;
+}
+
+.status-bar {
+  width: 56%;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
+}
+
+.info-card-and-rank-btn {
+  width: 24%;
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-end;
   align-items: center;
+}
+
+.show-rank-btn {
+  width: 90px;
+  padding: 4px;
+  font-weight: lighter;
+  display: none;
+  height: 5%;
+  margin-right: 10%;
+  text-align: center;
+  margin-top: 3%;
 }
 
 .player-name-header {
@@ -582,13 +596,6 @@ ul > li {
   transform: scale(1.2);
 }
 
-.show-end-popup {
-  width: 100px;
-  padding: 4px;
-  font-weight: lighter;
-  display: none;
-}
-
 #merger-img {
   width: 15%;
 }
@@ -596,7 +603,7 @@ ul > li {
 .info-icon {
   width: 45px;
   height: 45px;
-  margin-top: 0.5%;
+  margin-right: 7%;
 }
 
 .joined-player-names {

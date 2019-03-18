@@ -133,12 +133,7 @@
 
     <header id="game-header" style="display: none">
       <h1 class="app-title">ACQUIRE</h1>
-      <div class="name-and-quit-btn">
-        <span class="player-name-header" id="player-name"></span>
-        <span class="btn-default show-end-popup" id="show-end-popup"
-          >Show Ranks</span
-        >
-      </div>
+      <span class="player-name-header" id="player-name"></span>
     </header>
 
     <main>
@@ -156,13 +151,20 @@
       </section>
       <section id="game-container" style="display: none" class="game-container">
         <section class="game-top">
+          <div class="game-top-left-div"></div>
           <div class="status-bar" id="player-log"></div>
-          <img
-            class="info-icon"
-            onclick="showInformationCard()"
-            src="/images/information-card-icon.png"
-            title="Corporation details"
-          />
+          <div class="info-card-and-rank-btn">
+            <span class="btn-default show-rank-btn" id="show-rank-btn"
+              >Show Ranks</span
+            >
+
+            <img
+              class="info-icon"
+              onclick="showInformationCard()"
+              src="/images/information-card-icon.png"
+              title="Corporation details"
+            />
+          </div>
         </section>
         <section class="game-main">
           <div class="player-names-section">
