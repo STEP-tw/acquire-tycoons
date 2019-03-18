@@ -161,15 +161,17 @@ p {
   justify-content: center;
   align-items: center;
   border: 1px solid gray;
+  background-color: #e6e6e6;
+  opacity: 0.5;
 }
 
 .current-player {
-  background: #84a1ff;
-  color: white;
   font-size: 18px;
   width: 102%;
   box-shadow: -6px 0 6px -6px #333, 6px 0 6px -6px #333;
   border-radius: 3px;
+  opacity: 1;
+  background-color: white;
 }
 
 .name-and-quit-btn {
