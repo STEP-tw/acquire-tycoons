@@ -500,9 +500,6 @@ ul > li {
   cursor: pointer;
   font-size: 16px;
   border-radius: 5px;
-  background: #66c993;
-  color: whitesmoke;
-  border: none;
   text-align: center;
 }
 
@@ -511,7 +508,7 @@ ul > li {
 }
 
 .btn-default:hover {
-  box-shadow: 0px 0px 2px black;
+  box-shadow: 0px 0px 2px darkgray;
 }
 
 .btn-medium {
