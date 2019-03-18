@@ -757,8 +757,9 @@ describe('Game', function() {
         game.sellAndTradeStocks(sellAndTradeDetails);
         expect(player1.getStocksOf(survivingCorporationName)).to.equal(3);
         expect(game.turnManager.getAction(0).name).to.equal('DO_NOTHING');
+
         expect(player1.getLog()).to.equal(
-          'You got $800 and 1 stocks of Quantum'
+          'You got $800 and got 1 stock of Quantum '
         );
       });
 

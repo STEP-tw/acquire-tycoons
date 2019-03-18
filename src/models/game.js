@@ -9,7 +9,8 @@ const {
   getStocksCount,
   createTrueError,
   createFalseError,
-  createReplaceLog
+  createReplaceLog,
+  getStatusLog
 } = require('../util.js');
 
 class Game {
@@ -726,8 +727,21 @@ class Game {
 
     // updating player's log
     const currentPlayer = this.getCurrentPlayer();
-    let log = `You got $${sellingStocksMoney} and ${gettingStocksAfterTrading} stocks of ${survivingCorporationName}`;
-    currentPlayer.updateLog(log);
+    const totalDefunctStocks = currentPlayer.getStocksOf(
+      defunctCorporationName
+    );
+
+    let log = getStatusLog(
+      sellCount,
+      tradeCount,
+      totalDefunctStocks,
+      currentPriceOfDefunctStock,
+      survivingCorporationName
+    );
+
+    if (totalDefunctStocks != 0) {
+      currentPlayer.updateLog(log);
+    }
 
     this.updateSellAndTradeLog(currentPlayer, sellCount, tradeCount);
 
