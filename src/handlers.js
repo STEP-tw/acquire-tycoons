@@ -46,7 +46,7 @@ const joinGame = function(req, res) {
   res.cookie('playerId', `${playerId}`);
   res.send(createFalseError());
   if (game.isFull()) {
-    // gamManager.games[gameID] = requiredFunctionality();
+    // gameManager.games[gameID] = requiredFunctionality();
     initializeGame(game);
   }
 };
