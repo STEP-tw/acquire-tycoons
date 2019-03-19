@@ -45,9 +45,6 @@ const increaseSellAndTradeCount = function(
 ) {
   const msgDiv = document.getElementById('error-msg-at-sell-trade');
   msgDiv.innerText = '';
-  const survivingCorporationName = document.getElementById(
-    'survivingCorporationName'
-  ).innerText;
   const countSpan = document.getElementById(id);
   let count = +countSpan.innerText;
   if (exceededStocksUpperLimit(document, updater)) {
@@ -78,29 +75,7 @@ const displayMergingCorporations = function(
   survivingCorporation
 ) {
   const headerDiv = document.getElementById('sell-trade-header');
-
-  const defunctAttributes = {
-    innerText: defunctCorporation,
-    id: 'defunctCorporationName'
-  };
-
-  const defunctCorpSpan = createElement(document, 'span', defunctAttributes);
-
-  const survivingAttributes = {
-    innerText: survivingCorporation,
-    id: 'survivingCorporationName'
-  };
-
-  const survivingCorpSpan = createElement(
-    document,
-    'span',
-    survivingAttributes
-  );
-
-  const mergerImg = document.getElementById('merger-img');
-  mergerImg.style.display = 'visible';
-  const headerDivChildren = [defunctCorpSpan, mergerImg, survivingCorpSpan];
-  appendChildren(headerDiv, headerDivChildren);
+  headerDiv.innerText = `${survivingCorporation} acquires ${defunctCorporation}`;
 };
 
 const getSellAndTradeRow = function(
@@ -188,12 +163,6 @@ const holdAllStocks = function(document, data) {
   fetchGameData(document);
 };
 
-const removeSellAndTradeHeaderChildren = function(document) {
-  const headerDiv = document.getElementById('sell-trade-header');
-  headerDiv.removeChild(headerDiv.childNodes[0]);
-  headerDiv.removeChild(headerDiv.childNodes[1]);
-};
-
 const modifyTradeAndSellData = function(document, data) {
   const tradeCount = +document.getElementById('trade-stocks-count').innerText;
   const sellCount = +document.getElementById('sell-stocks-count').innerText;
@@ -210,7 +179,6 @@ const sellAndTradeStocks = function(document, data) {
 const finalizeSellingAndTrading = function(document, data) {
   document.getElementById('error-msg-at-sell-trade').innerText = '';
   closeOverlay(document, 'sell-trade-overlay');
-  removeSellAndTradeHeaderChildren(document);
 
   const postDetails = {
     method: 'POST',
@@ -239,7 +207,6 @@ const generateSellTradeContainer = function(document, sellTradeData) {
   } = sellTradeData;
 
   document.getElementById('sell-trade-overlay').style.display = 'flex';
-  document.getElementById('merger-img').style.display = 'visible';
   displayErrorMessage(document, 'error-msg-at-sell-trade', '');
   displaySellTradeDetails(document, survivingCorpStocks);
 

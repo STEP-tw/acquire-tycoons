@@ -44,13 +44,13 @@ app.urlsToValidateTurn = [
 ];
 
 app.set('view engine', 'ejs');
-morgan.token('cookies', function (req) {
+morgan.token('cookies', function(req) {
   return req.headers['cookie'];
 });
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(
-  morgan(function (tokens, req, res) {
+  morgan(function(tokens, req, res) {
     return [
       tokens.method(req, res),
       tokens.url(req, res),
