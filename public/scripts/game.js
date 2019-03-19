@@ -89,10 +89,17 @@ const getClassNameForCorporation = function(corporation) {
 
 const displayBoard = function(document, boardTiles, lastPlacedTileId) {
   boardTiles.forEach(tileData => {
-    const { id, corporation } = tileData;
+    const { id, corporation, isFoundingTile } = tileData;
     const tile = document.getElementById(`board-tile-${id}`);
+    tile.innerText = id;
     tile.className = 'board-tile';
     tile.classList.add(getClassNameForCorporation(corporation));
+
+    if (isFoundingTile) {
+      tile.classList.add('founding-tile');
+      const corporationNameInitial = corporation[0];
+      tile.innerText = corporationNameInitial;
+    }
   });
 
   if (!lastPlacedTileId) {

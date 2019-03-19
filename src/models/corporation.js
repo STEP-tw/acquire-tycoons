@@ -2,8 +2,17 @@ class Corporation {
   constructor(name, level) {
     this.name = name;
     this.tiles = [];
+    this.foundingTile = null;
     this.availableStocks = 25;
     this.level = level;
+  }
+
+  setFoundingTile(tile) {
+    this.foundingTile = tile;
+  }
+
+  getFoundingTile() {
+    return this.foundingTile;
   }
 
   isActive() {
@@ -65,11 +74,11 @@ class Corporation {
     return this.tiles.some(tile => tile.position == placedTile.position);
   }
 
-  resetTiles(){
+  resetTiles() {
     this.tiles = [];
   }
 
-  isSafe(){
+  isSafe() {
     return this.getSize() >= 11;
   }
 }

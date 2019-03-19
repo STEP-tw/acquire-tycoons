@@ -24,7 +24,8 @@ describe('getTileWithCorporationName', function() {
     const expectedOutput = [
       {
         id: '3A',
-        corporation: 'Sackson'
+        corporation: 'Sackson',
+        isFoundingTile: false
       }
     ];
     expect(getTileWithCorporationName(corporation)).to.deep.equal(

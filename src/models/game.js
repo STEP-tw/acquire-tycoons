@@ -228,6 +228,8 @@ class Game {
     const stack = this.turnManager.getStack();
     const placedTile = stack['placedTile'];
     const adjacentTile = stack['adjacentTile'];
+
+    corporation.setFoundingTile(placedTile);
     corporation.addTile(placedTile);
     this.removeUnIncorporatedTile(adjacentTile.concat(placedTile));
     corporation.concatTiles(adjacentTile);

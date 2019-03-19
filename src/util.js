@@ -19,10 +19,12 @@ const getCorporations = function(corporationsData, levelsData) {
 
 const getTileWithCorporationName = function(corporation) {
   const name = corporation.getName();
+  const foundingTile = corporation.getFoundingTile();
   return corporation.getTiles().map(tile => {
     return {
       id: tile.getValue(),
-      corporation: name
+      corporation: name,
+      isFoundingTile: foundingTile == tile
     };
   });
 };

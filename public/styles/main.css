@@ -656,3 +656,7 @@ ul > li {
 .full-width {
   width: 100%;
 }
+
+.founding-tile {
+  font-size: 36px;
+}

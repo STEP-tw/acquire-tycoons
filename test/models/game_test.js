@@ -505,6 +505,7 @@ describe('Game', function() {
         ]);
         game.establishCorporation('Hydra');
         expect(game.corporations[3].tiles.length).to.equal(2);
+        expect(game.corporations[3].foundingTile.getValue()).to.equal('2A');
         expect(game.getUnincorporatedTiles().length).to.equal(2);
       });
 
@@ -826,7 +827,6 @@ describe('Two same size corporation merger', function() {
 describe('Three corporation merger', function() {
   it('should ask to select surviving corporation', function() {
     const game = merger3CorpTest();
-    console.log(game.getCurrentPlayer());
     game.placeTile('3B');
     expect(game.turnManager.getAction(2).name).to.equal('SELL_TRADE');
   });
