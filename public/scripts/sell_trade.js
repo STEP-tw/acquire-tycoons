@@ -1,4 +1,4 @@
-const generateAddButton = function(document, id, updater, survivingCorpStocks) {
+const generateAddButton = function(document, id, updater, survivingCorpStocks,survivingCorporationName) {
   const addButtonAttributes = {
     className: 'btn-default',
     innerText: '+',
@@ -7,7 +7,8 @@ const generateAddButton = function(document, id, updater, survivingCorpStocks) {
       document,
       id,
       updater,
-      survivingCorpStocks
+      survivingCorpStocks,
+      survivingCorporationName
     )
   };
   return createElement(document, 'button', addButtonAttributes);
@@ -41,7 +42,8 @@ const increaseSellAndTradeCount = function(
   document,
   id,
   updater,
-  survivingCorpStocks
+  survivingCorpStocks,
+  survivingCorporationName
 ) {
   const msgDiv = document.getElementById('error-msg-at-sell-trade');
   msgDiv.innerText = '';
@@ -52,7 +54,7 @@ const increaseSellAndTradeCount = function(
     return;
   }
 
-  if (updater == 2 && survivingCorpStocks == 0) {
+  if (updater == 2 && count/2 == survivingCorpStocks) {
     msgDiv.innerText = `Stocks of ${survivingCorporationName} are not available`;
     return;
   }
@@ -82,7 +84,8 @@ const getSellAndTradeRow = function(
   document,
   actionName,
   actionId,
-  survivingCorpStocks
+  survivingCorpStocks,
+  survivingCorporationName
 ) {
   const sellAndTradeRow = document.createElement('tr');
 
@@ -103,7 +106,8 @@ const getSellAndTradeRow = function(
     document,
     actionId,
     updater,
-    survivingCorpStocks
+    survivingCorpStocks,
+    survivingCorporationName
   );
 
   const stocksCountAttribute = { id: actionId, innerText: 0 };
@@ -117,21 +121,23 @@ const getSellAndTradeRow = function(
   return sellAndTradeRow;
 };
 
-const displaySellTradeDetails = function(document, survivingCorpStocks) {
+const displaySellTradeDetails = function(document, survivingCorpStocks,survivingCorporationName) {
   const sellTradeBody = document.getElementById('sell-trade-body');
   sellTradeBody.innerText = '';
   const tradeRow = getSellAndTradeRow(
     document,
     'Trade',
     'trade-stocks-count',
-    survivingCorpStocks
+    survivingCorpStocks,
+    survivingCorporationName
   );
 
   const sellRow = getSellAndTradeRow(
     document,
     'Sell',
     'sell-stocks-count',
-    survivingCorpStocks
+    survivingCorpStocks,
+    survivingCorporationName
   );
   const sellTradeElements = [tradeRow, sellRow];
   appendChildren(sellTradeBody, sellTradeElements);
@@ -208,7 +214,7 @@ const generateSellTradeContainer = function(document, sellTradeData) {
 
   document.getElementById('sell-trade-overlay').style.display = 'flex';
   displayErrorMessage(document, 'error-msg-at-sell-trade', '');
-  displaySellTradeDetails(document, survivingCorpStocks);
+  displaySellTradeDetails(document, survivingCorpStocks,survivingCorporationName);
 
   displayMergingCorporations(
     document,
