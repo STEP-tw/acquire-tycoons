@@ -34,9 +34,14 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: darkgoldenrod;
 
   border-radius: 3px;
   box-shadow: 0px 0px 3px 1px gray;
+
+  -webkit-box-shadow: inset 0px 0px 100px 5px rgba(0,0,0,0.71);
+  -moz-box-shadow: inset 0px 0px 100px 5px rgba(0,0,0,0.71);
+  box-shadow: inset 0px 0px 100px 5px rgba(0,0,0,0.71);
 }
 
 .input-light {
@@ -46,9 +51,13 @@ main {
   width: 60%;
   margin: 8px;
   font-family: inherit;
-  background-color: #2c3039;
+  background-color: gray;
   color: whitesmoke;
   border-bottom: 1px solid white;
+}
+
+.input-light::placeholder {
+  color: white;
 }
 
 .input-light:hover {
