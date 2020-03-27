@@ -111,9 +111,6 @@ p {
 .game-board-container {
   width: 58%;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .game-board {
